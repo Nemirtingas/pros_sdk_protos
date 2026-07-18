@@ -126,7 +126,6 @@ message ModVersion {
   string version_name = 9;
   google.protobuf.Timestamp updated_at = 10;
   Pros.Api.Mod.ModAdvancedApproveStatus advanced_approve_status = 11;
-  Pros.Api.Mod.ModInstallationType installation_type = 12;
 }
 
 message ModDataInfo {
@@ -190,6 +189,7 @@ message GetModsSearchFilter {
   Pros.Api.Mod.IntervalFilters interval_filters = 8;
   Pros.Api.Mod.ExcludeFilters exclude_filters = 9;
   bool ignore_account_hide_filters = 10;
+  repeated Pros.Api.Mod.ModInstallationType installation_types = 11;
 }
 
 message ModDisplayInfo {
@@ -201,6 +201,7 @@ message ModDisplayInfo {
   repeated Pros.Api.Mod.ModModeratorMessage moderator_messages = 8;
   Pros.Api.Image.Image logo = 9;
   repeated Pros.Api.Image.Image pictures = 10;
+  Pros.Api.Mod.ModInstallationType installation_type = 11;
 }
 
 message ModIncludedToStaticCollectionInfo {

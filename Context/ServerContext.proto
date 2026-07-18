@@ -10,4 +10,5 @@ message ServerContext {
 message ServerContextData {
   string title_id = 1;
   string kernel_session_id = 2;
+  string sandbox_id = 3;
 }

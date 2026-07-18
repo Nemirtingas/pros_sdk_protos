@@ -22,4 +22,5 @@ message UserContextData {
   Hydra.Api.Infrastructure.Context.UserIdentityType user_identity_type = 6;
   string cross_progression_id = 7;
   int64 cross_progression_components = 8;
+  string sandbox_id = 9;
 }
