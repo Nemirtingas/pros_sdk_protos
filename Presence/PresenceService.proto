@@ -42,6 +42,7 @@ service PresenceApi {
   rpc MatchmakeSessionPendingAccept (MatchmakeSessionPendingAcceptRequest) returns (MatchmakeSessionPendingAcceptResponse);
   rpc MatchmakeSessionPendingDecline (MatchmakeSessionPendingDeclineRequest) returns (MatchmakeSessionPendingDeclineResponse);
   rpc MatchmakeSessionChangeTeam (MatchmakeSessionChangeTeamRequest) returns (MatchmakeSessionChangeTeamResponse);
+  rpc MatchmakeSessionChangeClassRole (MatchmakeSessionChangeClassRoleRequest) returns (MatchmakeSessionChangeClassRoleResponse);
   rpc MatchmakeSessionGetInfo (MatchmakeSessionGetInfoRequest) returns (MatchmakeSessionGetInfoResponse);
   rpc MatchmakeSessionGenerateJoinCode (MatchmakeSessionGenerateJoinCodeRequest) returns (MatchmakeSessionGenerateJoinCodeResponse);
   rpc MatchmakeSessionClearJoinCode (MatchmakeSessionClearJoinCodeRequest) returns (MatchmakeSessionClearJoinCodeResponse);

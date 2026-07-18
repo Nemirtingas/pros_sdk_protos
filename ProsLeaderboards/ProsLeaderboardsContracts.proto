@@ -45,6 +45,18 @@ enum ProsLeaderboardTimePeriod {
   PROS_LEADERBOARD_TIME_PERIOD_YEAR = 7;
 }
 
+enum ProsLeaderboardEntryUpdateType {
+  PROS_LEADERBOARD_ENTRY_UPDATE_TYPE_UNKNOWN = 0;
+  PROS_LEADERBOARD_ENTRY_UPDATE_TYPE_REPLACE = 1;
+  PROS_LEADERBOARD_ENTRY_UPDATE_TYPE_MAX = 2;
+}
+
+enum ProsLeaderboardScope {
+  PROS_LEADERBOARD_SCOPE_UNKNOWN = 0;
+  PROS_LEADERBOARD_SCOPE_GLOBAL = 1;
+  PROS_LEADERBOARD_SCOPE_SPLIT_BY_PLATFORM = 2;
+}
+
 message GetLeaderboardsCatalogRequest {
   Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
@@ -55,86 +67,125 @@ message GetLeaderboardsCatalogResponse {
   Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
 }
 
-message GetLeaderboardEntriesRequest {
+message GetLeaderboardsUserEntriesRequest {
   Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
-  string leaderboard_id = 2;
-  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 3;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardSearchBaseQuery queries = 2;
 }
 
-message GetLeaderboardEntriesResponse {
-  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardEntries entries = 1;
-  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
+message GetLeaderboardsUserEntriesResponse {
+  repeated Pros.Api.ProsLeaderboards.LeaderboardSearchUserData search_results = 1;
 }
 
-message GetLeaderboardsRequest {
+message GetLeaderboardsEntityEntriesRequest {
   Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
-  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardSearch leaderboards_searches = 2;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardSearchEntityQuery queries = 2;
 }
 
-message GetLeaderboardsResponse {
-  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardSearchData leaderboards_searches = 1;
+message GetLeaderboardsEntityEntriesResponse {
+  repeated Pros.Api.ProsLeaderboards.LeaderboardSearchEntityData search_results = 1;
 }
 
-message UpdateLeaderboardsRequest {
+message UpdateLeaderboardsEntriesRequest {
   Hydra.Api.Infrastructure.Context.ServerContext context = 1;
-  repeated Pros.Api.ProsLeaderboards.LeaderboardUpdateData leaderboards_updates = 2;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardUpdateQuery queries = 2;
 }
 
-message UpdateLeaderboardsResponse {
+message UpdateLeaderboardsEntriesResponse {
 }
 
-message ProsLeaderboardSearch {
+message LeaderboardSearchEntityQuery {
+  string entry_id = 1;
+  Pros.Api.ProsLeaderboards.LeaderboardSearchBaseQuery base_query = 2;
+}
+
+message LeaderboardSearchBaseQuery {
   string leaderboard_id = 1;
-  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardScope scope = 2;
+  int32 surrounding_entries_depth = 3;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 4;
 }
 
-message ProsLeaderboardSearchData {
+message LeaderboardSearchUserData {
   string leaderboard_id = 1;
-  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardEntries entries = 2;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardPlatformUserData platforms_entries = 2;
   Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 3;
 }
 
-message LeaderboardUpdateData {
-  string leaderboard_name = 1;
-  repeated Pros.Api.ProsLeaderboards.LeaderboardUserUpdateData users_updates = 2;
-}
-
-message LeaderboardUserUpdateData {
-  string user_id = 1;
-  Pros.Global.Api.Auth.Provider provider = 2;
-  Pros.Global.Api.Auth.BuildPlatform platform = 3;
-  int32 score = 4;
-  string custom_data = 5;
-}
-
-message ProsLeaderboardEntries {
+message LeaderboardPlatformUserData {
   Pros.Global.Api.Auth.Provider provider = 1;
   Pros.Global.Api.Auth.BuildPlatform platform = 2;
-  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardTierEntries tier_entries = 3;
-  Pros.Api.ProsLeaderboards.ProsLeaderboardRequestedPlayerResult requested_player_result = 4;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardTierUserEntriesData tiers_entries = 3;
+  Pros.Api.ProsLeaderboards.LeaderboardTierUserEntryData requested_entry = 4;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardTierUserEntryData surrounding_entries = 5;
 }
 
-message ProsLeaderboardTierEntries {
+message LeaderboardTierUserEntryData {
   string tier_name = 1;
-  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardEntry entries = 2;
+  Pros.Api.ProsLeaderboards.LeaderboardUserEntryData entry = 2;
 }
 
-message ProsLeaderboardEntry {
-  int32 rank = 1;
-  Pros.Api.ProsLeaderboards.ProsLeaderboardPlayer player = 2;
-  int32 score = 3;
-  string custom_data = 4;
+message LeaderboardTierUserEntriesData {
+  string tier_name = 1;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardUserEntryData entries = 2;
 }
 
-message ProsLeaderboardPlayer {
+message LeaderboardUserEntryData {
+  Pros.Api.ProsLeaderboards.LeaderboardPlayer player = 1;
+  Pros.Api.ProsLeaderboards.LeaderboardEntryData data = 2;
+}
+
+message LeaderboardPlayer {
   string user_id = 1;
   string account_id = 2;
   Pros.Api.Account.AccountInfo account_info = 3;
 }
 
-message ProsLeaderboardRequestedPlayerResult {
+message LeaderboardSearchEntityData {
+  string leaderboard_id = 1;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardPlatformEntityData platforms_entries = 2;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 3;
+}
+
+message LeaderboardPlatformEntityData {
+  Pros.Global.Api.Auth.Provider provider = 1;
+  Pros.Global.Api.Auth.BuildPlatform platform = 2;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardTierEntityEntriesData tiers_entries = 3;
+  Pros.Api.ProsLeaderboards.LeaderboardTierEntityEntryData requested_entry = 4;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardTierEntityEntryData surrounding_entries = 5;
+}
+
+message LeaderboardTierEntityEntryData {
   string tier_name = 1;
-  Pros.Api.ProsLeaderboards.ProsLeaderboardEntry result = 2;
+  Pros.Api.ProsLeaderboards.LeaderboardEntityEntryData entry = 2;
+}
+
+message LeaderboardTierEntityEntriesData {
+  string tier_name = 1;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardEntityEntryData entries = 2;
+}
+
+message LeaderboardEntityEntryData {
+  string entry_id = 1;
+  Pros.Api.ProsLeaderboards.LeaderboardEntryData data = 2;
+}
+
+message LeaderboardEntryData {
+  int32 rank = 2;
+  int32 score = 3;
+  string custom_data = 4;
+}
+
+message LeaderboardUpdateQuery {
+  string leaderboard_name = 1;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardUpdateEntryData entries = 2;
+}
+
+message LeaderboardUpdateEntryData {
+  string entry_id = 1;
+  Pros.Global.Api.Auth.Provider provider = 2;
+  Pros.Global.Api.Auth.BuildPlatform platform = 3;
+  int32 score = 4;
+  string custom_data = 5;
 }
 
 message ProsLeaderboard {
@@ -153,11 +204,12 @@ message ProsLeaderboardLocalizationInfo {
 }
 
 message ProsLeaderboardGeneralInfo {
-  bool split_data_by_platform = 1;
   repeated string platform_ids = 2;
   int32 participants_displayed = 3;
   bool show_anonymous_players = 4;
   repeated Pros.Api.ProsLeaderboards.ProsLeaderboardTierInfo tiers = 5;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardEntryUpdateType entry_update_type = 6;
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardScope scopes = 7;
 }
 
 message ProsLeaderboardTierInfo {

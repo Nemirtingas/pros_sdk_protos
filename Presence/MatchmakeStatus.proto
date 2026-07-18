@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "SessionControl/KeyContainer.proto";
 import "Authorization/AuthorizationContracts.proto";
+import "google/protobuf/wrappers.proto";
 
 package Hydra.Api.Presence;
 
@@ -98,6 +99,7 @@ message SessionMember {
   Hydra.Api.SessionControl.KeyContainer keys = 9;
   Hydra.Api.Presence.MemberState state = 10;
   Hydra.Api.Presence.PlatformData platform_data = 11;
+  google.protobuf.StringValue class_role = 12;
 }
 
 message GameSessionData {

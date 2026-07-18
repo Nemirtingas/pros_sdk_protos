@@ -112,6 +112,7 @@ message ServerGetChallengesRequest {
 message ServerGetChallengesResponse {
   repeated Hydra.Api.Challenges.PerUserChallengeCounter per_user_challenge_counters = 1;
   Hydra.Api.Challenges.ServerChallengesSettings server_challenges_settings = 2;
+  int32 refresh_after_seconds = 3;
 }
 
 message ServerChallengesSettings {

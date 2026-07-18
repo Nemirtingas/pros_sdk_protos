@@ -7,7 +7,7 @@ package Pros.Api.ProsLeaderboards;
 
 service ProsLeaderboardsApi {
   rpc GetLeaderboardsCatalog (GetLeaderboardsCatalogRequest) returns (GetLeaderboardsCatalogResponse);
-  rpc GetLeaderboardEntries (GetLeaderboardEntriesRequest) returns (GetLeaderboardEntriesResponse);
-  rpc GetLeaderboards (GetLeaderboardsRequest) returns (GetLeaderboardsResponse);
-  rpc UpdateLeaderboards (UpdateLeaderboardsRequest) returns (UpdateLeaderboardsResponse);
+  rpc GetLeaderboardsUserEntries (GetLeaderboardsUserEntriesRequest) returns (GetLeaderboardsUserEntriesResponse);
+  rpc GetLeaderboardsEntityEntries (GetLeaderboardsEntityEntriesRequest) returns (GetLeaderboardsEntityEntriesResponse);
+  rpc UpdateLeaderboardsEntries (UpdateLeaderboardsEntriesRequest) returns (UpdateLeaderboardsEntriesResponse);
 }

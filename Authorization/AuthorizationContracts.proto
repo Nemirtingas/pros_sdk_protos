@@ -19,7 +19,6 @@ enum BuildPlatform {
   BUILD_PLATFORM_ANDROID = 7;
   BUILD_PLATFORM_PROSPERO = 8;
   BUILD_PLATFORM_SCARLETT = 9;
-  BUILD_PLATFORM_STADIA = 10;
   BUILD_PLATFORM_XBOXONE = 13;
   BUILD_PLATFORM_DARWINX64 = 14;
   BUILD_PLATFORM_WIN32 = 15;
@@ -29,7 +28,6 @@ enum BuildPlatform {
 enum Provider {
   PROVIDER_STEAM = 0;
   PROVIDER_EOS = 1;
-  PROVIDER_STADIA = 2;
   PROVIDER_XBOX = 3;
   PROVIDER_PSN = 4;
   PROVIDER_NINTENDO = 5;
@@ -45,6 +43,14 @@ enum Provider {
   PROVIDER_UNKNOWN = 200;
 }
 
+enum XboxClientLicenseType {
+  XBOX_CLIENT_LICENSE_TYPE_UNKNOWN = 0;
+  XBOX_CLIENT_LICENSE_TYPE_FULL_GAME = 1;
+  XBOX_CLIENT_LICENSE_TYPE_FULL_GAME_DISK = 2;
+  XBOX_CLIENT_LICENSE_TYPE_TRIAL_OWNED = 3;
+  XBOX_CLIENT_LICENSE_TYPE_TRIAL_SHARED = 4;
+}
+
 enum PsnClientLicenseType {
   PSN_CLIENT_LICENSE_TYPE_UNKNOWN = 0;
   PSN_CLIENT_LICENSE_TYPE_FULL_GAME = 1;
@@ -57,6 +63,7 @@ enum SearchAccountType {
   SEARCH_ACCOUNT_TYPE_ACCOUNT_PAIRWISE_ID = 1;
   SEARCH_ACCOUNT_TYPE_LOGIN = 2;
   SEARCH_ACCOUNT_TYPE_USERNAME = 3;
+  SEARCH_ACCOUNT_TYPE_USERNAME_WITH_POSTFIX = 4;
 }
 
 enum PartnerId {
@@ -84,12 +91,14 @@ message SignInEpicOnlineServicesRequest {
 message SignInXboxRequest {
   Pros.Global.Api.Auth.SignInData data = 1;
   string xsts_client_token = 2;
+  Pros.Global.Api.Auth.XboxClientLicenseType client_license_type = 3;
 }
 
 message SignInMsStoreRequest {
   Pros.Global.Api.Auth.SignInData data = 1;
   string xsts_client_token = 2;
   string xstore_client_token = 3;
+  Pros.Global.Api.Auth.XboxClientLicenseType client_license_type = 4;
 }
 
 message GetCustomDeveloperStringMsStoreRequest {
@@ -118,6 +127,7 @@ message SignInSteamRequest {
   Pros.Global.Api.Auth.SignInData data = 1;
   string auth_session_ticket = 2;
   bool validate_identity = 3;
+  string steam_app_id = 4;
 }
 
 message SignInNintendoRequest {
