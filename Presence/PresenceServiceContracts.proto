@@ -299,15 +299,6 @@ message MatchmakeSessionChangeTeamResponse {
   string correlation_id = 1;
 }
 
-message MatchmakeSessionChangeClassRoleRequest {
-  Hydra.Api.Infrastructure.Context.UserContext context = 1;
-  repeated string class_roles = 2;
-}
-
-message MatchmakeSessionChangeClassRoleResponse {
-  string correlation_id = 1;
-}
-
 message MatchmakeSessionSetDataResponse {
 }
 
@@ -415,5 +406,4 @@ message MatchmakeMemberData {
 
 message MatchmakeData {
   string rating_id = 1;
-  repeated string class_roles = 2;
 }
