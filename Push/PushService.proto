@@ -6,5 +6,5 @@ import "google/protobuf/empty.proto";
 package Hydra.Api.Push;
 
 service PushServiceStub {
-  rpc Fake (Empty) returns (Empty);
+  rpc Fake (google.protobuf.Empty) returns (google.protobuf.Empty);
 }

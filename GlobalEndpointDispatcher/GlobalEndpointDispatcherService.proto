@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "GlobalEndpointDispatcher/GlobalEndpointDispatcherContracts.proto";
+
+package Pros.Global.Api.GlobalEndpointDispatcher;
+
+service GlobalEndpointDispatcherApi {
+  rpc GetEnvironmentInfo (GetEnvironmentInfoRequest) returns (GetEnvironmentInfoResponse);
+}
