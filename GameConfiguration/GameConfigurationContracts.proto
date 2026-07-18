@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/ConfigurationContext.proto";
+
+package Hydra.Api.GameConfiguration;
+
+enum ComponentDataType {
+  COMPONENT_DATA_TYPE_JSON = 0;
+}
+
+message GetConfigurationContextRequest {
+  UserContext context = 1;
+  repeated ConfigurationComponent components = 2;
+}
+
+message GetConfigurationContextResponse {
+  ConfigurationContext context = 1;
+  repeated ConfigurationComponentSnapshot snapshots = 2;
+}
+
+message GetConfigurationComponentDataRequest {
+  ConfigurationContext context = 1;
+  repeated ConfigurationComponent components = 2;
+}
+
+message GetConfigurationComponentDataResponse {
+  repeated ComponentDataResult results = 1;
+}
+
+message ConfigurationComponent {
+  string name = 1;
+  string version = 2;
+}
+
+message ConfigurationComponentSnapshot {
+  ConfigurationComponent component = 1;
+  string component_hash = 2;
+}
+
+message ComponentDataResult {
+  ConfigurationComponentSnapshot component_snapshot = 1;
+  bytes data_result = 2;
+  ComponentDataType data_type = 3;
+}
+

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+package Hydra.Api.Nullable;
+
+message NullableString {
+  oneof kind {
+    NullValue null = 1;
+    string data = 2;
+  }
+}
+
+message NullableInt {
+  oneof kind {
+    NullValue null = 1;
+    int32 data = 2;
+  }
+}
+
+message NullableBool {
+  oneof kind {
+    NullValue null = 1;
+    bool data = 2;
+  }
+}
+

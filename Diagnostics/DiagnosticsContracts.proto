@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+
+package Hydra.Api.Diagnostics;
+
+enum CrashDumpType {
+  CRASH_DUMP_TYPE_UNKNOWN = 0;
+  CRASH_DUMP_TYPE_GAME_CLIENT = 1;
+  CRASH_DUMP_TYPE_GAME_SERVER = 2;
+}
+
+enum DiagnosticsDataType {
+  DIAGNOSTICS_DATA_TYPE_BINARY = 0;
+  DIAGNOSTICS_DATA_TYPE_TEXT = 1;
+}
+
+message WriteCrashDumpUserRequest {
+  UserContext user_context = 1;
+  repeated DiagnosticsProperty properties = 2;
+  string dump_hash = 3;
+  bytes data = 4;
+  DiagnosticsDataType data_type = 5;
+  string provider = 6;
+  string client_version = 7;
+  string sdk_version = 8;
+}
+
+message WriteCrashDumpUserResponse {
+}
+
+message WriteCrashDumpServerRequest {
+  ServerContext server_context = 1;
+  repeated DiagnosticsProperty properties = 2;
+  string dump_hash = 3;
+  bytes data = 4;
+  DiagnosticsDataType data_type = 5;
+  string version = 6;
+  string sdk_version = 7;
+}
+
+message WriteCrashDumpServerResponse {
+}
+
+message DiagnosticsProperty {
+  string name = 1;
+  string value = 2;
+}
+

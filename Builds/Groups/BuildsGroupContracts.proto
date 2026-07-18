@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "Context/ToolContext.proto";
+import "google/protobuf/timestamp.proto";
+import "Builds/BuildsCommonContracts.proto";
+
+package Hydra.Api.Builds;
+
+message RegisterBuildVersionsToolRequest {
+  ToolContext tool_context = 1;
+  string group_name = 2;
+  repeated BuildVersionInfoDto build_version_infos = 3;
+}
+
+message RegisterBuildVersionsToolResponse {
+  repeated string failed_versions = 1;
+  repeated BuildVersionWithIdDto registered_build_versions = 2;
+}
+
+message BuildVersionInfoDto {
+  message AttributesEntry {
+    string key = 1;
+    string value = 2;
+  }
+
+  string build_version = 1;
+  repeated AttributesEntry attributes = 2;
+  bool pinned = 3;
+  Timestamp created_time = 4;
+  string id = 5;
+  string pack_id = 6;
+}
+

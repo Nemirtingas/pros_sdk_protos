@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package Hydra.Api.Infrastructure.Context;
+
+enum UserIdentityType {
+  USER_IDENTITY_TYPE_UNKNOWN = 0;
+  USER_IDENTITY_TYPE_PURE_USER_ID = 1;
+  USER_IDENTITY_TYPE_ANONYMOUS_JWE = 2;
+}
+
+message UserContext {
+  UserContextData data = 1;
+  bytes signature = 2;
+}
+
+message UserContextData {
+  string user_identity = 1;
+  string title_id = 2;
+  string platform = 3;
+  string kernel_session_id = 4;
+  string provider_id = 5;
+  UserIdentityType user_identity_type = 6;
+}
+

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+
+package Hydra.Api.AbstractData;
+
+message AbstractDataRecord {
+  int64 layout = 1;
+  int64 version = 2;
+  bytes data = 3;
+}
+
+message AbstractDataContainerData {
+  string container_name = 1;
+  AbstractDataRecord record = 2;
+}
+
+message AbstractDataKeyContainers {
+  string key = 1;
+  repeated AbstractDataContainerData containers = 2;
+}
+
+message AbstractDataKeyContainerNames {
+  string key = 1;
+  repeated string container_names = 2;
+}
+
+message GetDataRequest {
+  UserContext context = 1;
+  repeated AbstractDataKeyContainerNames key_container_names = 2;
+}
+
+message GetDataResponse {
+  repeated AbstractDataKeyContainers data = 1;
+}
+
+message SetDataRequest {
+  UserContext context = 1;
+  repeated AbstractDataKeyContainers data = 2;
+}
+
+message SetDataResponse {
+}
+
+message GetDataServerRequest {
+  ServerContext context = 1;
+  repeated AbstractDataKeyContainerNames key_container_names = 2;
+}
+
+message GetDataServerResponse {
+  repeated AbstractDataKeyContainers data = 1;
+}
+
+message SetDataServerRequest {
+  ServerContext context = 1;
+  repeated AbstractDataKeyContainers data = 2;
+}
+
+message SetDataServerResponse {
+}
+

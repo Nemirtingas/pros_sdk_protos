@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+import "Push/PushToken.proto";
+
+package Hydra.Api.Messaging;
+
+enum ChannelAccessPolicy {
+  CHANNEL_ACCESS_POLICY_UNKNOWN = 0;
+  CHANNEL_ACCESS_POLICY_ALLOW = 1;
+  CHANNEL_ACCESS_POLICY_BLOCK = 2;
+}
+
+enum ChannelMembershipPolicy {
+  CHANNEL_MEMBERSHIP_POLICY_UNKNOWN = 0;
+  CHANNEL_MEMBERSHIP_POLICY_LOCK = 1;
+  CHANNEL_MEMBERSHIP_POLICY_UNLOCK = 2;
+}
+
+enum ChannelCredentialPolicy {
+  CHANNEL_CREDENTIAL_POLICY_UNKNOWN = 0;
+  CHANNEL_CREDENTIAL_POLICY_EMPTY = 1;
+  CHANNEL_CREDENTIAL_POLICY_PASSWORD = 2;
+}
+
+enum ChannelOwnerMigrationPolicy {
+  CHANNEL_OWNER_MIGRATION_POLICY_UNKNOWN = 0;
+  CHANNEL_OWNER_MIGRATION_POLICY_NONE = 1;
+  CHANNEL_OWNER_MIGRATION_POLICY_AUTOMATIC = 2;
+  CHANNEL_OWNER_MIGRATION_POLICY_SERVER = 3;
+}
+
+enum ChannelWritingPolicy {
+  CHANNEL_WRITING_POLICY_UNKNOWN = 0;
+  CHANNEL_WRITING_POLICY_WRITE = 1;
+  CHANNEL_WRITING_POLICY_READ = 2;
+}
+
+enum ChannelMessageType {
+  CHANNEL_MESSAGE_TYPE_NONE = 0;
+  CHANNEL_MESSAGE_TYPE_PRIVATE = 100;
+  CHANNEL_MESSAGE_TYPE_CHANNEL = 200;
+}
+
+enum ChannelType {
+  CHANNEL_TYPE_NONE = 0;
+  CHANNEL_TYPE_PRIVATE = 1;
+  CHANNEL_TYPE_SERVICE = 2;
+  CHANNEL_TYPE_USER = 3;
+}
+
+enum ChannelCredentialType {
+  CHANNEL_CREDENTIAL_TYPE_UNKNOWN = 0;
+  CHANNEL_CREDENTIAL_TYPE_PASSWORD = 1;
+}
+
+message ConnectRequest {
+  UserContext user_context = 1;
+  PushToken push_token = 2;
+}
+
+message ConnectResponse {
+  repeated ChannelHistory channel_histories = 1;
+}
+
+message DisconnectRequest {
+  UserContext user_context = 1;
+}
+
+message DisconnectResponse {
+}
+
+message CreateChannelRequest {
+  UserContext user_context = 1;
+  Channel channel = 2;
+  ChannelConfiguration channel_configuration = 3;
+  ChannelCredential channel_credential = 4;
+}
+
+message CreateChannelResponse {
+}
+
+message UpdateChannelRequest {
+  UserContext user_context = 1;
+  Channel channel = 2;
+  ChannelConfiguration channel_configuration = 3;
+}
+
+message UpdateChannelResponse {
+}
+
+message UpdateMembersRequest {
+  UserContext user_context = 1;
+  Channel channel = 2;
+  repeated ChannelUserAccess channel_users_access = 3;
+}
+
+message UpdateMembersResponse {
+}
+
+message JoinChannelsRequest {
+  UserContext user_context = 1;
+  repeated ChannelInfo channels_info = 2;
+}
+
+message JoinChannelsResponse {
+}
+
+message LeaveChannelsRequest {
+  UserContext user_context = 1;
+  repeated Channel channels = 2;
+}
+
+message LeaveChannelsResponse {
+}
+
+message SendChannelMessageRequest {
+  UserContext user_context = 1;
+  Channel channel = 2;
+  ChannelMessage channel_message = 3;
+}
+
+message SendChannelMessageResponse {
+}
+
+message SendPrivateMessageRequest {
+  UserContext user_context = 1;
+  ChannelUser for_user = 2;
+  ChannelMessage channel_message = 3;
+}
+
+message SendPrivateMessageResponse {
+}
+
+message GetChannelsHistoryRequest {
+  UserContext user_context = 1;
+  repeated ChannelIndex channel_indexes = 2;
+}
+
+message GetChannelsHistoryResponse {
+  repeated ChannelHistory channel_histories = 1;
+}
+
+message ReadChannelsHistoryRequest {
+  UserContext user_context = 1;
+  repeated ChannelIndex channel_indexes = 2;
+}
+
+message ReadChannelsHistoryResponse {
+}
+
+message ChannelIndex {
+  Channel channel = 1;
+  int64 message_index = 2;
+}
+
+message ChannelHistory {
+  ChannelIndex channel_index = 1;
+  int64 read_message_index = 2;
+  repeated ChannelMessageInfo messages_info = 3;
+}
+
+message ChannelConfiguration {
+  int32 channel_max_members = 1;
+  ChannelCredentialPolicy channel_credential_policy = 2;
+  ChannelOwnerMigrationPolicy channel_owner_migration_policy = 3;
+  ChannelWritingPolicy channel_writing_policy = 4;
+  ChannelMembershipPolicy channel_membership_policy = 5;
+  int64 channel_timeout_ms = 6;
+}
+
+message Channel {
+  string channel_name = 1;
+  ChannelType channel_type = 2;
+}
+
+message ChannelUser {
+  string user = 1;
+}
+
+message ChannelUserAccess {
+  ChannelUser channel_user = 1;
+  ChannelAccessPolicy channel_access_policy = 2;
+}
+
+message ChannelMessageInfo {
+  int64 message_index = 1;
+  ChannelMessage channel_message = 2;
+  ChannelMessageType channel_message_type = 3;
+  ChannelUser from_user = 4;
+  Timestamp created_at = 5;
+}
+
+message ChannelMessage {
+  string text = 2;
+}
+
+message ChannelCredentialPassword {
+  string password = 1;
+}
+
+message ChannelCredential {
+  oneof type {
+    ChannelCredentialType credential_type = 1;
+    ChannelCredentialPassword credential_password = 2;
+  }
+  ChannelCredentialType credential_type = 1;
+}
+
+message ChannelInfo {
+  Channel channel = 1;
+  ChannelCredential channel_credential = 2;
+}
+
+message MessagingUserUpdateVersion {
+  int32 version = 1;
+  MessagingUserUpdate update = 2;
+}
+
+message MessagingUserUpdate {
+  repeated ChannelUserMessage messages = 1;
+}
+
+message ChannelUserMessage {
+  Channel channel = 1;
+  ChannelMessageInfo channel_message_info = 2;
+}
+

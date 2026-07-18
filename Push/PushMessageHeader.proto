@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "Push/PushToken.proto";
+import "Push/PushMessageType.proto";
+
+package Hydra.Api.Push;
+
+message PushMessageHeader {
+  PushToken token = 1;
+  PushMessageType message_type = 2;
+  int32 version = 3;
+}
+

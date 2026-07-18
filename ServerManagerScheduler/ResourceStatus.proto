@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package Hydra.Api.ServerManagerScheduler;
+
+message ResourceStatus {
+  int64 used = 1;
+  int64 total = 2;
+}
+
+message VmResourceStatus {
+  ResourceStatus cpu = 1;
+  ResourceStatus memory = 2;
+}
+

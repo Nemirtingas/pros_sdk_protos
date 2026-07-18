@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package Hydra.Api.ServerManagerScheduler;
+
+message BuildVersion {
+  string title_id = 1;
+  string version = 2;
+}
+

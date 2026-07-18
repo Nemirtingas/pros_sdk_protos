@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "Push/Signaling/Signaling.proto";
+
+package Hydra.Api.Push;
+
+enum PushClientMessageType {
+  PUSH_CLIENT_MESSAGE_TYPE_UNKNOWN = 0;
+  PUSH_CLIENT_MESSAGE_TYPE_SIGNALING = 1;
+}
+
+message PushClientMessage {
+  oneof kind {
+    PushClientMessageType message_type = 1;
+    SignalingMessage signal = 2;
+  }
+  PushClientMessageType message_type = 1;
+}
+

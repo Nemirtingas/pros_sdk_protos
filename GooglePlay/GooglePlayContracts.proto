@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+
+package Hydra.Api.GooglePlay;
+
+enum GooglePlayPurchaseType {
+  GOOGLE_PLAY_PURCHASE_TYPE_TEST = 0;
+  GOOGLE_PLAY_PURCHASE_TYPE_PROMO = 1;
+  GOOGLE_PLAY_PURCHASE_TYPE_REWARDED = 2;
+  GOOGLE_PLAY_PURCHASE_TYPE_REAL_MONEY = 100;
+  GOOGLE_PLAY_PURCHASE_TYPE_UNKNOWN = 200;
+}
+
+message ValidateGooglePurchaseRequest {
+  UserContext user_context = 1;
+  GooglePlayPurchase purchase = 2;
+}
+
+message ValidateGooglePurchaseResponse {
+  GooglePlayPurchaseInfo purchase_info = 1;
+}
+
+message GooglePlayPurchase {
+  string product_id = 1;
+  string purchase_token = 2;
+  string currency_code = 3;
+  float numeric_price = 4;
+  string sale_instance_id = 5;
+}
+
+message GooglePlayPurchaseInfo {
+  GooglePlayPurchaseType purchase_type = 1;
+  string order_id = 2;
+}
+

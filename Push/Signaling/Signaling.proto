@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package Hydra.Api.Push.Signaling;
+
+enum SignalingType {
+  SIGNALING_TYPE_SIGNAL_UNKNOWN = 0;
+  SIGNALING_TYPE_SIGNAL_P2P = 1;
+}
+
+message SignalingMessage {
+  string message_id = 1;
+  SignalingType type = 2;
+  string user_id_from = 3;
+  string user_id_to = 4;
+  bytes data = 5;
+}
+
+message SignalingMessageVersion {
+  int32 version = 1;
+  SignalingMessage update = 2;
+}
+

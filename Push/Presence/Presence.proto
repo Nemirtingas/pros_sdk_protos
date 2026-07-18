@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+import "Presence/PartyStatus.proto";
+import "Presence/MatchmakeStatus.proto";
+import "Presence/InviteData.proto";
+import "Errors/ErrorCode.proto";
+import "Nullable/Nullable.proto";
+
+package Hydra.Api.Push.Presence;
+
+enum InviteEventType {
+  INVITE_EVENT_TYPE_UNKNOWN = 0;
+  INVITE_EVENT_TYPE_INVITE_SENT = 1;
+  INVITE_EVENT_TYPE_REVOKE_SENT = 2;
+  INVITE_EVENT_TYPE_INVITE_RECEIVED = 3;
+  INVITE_EVENT_TYPE_REVOKE_RECEIVED = 4;
+  INVITE_EVENT_TYPE_INVITE_ACCEPTED = 5;
+  INVITE_EVENT_TYPE_INVITE_REJECTED = 6;
+  INVITE_EVENT_TYPE_ACCEPT_SUCCESS_RECEIVED = 7;
+  INVITE_EVENT_TYPE_ACCEPT_FAIL_RECEIVED = 8;
+  INVITE_EVENT_TYPE_REJECT_RECEIVED = 9;
+}
+
+enum PresenceSessionMemberUpdateType {
+  PRESENCE_SESSION_MEMBER_UPDATE_TYPE_NONE = 0;
+  PRESENCE_SESSION_MEMBER_UPDATE_TYPE_ADD = 1;
+  PRESENCE_SESSION_MEMBER_UPDATE_TYPE_REMOVE = 2;
+  PRESENCE_SESSION_MEMBER_UPDATE_TYPE_UPDATE = 3;
+}
+
+enum PresencePartyUpdateType {
+  PRESENCE_PARTY_UPDATE_TYPE_NONE = 0;
+  PRESENCE_PARTY_UPDATE_TYPE_ID = 1;
+  PRESENCE_PARTY_UPDATE_TYPE_DATA = 2;
+  PRESENCE_PARTY_UPDATE_TYPE_SETTINGS = 4;
+  PRESENCE_PARTY_UPDATE_TYPE_MEMBERS = 8;
+  PRESENCE_PARTY_UPDATE_TYPE_JOIN_CODE = 16;
+}
+
+enum PresencePartyMemberUpdateType {
+  PRESENCE_PARTY_MEMBER_UPDATE_TYPE_NONE = 0;
+  PRESENCE_PARTY_MEMBER_UPDATE_TYPE_ADD = 1;
+  PRESENCE_PARTY_MEMBER_UPDATE_TYPE_REMOVE = 2;
+  PRESENCE_PARTY_MEMBER_UPDATE_TYPE_UPDATE = 3;
+}
+
+message InviteEvent {
+  InviteEventType event_type = 1;
+  InviteData data = 2;
+  int32 sequence_id = 3;
+}
+
+message LongOperationResultUpdate {
+  string correlation_id = 1;
+  ErrorCode result_code = 2;
+}
+
+message PresenceUserUpdate {
+  repeated InviteEvent invite_events = 1;
+  LongOperationResultUpdate long_operation_result = 2;
+}
+
+message PresenceSessionMemberUpdate {
+  PresenceSessionMemberUpdateType update_type = 2;
+  SessionMember member_data = 3;
+}
+
+message PresenceSessionQueueData {
+  string play_list_id = 1;
+  repeated QueueVariants queue_variants = 2;
+}
+
+message PresenceSessionGameData {
+  NullableString play_list_id = 1;
+  repeated GameVariant variants = 2;
+  MatchmakeSessionSettings settings = 3;
+  NullableString data = 4;
+  repeated PresenceSessionMemberUpdate members_update = 5;
+  string s_c_managed_context = 6;
+}
+
+message PresenceSessionUpdate {
+  GameSessionId id = 1;
+  MatchmakeState state = 2;
+  PresenceSessionQueueData queue_data = 3;
+  PresenceSessionGameData game_data = 4;
+}
+
+message PresencePartyUpdate {
+  PartyId id = 2;
+  NullableString data = 3;
+  PartySettings settings = 4;
+  repeated PresencePartyMemberUpdate members = 5;
+  NullableString join_code = 6;
+}
+
+message PresencePartyMemberUpdate {
+  PresencePartyMemberUpdateType update_type = 1;
+  PartyMember member = 2;
+}
+
+message PresenceUserUpdateVersion {
+  int32 version = 1;
+  PresenceUserUpdate update = 2;
+}
+
+message PresenceSessionUpdateVersion {
+  int32 version = 1;
+  PresenceSessionUpdate update = 2;
+}
+
+message PresencePartyUpdateVersion {
+  int32 version = 1;
+  PresencePartyUpdate update = 2;
+}
+

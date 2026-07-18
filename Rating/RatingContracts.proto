@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+
+package Hydra.Api.Rating;
+
+enum MatchResult {
+  MATCH_RESULT_NONE = 0;
+  MATCH_RESULT_WIN = 1;
+  MATCH_RESULT_LOSE = 2;
+}
+
+message UserRatingHistory {
+  int32 games_count = 1;
+  double rating = 2;
+  string session_id = 3;
+  Timestamp time = 4;
+  string custom_data = 5;
+  MatchResult result = 6;
+}
+
+message RatingData {
+  double rating = 1;
+  int32 games_count = 2;
+  repeated UserRatingHistory history = 4;
+}
+
+message UserRating {
+  string user_id = 1;
+  RatingData data = 2;
+}
+
+message UserIndividualResult {
+  string user_id = 1;
+  int32 user_place_in_game = 2;
+  string custom_data = 3;
+}
+
+message UserTeamResult {
+  string user_id = 1;
+  int32 user_place_in_team = 2;
+  int32 team_place_in_game = 3;
+  string custom_data = 4;
+}
+
+message SessionIndividualResult {
+  repeated UserIndividualResult results = 1;
+}
+
+message SessionTeamResult {
+  repeated UserTeamResult results = 1;
+}
+
+message RatingUpdate {
+  oneof result {
+    SessionIndividualResult individual_results = 2;
+    SessionTeamResult team_results = 3;
+  }
+}
+
+message GetRatingsUserRequest {
+  UserContext context = 1;
+  string rating_id = 2;
+  bool include_history = 3;
+  repeated string user_ids = 4;
+}
+
+message GetRatingsUserResponse {
+  repeated UserRating ratings = 1;
+}
+
+message GetRatingsServerRequest {
+  ServerContext context = 1;
+  string rating_id = 2;
+  bool include_history = 3;
+  repeated string user_ids = 4;
+}
+
+message GetRatingsServerResponse {
+  repeated UserRating ratings = 1;
+}
+
+message GetServiceRatingsRequest {
+  string title_id = 1;
+  string rating_id = 2;
+  repeated string user_ids = 3;
+}
+
+message UpdateRatingsServerRequest {
+  ServerContext context = 1;
+  string rating_id = 2;
+  RatingUpdate update = 3;
+}
+
+message UpdateRatingsServerResponse {
+}
+
+message UpdateRatingsUserRequest {
+  UserContext context = 1;
+  string session_id = 2;
+  string rating_id = 3;
+  RatingUpdate update = 4;
+}
+
+message UpdateRatingsUserResponse {
+}
+
+message CustomRatingUpdate {
+  string user_id = 1;
+  double rating = 2;
+  string custom_data = 3;
+  MatchResult result = 4;
+}
+
+message UpdateCustomRatingsServerRequest {
+  ServerContext context = 1;
+  string rating_id = 2;
+  repeated CustomRatingUpdate update = 3;
+}
+
+message UpdateCustomRatingsServerResponse {
+}
+
+message UpdateCustomRatingsUserRequest {
+  UserContext context = 1;
+  string session_id = 2;
+  string rating_id = 3;
+  repeated CustomRatingUpdate update = 4;
+}
+
+message UpdateCustomRatingsUserResponse {
+}
+

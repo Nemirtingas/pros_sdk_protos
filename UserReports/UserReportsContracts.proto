@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+
+package Hydra.Api.UserReports;
+
+enum SendUserReportResult {
+  SEND_USER_REPORT_RESULT_NONE = 0;
+  SEND_USER_REPORT_RESULT_SUCCESS = 1;
+  SEND_USER_REPORT_RESULT_DAILY_LIMIT_REACHED = 2;
+  SEND_USER_REPORT_RESULT_USER_LIMIT_REACHED = 3;
+}
+
+message UserReportsProperty {
+  string name = 1;
+  string value = 2;
+}
+
+message SendUserReportRequest {
+  UserContext user_context = 1;
+  string to_user_id = 2;
+  string report_reason_id = 3;
+  string user_message = 4;
+  repeated UserReportsProperty user_reports_properties = 5;
+}
+
+message SendUserReportResponse {
+  SendUserReportResult result = 1;
+  string user_report_id = 2;
+}
+

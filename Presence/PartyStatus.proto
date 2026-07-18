@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import "Presence/MatchmakeStatus.proto";
+
+package Hydra.Api.Presence;
+
+enum PartyState {
+  PARTY_STATE_NONE = 0;
+  PARTY_STATE_CREATED = 1;
+}
+
+enum PartyIdChangeReason {
+  PARTY_ID_CHANGE_REASON_NONE = 0;
+  PARTY_ID_CHANGE_REASON_CREATE = 1;
+  PARTY_ID_CHANGE_REASON_JOIN = 2;
+  PARTY_ID_CHANGE_REASON_LEAVE = 4;
+  PARTY_ID_CHANGE_REASON_KICK = 5;
+  PARTY_ID_CHANGE_REASON_DISBAND = 6;
+}
+
+enum PartyInviteDelegation {
+  PARTY_INVITE_DELEGATION_OWNER = 0;
+  PARTY_INVITE_DELEGATION_EVERYONE = 1;
+}
+
+enum PartyJoin {
+  PARTY_JOIN_DISABLED = 0;
+  PARTY_JOIN_ENABLED = 1;
+}
+
+enum PartyJoinDelegation {
+  PARTY_JOIN_DELEGATION_DISABLED = 0;
+  PARTY_JOIN_DELEGATION_EVERYONE = 1;
+  PARTY_JOIN_DELEGATION_ALLOWED_USERS = 2;
+}
+
+message PartyId {
+  string id = 2;
+  PartyIdChangeReason reason = 3;
+}
+
+message PartySettings {
+  int32 party_max_count = 1;
+  PartyInviteDelegation invite_delegation = 2;
+  PartyJoinDelegation join_delegation = 3;
+  repeated string allowed_user_ids = 4;
+  PartyJoin joinable = 5;
+  bool disband_on_owner_leave = 6;
+}
+
+message PartyMember {
+  string user_id = 1;
+  bool is_owner = 2;
+  string data = 3;
+  string static_data = 4;
+  int32 sort_index = 5;
+  MatchmakeState state = 6;
+}
+
+message PartyCreateParams {
+  PartySettings settings = 1;
+  string data = 2;
+  string member_data = 3;
+}
+

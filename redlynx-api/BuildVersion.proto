@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package RedLynx.Api;
+
+message BuildInformation {
+}
+
+message Build {
+  string version = 1;
+  string hash = 2;
+}
+

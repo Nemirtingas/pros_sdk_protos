@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package Hydra.Api.Challenges;
+
+enum ChallengeUpdateType {
+  CHALLENGE_UPDATE_TYPE_NONE = 0;
+  CHALLENGE_UPDATE_TYPE_FULL = 1;
+  CHALLENGE_UPDATE_TYPE_INCREMENTAL = 2;
+  CHALLENGE_UPDATE_TYPE_FILTERED = 3;
+}
+
+enum ChallengeType {
+  CHALLENGE_TYPE_NONE = 0;
+  CHALLENGE_TYPE_DAILY = 1;
+  CHALLENGE_TYPE_STATIC = 2;
+}
+
+enum ChallengeState {
+  CHALLENGE_STATE_NONE = 0;
+  CHALLENGE_STATE_ACTIVATED = 1;
+  CHALLENGE_STATE_COMPLETED = 2;
+  CHALLENGE_STATE_EXPIRED = 3;
+  CHALLENGE_STATE_REWARDED = 4;
+}
+
+enum ChallengeCounterFilterOperationType {
+  CHALLENGE_COUNTER_FILTER_OPERATION_TYPE_NONE = 0;
+  CHALLENGE_COUNTER_FILTER_OPERATION_TYPE_EQUAL = 1;
+  CHALLENGE_COUNTER_FILTER_OPERATION_TYPE_NOT_EQUAL = 2;
+}
+
+enum ChallengeOperationType {
+  CHALLENGE_OPERTAION_TYPE_NONE = 0;
+  CHALLENGE_OPERTAION_TYPE_INCREASE = 1;
+  CHALLENGE_OPERTAION_TYPE_RESET = 2;
+}
+
+message UserChallengesIncrementalUpdate {
+  ChallengeUpdateType update_type = 1;
+  repeated Challenge challenges = 2;
+  repeated string removed_challenges = 3;
+  uint64 current_tick = 4;
+  uint64 current_tick_expiration_sec = 5;
+  repeated ChallengeDailySlotInfo daily_slot_info = 6;
+}
+
+message UserChallengesUpdateVersion {
+  int32 version = 1;
+  int64 from_challenges_version = 2;
+  int64 to_challenges_version = 3;
+  UserChallengesIncrementalUpdate update = 4;
+}
+
+message UserChallengesInfo {
+  repeated Challenge challenges = 1;
+  uint64 current_tick = 2;
+  uint64 current_tick_expiration_sec = 3;
+  repeated ChallengeDailySlotInfo daily_slot_info = 4;
+}
+
+message Challenge {
+  string challenge_id = 1;
+  string definition = 2;
+  ChallengeType type = 3;
+  ChallengeState state = 4;
+  int32 slot = 5;
+  uint32 tick = 6;
+  repeated ChallengeCounter counters = 7;
+}
+
+message ChallengeCounterFilterItem {
+  string name = 1;
+  string value = 2;
+  ChallengeCounterFilterOperationType operation = 3;
+}
+
+message ChallengeCounter {
+  string challenge_counter_id = 1;
+  uint64 value = 2;
+  uint64 goal = 3;
+  repeated uint64 milestones = 4;
+}
+
+message ChallengeEvent {
+  string event_name = 1;
+  ChallengeOperationType operation = 2;
+  repeated ChallengeCounterFilterItem event_filter = 3;
+  uint64 value = 4;
+}
+
+message ChallengeCounterWithEvents {
+  string challenge_counter_id = 1;
+  repeated ChallengeEvent events = 2;
+  uint64 value = 3;
+  uint64 goal = 4;
+  repeated uint64 milestones = 5;
+}
+
+message ChallengeOperationList {
+  string user_id = 1;
+  repeated ChallengeCounterOperation operations = 2;
+}
+
+message ChallengeCounterOperation {
+  string challenge_counter_id = 1;
+  ChallengeOperationType operation_type = 2;
+  uint64 value = 3;
+}
+
+message ChallengeDailySlotInfo {
+  int32 available_recharge_count = 1;
+  int32 remaining_cooldown_sec = 2;
+}
+

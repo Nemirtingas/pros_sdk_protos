@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package Hydra.Api.Presence;
+
+message InviteData {
+  string invite_id = 1;
+  string party_id = 2;
+  string user_id_from = 3;
+  string user_id_to = 4;
+}
+

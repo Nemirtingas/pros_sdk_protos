@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/ConfigurationContext.proto";
+import "Push/PushToken.proto";
+import "User/Enums.proto";
+import "google/protobuf/timestamp.proto";
+
+package Hydra.Api.User;
+
+message ConnectRequest {
+  UserContext context = 1;
+  PushToken push_token = 2;
+  ConfigurationContext configuration_context = 3;
+}
+
+message ConnectResponse {
+  UserStates data = 1;
+}
+
+message DisconnectRequest {
+  UserContext context = 1;
+}
+
+message DisconnectResponse {
+}
+
+message GetUserStatesRequest {
+  UserContext context = 1;
+}
+
+message GetUserStatesResponse {
+  UserStates data = 1;
+}
+
+message GetTransactionsRequest {
+  UserContext context = 1;
+  int64 from_transaction_id = 2;
+  int64 count = 3;
+}
+
+message GetTransactionsResponse {
+  UserTransactionsUpdate transactions = 1;
+}
+
+message GetTransactionsReverseRequest {
+  UserContext context = 1;
+  int64 before_transaction_id = 2;
+  int64 count = 3;
+}
+
+message GetTransactionsReverseResponse {
+  UserTransactionsUpdate transactions = 1;
+}
+
+message ApplyOffersRequest {
+  UserContext user_context = 1;
+  ConfigurationContext configuration_context = 2;
+  repeated OfferListItem offers = 3;
+}
+
+message ApplyOffersResponse {
+}
+
+message OfferListItem {
+  string reference_id = 1;
+  string offer_id = 2;
+}
+
+message UserStates {
+  int64 last_transaction_id = 1;
+  repeated UserState items = 2;
+}
+
+message UserState {
+  string state_uid = 1;
+  StateValue state_value = 2;
+}
+
+message UserTransactionsUpdate {
+  repeated UserTransaction transactions = 1;
+}
+
+message UserTransaction {
+  message ExtendedInfoEntry {
+    string key = 1;
+    string value = 2;
+  }
+
+  int64 id = 1;
+  string offer_id = 2;
+  string reference_id = 3;
+  repeated UserTransactionItem transaction_items = 4;
+  repeated ExtendedInfoEntry extended_info = 5;
+  Timestamp created_at = 6;
+}
+
+message UserTransactionItem {
+  message ExtendedInfoEntry {
+    string key = 1;
+    string value = 2;
+  }
+
+  string state_uid = 1;
+  UserStateOpType state_op_type = 2;
+  StateValue prev_value = 3;
+  StateValue current_value = 4;
+  repeated ExtendedInfoEntry extended_info = 5;
+}
+
+message StateValue {
+  oneof value {
+    UserStateOwnType state_own_type = 1;
+    UserStateDataType state_data_type = 2;
+    Int64Value int64_value = 3;
+    StringValue string_value = 4;
+    VectorStringValue vector_string_value = 5;
+  }
+  UserStateOwnType state_own_type = 1;
+  UserStateDataType state_data_type = 2;
+}
+
+message ProcessPlatformEntitlementsRequest {
+  UserContext user_context = 1;
+  ConfigurationContext configuration_context = 2;
+}
+
+message ProcessPlatformEntitlementsResponse {
+}
+
+message Int64Value {
+  int64 value = 1;
+}
+
+message StringValue {
+  string value = 1;
+}
+
+message VectorStringValue {
+  repeated string value = 1;
+}
+
+message UserTransactionsUpdateVersion {
+  int32 version = 1;
+  UserTransactionsUpdate update = 2;
+}
+

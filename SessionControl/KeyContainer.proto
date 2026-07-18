@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package Hydra.Api.SessionControl;
+
+message KeyContainer {
+  bytes key = 1;
+  bytes hash_key = 2;
+  bytes init_vector_value = 3;
+  bytes nonce = 4;
+}
+

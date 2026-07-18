@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+import "SessionControl/KeyContainer.proto";
+import "Context/UserContext.proto";
+
+package Hydra.Api.SessionControl;
+
+enum AcceptStatus {
+  ACCEPT_STATUS_PENDING = 0;
+  ACCEPT_STATUS_ACCEPTED = 1;
+  ACCEPT_STATUS_REJECTED = 2;
+}
+
+enum SessionMemberEventType {
+  SESSION_MEMBER_EVENT_TYPE_NONE = 0;
+  SESSION_MEMBER_EVENT_TYPE_ADD = 1;
+  SESSION_MEMBER_EVENT_TYPE_REMOVE = 2;
+  SESSION_MEMBER_EVENT_TYPE_AWAITING = 3;
+  SESSION_MEMBER_EVENT_TYPE_RETURN = 4;
+}
+
+enum UserSessionEventType {
+  USER_SESSION_EVENT_TYPE_UNKNOWN = 0;
+  USER_SESSION_EVENT_TYPE_KR_PARTY_OWNER = 1;
+  USER_SESSION_EVENT_TYPE_KR_REJECTED = 2;
+  USER_SESSION_EVENT_TYPE_KR_TIMEOUT = 3;
+  USER_SESSION_EVENT_TYPE_KR_CHEAT = 4;
+  USER_SESSION_EVENT_TYPE_KR_AFK = 5;
+  USER_SESSION_EVENT_TYPE_KR_RETARD = 6;
+  USER_SESSION_EVENT_TYPE_KR_READY_TIMEOUT = 7;
+  USER_SESSION_EVENT_TYPE_DISBAND = 8;
+  USER_SESSION_EVENT_TYPE_SC_NO_MATCHING_DSM = 9;
+  USER_SESSION_EVENT_TYPE_SC_PENDING_TIMEOUT = 10;
+  USER_SESSION_EVENT_TYPE_SC_UNKNOWN = 11;
+  USER_SESSION_EVENT_TYPE_SC_NO_SLOTS_DSM = 12;
+  USER_SESSION_EVENT_TYPE_SC_NO_PROVIDER = 13;
+  USER_SESSION_EVENT_TYPE_SC_TIMEOUT_QUEUE = 14;
+  USER_SESSION_EVENT_TYPE_REMATCH_DISBAND = 15;
+  USER_SESSION_EVENT_TYPE_SESSION_JOIN_FAILED = 16;
+}
+
+enum TeamId {
+  TEAM_ID_UNKNOWN = 0;
+  TEAM_ID_1 = 1;
+  TEAM_ID_2 = 2;
+  TEAM_ID_SPECTATOR = 3;
+}
+
+message AcceptData {
+  KeyContainer key_info = 1;
+}
+
+message SessionMemberBackendData {
+  KeyContainer key_info = 1;
+}
+
+message ServerInfo {
+  string connection_info = 1;
+  string server_property = 2;
+}
+
+message AcceptClientResult {
+  AcceptStatus status = 1;
+  AcceptData data = 2;
+  ServerInfo server_info = 3;
+}
+
+message ServerUserContext {
+  UserContext user_context = 1;
+}
+
+message SessionMemberEventData {
+  ServerUserContext server_user_context = 1;
+  SessionMemberBackendData backend_data = 2;
+  SessionMemberEventType event_type = 3;
+}
+
+message SessionMemberEvent {
+  string key = 1;
+  SessionMemberEventData data = 2;
+}
+
+message MemberAcceptResult {
+  AcceptStatus status = 1;
+  AcceptData data = 2;
+}
+
+message SessionMemberEventResultData {
+  AcceptStatus status = 1;
+}
+
+message SessionMemberEventResult {
+  string key = 1;
+  SessionMemberEventResultData data = 2;
+}
+

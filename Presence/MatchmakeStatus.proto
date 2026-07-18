@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package Hydra.Api.Presence;
+
+enum MatchmakeState {
+  MATCHMAKE_STATE_NONE = 0;
+  MATCHMAKE_STATE_QUEUE = 1;
+  MATCHMAKE_STATE_GAME = 2;
+}
+
+enum MatchmakeJIPState {
+  MATCHMAKE_JIP_STATE_DISABLED = 0;
+  MATCHMAKE_JIP_STATE_ENABLED = 1;
+}
+
+enum MatchmakeJoinDelegation {
+  MATCHMAKE_JOIN_DELEGATION_DISABLED = 0;
+  MATCHMAKE_JOIN_DELEGATION_EVERYONE = 1;
+  MATCHMAKE_JOIN_DELEGATION_ALLOWED_USERS = 2;
+}
+
+enum GameSessionIdChangeReason {
+  GAME_SESSION_ID_CHANGE_REASON_NONE = 0;
+  GAME_SESSION_ID_CHANGE_REASON_JOIN = 1;
+  GAME_SESSION_ID_CHANGE_REASON_LEAVE = 2;
+  GAME_SESSION_ID_CHANGE_REASON_KICK = 3;
+  GAME_SESSION_ID_CHANGE_REASON_DISBAND = 4;
+  GAME_SESSION_ID_CHANGE_REASON_SESSION_FINISHED_NORMAL = 5;
+  GAME_SESSION_ID_CHANGE_REASON_SESSION_FINISHED_NO_MATCHING_DSM = 6;
+  GAME_SESSION_ID_CHANGE_REASON_SESSION_FINISHED_PENDING_TIMEOUT = 7;
+  GAME_SESSION_ID_CHANGE_REASON_SESSION_FINISHED_NO_SLOTS_DSM = 8;
+  GAME_SESSION_ID_CHANGE_REASON_SESSION_FINISHED_NO_PROVIDER = 9;
+  GAME_SESSION_ID_CHANGE_REASON_SESSION_FINISHED_TIMEOUT_QUEUE = 10;
+}
+
+message DCPing {
+  string name = 1;
+  int32 ping = 2;
+}
+
+message QueueVariants {
+  string id = 1;
+  repeated string values = 2;
+}
+
+message MatchmakeSessionSettings {
+  MatchmakeJIPState jip = 1;
+  int32 max_players = 2;
+  MatchmakeJoinDelegation join_delegation = 3;
+  repeated string allowed_user_ids = 4;
+}
+
+message MatchmakeSessionOptions {
+  string playlist_id = 1;
+  repeated DCPing pings = 2;
+}
+
+message MatchmakeCreateOptions {
+  MatchmakeSessionOptions options = 1;
+  MatchmakeSessionSettings settings = 2;
+  repeated GameVariant variants = 3;
+}
+
+message MatchmakeSearchOptions {
+  MatchmakeSessionOptions options = 1;
+  repeated QueueVariants variants = 2;
+}
+
+message GameVariant {
+  string id = 1;
+  string value = 2;
+}
+
+message SessionMember {
+  string user_id = 1;
+  bool is_owner = 2;
+  string data = 3;
+  string static_data = 4;
+  float rating = 5;
+  int32 sorting_index = 6;
+  string group_id = 7;
+  int32 team_id = 8;
+}
+
+message GameSessionData {
+  string id = 1;
+  MatchmakeSessionSettings settings = 2;
+  repeated GameVariant variants = 3;
+  string data = 4;
+  repeated SessionMember session_members = 5;
+}
+
+message GameSessionId {
+  string id = 1;
+  GameSessionIdChangeReason reason = 2;
+}
+
+message MatchmakeStatus {
+  GameSessionId id = 1;
+  MatchmakeState state = 2;
+  GameSessionData session = 3;
+}
+
+message UserPresenceData {
+  string user_id = 1;
+  GameSessionData session = 2;
+  bool is_online = 3;
+  bool is_invitable = 4;
+  string static_data = 5;
+}
+

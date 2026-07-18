@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package Hydra.Api.Infrastructure;
+
+enum ServiceAccessRole {
+  UNKNOWN = 0;
+  GUEST = 1;
+  GAME_CLIENT = 2;
+  GAME_SERVER = 3;
+  WEB_PORTAL = 4;
+  SERVER_MANAGER_AGENT = 5;
+  STANDALONE_SERVER = 6;
+  BOT_MANAGER = 7;
+  ADMIN = 8;
+  PLUGIN = 9;
+  PLUGIN_ADMIN = 10;
+  CONFIGURATION_MANAGER = 11;
+  DIAGNOSTIC_MANAGER = 12;
+  GAME_NEXUS_API = 13;
+  DEDICATED_SERVER_UPLOADER = 14;
+  ATHENA = 15;
+}
+
+enum VisibilityScope {
+  NONE = 0;
+  BASE = 1;
+  TITLE = 2;
+}
+
+message EnumValueDescription {
+  string value = 1;
+}
+
+message ServiceAttribute {
+  ServiceVersion version = 1;
+  string access_role = 2;
+  string scope = 3;
+}
+
+message MethodAttribute {
+  string access_role = 1;
+  string scope = 2;
+}
+
+message ServiceVersion {
+  int32 major = 1;
+  int32 minor = 2;
+  string hash = 3;
+}
+

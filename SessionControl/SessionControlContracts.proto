@@ -1,0 +1,175 @@
+syntax = "proto3";
+
+import "EndpointDispatcher/EndpointDispatcherContracts.proto";
+import "SessionControl/MemberEvent.proto";
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+import "Nullable/Nullable.proto";
+
+package Hydra.Api.SessionControl;
+
+message CreateSessionRequest {
+  UserContext user_context = 1;
+  string data_center_id = 2;
+  string client_version = 3;
+  string server_data = 4;
+}
+
+message CreateSessionResponse {
+  string game_session_id = 1;
+}
+
+message GetServerInfoRequest {
+  UserContext user_context = 1;
+  string game_session_id = 2;
+}
+
+message GetServerInfoResponse {
+  AcceptClientResult accept_client_result = 1;
+  int32 refresh_after_seconds = 2;
+}
+
+message ManagedGetServerInfoRequest {
+  UserContext user_context = 1;
+  string s_c_context = 2;
+  string game_session_id = 3;
+}
+
+message ManagedGetServerInfoResponse {
+  AcceptClientResult accept_client_result = 1;
+}
+
+message ActivateSessionRequest {
+  string server_token = 1;
+  ServerInfo server_info = 2;
+}
+
+message ActivateSessionResponse {
+  ServerContext server_context = 1;
+  string server_data = 2;
+}
+
+message GetSessionMemberEventsRequest {
+  ServerContext server_context = 1;
+  int64 last_event_id = 2;
+}
+
+message GetSessionMemberEventsResponse {
+  repeated SessionMemberEvent events = 1;
+  int64 last_event_id = 2;
+}
+
+message ProcessSessionMemberEventsRequest {
+  ServerContext server_context = 1;
+  repeated SessionMemberEventResult list = 2;
+}
+
+message ProcessSessionMemberEventsResponse {
+}
+
+message FinishSessionRequest {
+  ServerContext server_context = 1;
+}
+
+message FinishSessionResponse {
+}
+
+message GetDataCenterEchoEndpointsRequest {
+  string client_version = 1;
+}
+
+message GetDataCenterEchoEndpointsV2Request {
+  UserContext user_context = 1;
+  string client_version = 2;
+}
+
+message EchoEndpoint {
+  string ip = 1;
+  int32 port = 2;
+  EndpointScheme scheme = 3;
+}
+
+message DataCenterEchoEndpoints {
+  string data_center_id = 1;
+  repeated EchoEndpoint endpoints = 2;
+}
+
+message GetDataCenterEchoEndpointsResponse {
+  repeated DataCenterEchoEndpoints endpoints = 1;
+}
+
+message SessionKeyValue {
+  string key = 1;
+  string value = 2;
+}
+
+message HeartbeatServerTags {
+  repeated string list = 1;
+}
+
+message HeartbeatServerKeyValue {
+  repeated SessionKeyValue list = 1;
+}
+
+message HeartbeatServerMembers {
+  repeated string list = 1;
+}
+
+message ServerBrowsingSessionData {
+  NullableString game_mode = 1;
+  NullableString game_map = 2;
+  NullableString server_name = 3;
+  NullableBool password_protected = 4;
+  NullableInt max_player_count = 5;
+  HeartbeatServerTags tags = 6;
+  HeartbeatServerKeyValue key_values = 7;
+  HeartbeatServerMembers members = 8;
+}
+
+message ServerData {
+  ServerBrowsingSessionData session_data = 1;
+  ServerInfo server_info = 2;
+}
+
+message BrowseServersResponse {
+  int32 slots_total = 1;
+  int32 slots_occupied = 2;
+  repeated ServerData servers = 3;
+}
+
+message HeartbeatServerData {
+  ServerBrowsingSessionData data = 1;
+}
+
+message CreateServerRequest {
+  string server_token = 1;
+  string client_version = 2;
+  ServerBrowsingSessionData create_data = 3;
+  ServerInfo server_info = 4;
+}
+
+message CreateServerResponse {
+  ServerContext server_context = 1;
+}
+
+message HeartbeatServerRequest {
+  ServerContext server_context = 1;
+  HeartbeatServerData update = 2;
+}
+
+message HeartbeatServerResponse {
+  int32 refresh_after_seconds = 1;
+}
+
+message BrowseServersRequest {
+  UserContext user_context = 1;
+  string client_version = 2;
+}
+
+message DestroyServerRequest {
+  ServerContext server_context = 1;
+}
+
+message DestroyServerResponse {
+}
+

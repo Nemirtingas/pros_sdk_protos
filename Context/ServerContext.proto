@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package Hydra.Api.Infrastructure.Context;
+
+message ServerContext {
+  ServerContextData data = 1;
+  bytes signature = 2;
+}
+
+message ServerContextData {
+  string title_id = 1;
+  string kernel_session_id = 2;
+}
+

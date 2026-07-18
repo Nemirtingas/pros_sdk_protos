@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Localization/LocalizedString.proto";
+
+package RedLynx.Api.Banner;
+
+enum BannerUrlType {
+  BANNER_URL_TYPE_EXTERNAL_URL = 0;
+  BANNER_URL_TYPE_IN_APP_GAME_CONTENT = 1;
+  BANNER_URL_TYPE_IN_APP_EXTERNAL_CONTENT = 2;
+}
+
+enum BannerSeverity {
+  BANNER_SEVERITY_NONE = 0;
+  BANNER_SEVERITY_IMPORTANT = 1;
+}
+
+enum BannerType {
+  BANNER_TYPE_TIPS = 0;
+  BANNER_TYPE_PROMO = 1;
+}
+
+enum BannerSystemMode {
+  BANNER_SYSTEM_MODE_NORMAL = 0;
+  BANNER_SYSTEM_MODE_TURN_OFF = 1;
+}
+
+message GetBannersRequest {
+  UserContext user_context = 1;
+  repeated string entitlements = 2;
+  string reference_id = 3;
+}
+
+message GetBannersResponse {
+  BannerConfig config = 1;
+  repeated BannerInfo banners = 2;
+}
+
+message BannerInfo {
+  string campaign_id = 1;
+  string image_url = 2;
+  string redirect_url = 3;
+  BannerUrlType url_type = 7;
+  BannerSeverity severity = 4;
+  BannerType banner_type = 5;
+  repeated BannerMessage messages = 6;
+}
+
+message BannerConfig {
+  int32 display_duration_ms = 1;
+  BannerSeverity min_severity_display = 2;
+  BannerSystemMode system_mode = 3;
+}
+
+message BannerMessage {
+  string id = 1;
+  repeated LocalizedString descriptions = 2;
+}
+

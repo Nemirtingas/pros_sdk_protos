@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+import "Localization/LocalizedString.proto";
+
+package RedLynx.Api.Entitlement;
+
+enum EntitlementType {
+  ENTITLEMENT_TYPE_UNKNOWN = 0;
+  ENTITLEMENT_TYPE_DURABLE = 1;
+  ENTITLEMENT_TYPE_CONSUMABLE = 2;
+}
+
+enum EntitlementStatus {
+  ENTITLEMENT_STATUS_UNKNOWN = 0;
+  ENTITLEMENT_STATUS_UNCLAIMED = 1;
+  ENTITLEMENT_STATUS_OWNED = 2;
+}
+
+message GetEntitlementsRequest {
+  UserContext user_context = 1;
+}
+
+message GetEntitlementsResponse {
+  repeated Entitlement entitlements = 1;
+}
+
+message ConsumeEntitlementsRequest {
+  UserContext user_context = 1;
+  repeated string entitlement_ids = 2;
+}
+
+message ConsumeEntitlementsResponse {
+  repeated Entitlement entitlements = 1;
+}
+
+message Entitlement {
+  string id = 1;
+  string name = 2;
+  repeated LocalizedString u_i_name = 3;
+  repeated LocalizedString u_i_desc = 4;
+  string picture_url = 5;
+  EntitlementType entitlement_type = 6;
+  EntitlementStatus entitlement_status = 7;
+  Timestamp created = 8;
+  Timestamp updated = 9;
+  int32 consume_limit = 10;
+  int32 consume_count = 11;
+}
+

@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+import "Challenges/ChallengesCore.proto";
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+import "Context/ConfigurationContext.proto";
+import "Push/PushToken.proto";
+
+package Hydra.Api.Challenges;
+
+message ConnectRequest {
+  UserContext context = 1;
+  ConfigurationContext configuration_context = 2;
+  PushToken push_token = 3;
+}
+
+message ConnectResponse {
+  UserChallengesInfo user_challenges_info = 1;
+  int64 version = 2;
+}
+
+message GetChallengesRequest {
+  UserContext context = 1;
+  ConfigurationContext configuration_context = 2;
+}
+
+message GetChallengesResponse {
+  UserChallengesInfo user_challenges_info = 1;
+  int64 version = 2;
+}
+
+message GetChallengesIncrementalUpdateRequest {
+  UserContext context = 1;
+  ConfigurationContext configuration_context = 2;
+  int64 from_version = 3;
+}
+
+message GetChallengesIncrementalUpdateResponse {
+  UserChallengesIncrementalUpdate user_challenges_incremental_update = 1;
+  int64 version = 2;
+}
+
+message ServerSubmitChallengeCountersRequest {
+  ServerContext context = 1;
+  string reference_id = 2;
+  repeated ChallengeOperationList user_operations = 3;
+  bool is_last_update = 4;
+}
+
+message ServerSubmitChallengeCountersResponse {
+  repeated string failed_user_ids = 1;
+}
+
+message ServerGetChallengesRequest {
+  ServerContext context = 1;
+  repeated string user_ids = 2;
+}
+
+message PerUserChallengeCounter {
+  string user_id = 1;
+  repeated ChallengeCounterWithEvents challenge_counters = 2;
+}
+
+message ServerGetChallengesResponse {
+  repeated PerUserChallengeCounter per_user_challenge_counters = 1;
+  ServerChallengesSettings server_challenges_settings = 2;
+}
+
+message ServerChallengesSettings {
+  int64 flush_time_criteria_sec = 1;
+  int64 flush_count_criteria = 2;
+}
+

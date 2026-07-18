@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "Context/ToolContext.proto";
+import "Context/ConfigurationContext.proto";
+import "GameConfiguration/GameConfigurationContracts.proto";
+
+package Hydra.Api.GameConfiguration;
+
+message UploadConfigurationComponentPacksRequest {
+  string title_id = 1;
+  repeated ConfigurationComponentPack packs = 2;
+}
+
+message UploadConfigurationComponentPacksResponse {
+  ConfigurationContext context = 1;
+}
+
+message DownloadConfigurationComponentPacksRequest {
+  string title_id = 1;
+}
+
+message DownloadConfigurationComponentPacksResponse {
+  repeated ConfigurationComponentPack packs = 1;
+}
+
+message ConfigurationComponentPack {
+  repeated ConfigurationComponentDataItem schemas = 1;
+  ConfigurationComponentDataItem data = 2;
+}
+
+message ConfigurationComponentDataItem {
+  string name = 1;
+  bytes content = 2;
+  ComponentDataType type = 3;
+}
+
+message UploadConfigurationComponentPacksToolRequest {
+  ToolContext tool_context = 1;
+  repeated ConfigurationComponentPack packs = 2;
+}
+
+message UploadConfigurationComponentPacksToolResponse {
+  ConfigurationContext context = 1;
+}
+
+message DownloadConfigurationComponentPacksToolRequest {
+  ToolContext tool_context = 1;
+}
+
+message DownloadConfigurationComponentPacksToolResponse {
+  repeated ConfigurationComponentPack packs = 1;
+}
+
+message DownloadDefaultConfigurationComponentPacksToolRequest {
+  ToolContext tool_context = 1;
+}
+
+message DownloadDefaultConfigurationComponentPacksToolResponse {
+  repeated ConfigurationComponentPack packs = 1;
+}
+

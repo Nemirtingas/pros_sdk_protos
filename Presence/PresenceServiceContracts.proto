@@ -1,0 +1,263 @@
+syntax = "proto3";
+
+import "Presence/PartyStatus.proto";
+import "Presence/MatchmakeStatus.proto";
+import "Presence/InviteData.proto";
+import "Context/UserContext.proto";
+import "Push/PushToken.proto";
+import "EndpointDispatcher/EndpointDispatcherContracts.proto";
+
+package Hydra.Api.Presence;
+
+message ConnectRequest {
+  UserContext context = 1;
+  PushToken push_token = 2;
+  string client_version = 3;
+  string static_property = 4;
+}
+
+message ConnectResponse {
+}
+
+message DisconnectRequest {
+  UserContext context = 1;
+}
+
+message DisconnectResponse {
+}
+
+message GetUsersPresenceRequest {
+  UserContext context = 1;
+  repeated string users = 2;
+}
+
+message GetUsersPresenceResponse {
+  repeated UserPresenceData data = 1;
+}
+
+message PartyCreateRequest {
+  UserContext context = 1;
+  PartyCreateParams params = 2;
+}
+
+message PartyCreateResponse {
+}
+
+message PartySetSettingsRequest {
+  UserContext context = 1;
+  PartySettings settings = 2;
+}
+
+message PartySetSettingsResponse {
+}
+
+message PartySetDataRequest {
+  UserContext context = 1;
+  string data = 2;
+}
+
+message PartySetDataResponse {
+}
+
+message PartySetMemberDataRequest {
+  UserContext context = 1;
+  string member_data = 2;
+}
+
+message PartySetMemberDataResponse {
+}
+
+message PartyInviteSendRequest {
+  UserContext context = 1;
+  string user_id_to = 2;
+}
+
+message PartyInviteSendResponse {
+}
+
+message PartyInviteRevokeRequest {
+  UserContext context = 1;
+  string user_id_to = 2;
+}
+
+message PartyInviteRevokeResponse {
+}
+
+message PartyInviteAcceptRequest {
+  UserContext context = 1;
+  InviteData invite_data = 2;
+}
+
+message PartyInviteAcceptResponse {
+}
+
+message PartyInviteRejectRequest {
+  UserContext context = 1;
+  InviteData invite_data = 2;
+}
+
+message PartyInviteRejectResponse {
+}
+
+message PartyJoinRequest {
+  UserContext context = 1;
+  string user_id_to = 2;
+}
+
+message PartyJoinResponse {
+}
+
+message PartyLeaveRequest {
+  UserContext context = 1;
+}
+
+message PartyLeaveResponse {
+}
+
+message PartyRemoveMembersRequest {
+  UserContext context = 1;
+  string user_id = 2;
+}
+
+message PartyRemoveMembersResponse {
+}
+
+message PartySetOwnerRequest {
+  UserContext context = 1;
+  string user_id = 2;
+}
+
+message PartySetOwnerResponse {
+}
+
+message PartyDisbandRequest {
+  UserContext context = 1;
+}
+
+message PartyDisbandResponse {
+}
+
+message PartyGenerateJoinCodeRequest {
+  UserContext context = 1;
+}
+
+message PartyGenerateJoinCodeResponse {
+}
+
+message PartyClearJoinCodeRequest {
+  UserContext context = 1;
+}
+
+message PartyClearJoinCodeResponse {
+}
+
+message PartyUseJoinCodeRequest {
+  UserContext context = 1;
+  string join_code = 2;
+}
+
+message PartyUseJoinCodeResponse {
+}
+
+message MatchmakeStartRequest {
+  UserContext context = 1;
+  MatchmakeSearchOptions options = 2;
+}
+
+message MatchmakeStartResponse {
+}
+
+message MatchmakeStopRequest {
+  UserContext context = 1;
+}
+
+message MatchmakeStopResponse {
+  string correlation_id = 1;
+}
+
+message MatchmakeSessionCreateRequest {
+  UserContext context = 1;
+  MatchmakeCreateOptions options = 2;
+}
+
+message MatchmakeSessionCreateResponse {
+  string correlation_id = 1;
+}
+
+message MatchmakeSessionSetSettingsRequest {
+  UserContext context = 1;
+  MatchmakeSessionSettings settings = 2;
+}
+
+message MatchmakeSessionSetSettingsResponse {
+}
+
+message MatchmakeSessionSetVariantsRequest {
+  UserContext context = 1;
+  repeated GameVariant variants = 2;
+}
+
+message MatchmakeSessionSetVariantsResponse {
+}
+
+message MatchmakeSessionSetDataRequest {
+  UserContext context = 1;
+  string data = 2;
+}
+
+message MatchmakeSessionSetDataResponse {
+}
+
+message MatchmakeSessionSetMemberDataRequest {
+  UserContext context = 1;
+  string member_data = 2;
+}
+
+message MatchmakeSessionSetMemberDataResponse {
+}
+
+message MatchmakeSessionJoinRequest {
+  UserContext context = 1;
+  string session_id = 2;
+}
+
+message MatchmakeSessionJoinResponse {
+  string correlation_id = 1;
+}
+
+message MatchmakeSessionLeaveRequest {
+  UserContext context = 1;
+}
+
+message MatchmakeSessionLeaveResponse {
+  string correlation_id = 1;
+}
+
+message MatchmakeSessionRemoveMembersRequest {
+  UserContext context = 1;
+  repeated string user_id = 2;
+}
+
+message MatchmakeSessionRemoveMembersResponse {
+}
+
+message MatchmakeSessionSetOwnerRequest {
+  UserContext context = 1;
+  string user_id = 2;
+}
+
+message MatchmakeSessionSetOwnerResponse {
+}
+
+message DataCenterPingEndpoints {
+  string data_center_id = 1;
+  repeated EndpointInfo endpoints = 2;
+}
+
+message GetDataCenterPingEndpointsRequest {
+}
+
+message GetDataCenterPingEndpointsResponse {
+  repeated DataCenterPingEndpoints data_center_ping_endpoints = 1;
+}
+

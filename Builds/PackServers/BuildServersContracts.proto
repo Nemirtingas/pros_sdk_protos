@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/ToolContext.proto";
+import "Builds/BuildsCommonContracts.proto";
+
+package Hydra.Api.BuildServers;
+
+enum CredentialsTokenType {
+  CREDENTIALS_TOKEN_TYPE_UNKNOWN = 0;
+  CREDENTIALS_TOKEN_TYPE_SAS_URI = 1;
+}
+
+message GetUploadCredentialsToolRequest {
+  ToolContext tool_context = 1;
+}
+
+message GetUploadCredentialsToolResponse {
+  string pack_id = 1;
+  string token = 2;
+  CredentialsTokenType token_type = 3;
+  Timestamp expires_on = 4;
+}
+
+message AnalyzeBuildPackConfigToolRequest {
+  ToolContext tool_context = 1;
+  string config_data = 2;
+}
+
+message AnalyzeBuildPackConfigToolResponse {
+}
+
+message UploadBuildPackConfigToolRequest {
+  ToolContext tool_context = 1;
+  string config_data = 2;
+  string pack_id = 3;
+  repeated BuildVersionWithIdDto build_versions_with_id = 4;
+  int64 compressed_size = 5;
+  int64 decompressed_size = 6;
+}
+
+message UploadBuildPackConfigToolResponse {
+}
+
