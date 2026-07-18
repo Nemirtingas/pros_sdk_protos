@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package Hydra.Api.Push;
+
+enum PushBroadcastKey {
+  PUSH_BROADCAST_KEY_UNKNOWN = 0;
+  PUSH_BROADCAST_KEY_GC_BRANCH = 1;
+}

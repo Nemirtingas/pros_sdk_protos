@@ -5,7 +5,6 @@ import "Push/PushMessageType.proto";
 package Hydra.Api.Push;
 
 message PushVersion {
-  PushMessageType version_type = 1;
+  Hydra.Api.Push.PushMessageType version_type = 1;
   int32 version = 2;
 }
-

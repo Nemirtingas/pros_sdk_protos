@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+
+package Hydra.Api.Push;
+
+message PushConfigurationMessage {
+  google.protobuf.Duration heartbeat_interval = 1;
+}

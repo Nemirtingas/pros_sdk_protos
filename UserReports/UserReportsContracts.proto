@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
 import "Context/UserContext.proto";
 
 package Hydra.Api.UserReports;
@@ -18,15 +17,14 @@ message UserReportsProperty {
 }
 
 message SendUserReportRequest {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   string to_user_id = 2;
   string report_reason_id = 3;
   string user_message = 4;
-  repeated UserReportsProperty user_reports_properties = 5;
+  repeated Hydra.Api.UserReports.UserReportsProperty user_reports_properties = 5;
 }
 
 message SendUserReportResponse {
-  SendUserReportResult result = 1;
+  Hydra.Api.UserReports.SendUserReportResult result = 1;
   string user_report_id = 2;
 }
-

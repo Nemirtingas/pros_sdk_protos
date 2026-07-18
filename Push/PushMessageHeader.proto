@@ -6,8 +6,7 @@ import "Push/PushMessageType.proto";
 package Hydra.Api.Push;
 
 message PushMessageHeader {
-  PushToken token = 1;
-  PushMessageType message_type = 2;
+  Hydra.Api.Push.PushToken token = 1;
+  Hydra.Api.Push.PushMessageType message_type = 2;
   int32 version = 3;
 }
-

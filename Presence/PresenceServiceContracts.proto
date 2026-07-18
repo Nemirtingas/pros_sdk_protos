@@ -1,58 +1,78 @@
 syntax = "proto3";
 
+import "google/protobuf/duration.proto";
 import "Presence/PartyStatus.proto";
 import "Presence/MatchmakeStatus.proto";
 import "Presence/InviteData.proto";
 import "Context/UserContext.proto";
 import "Push/PushToken.proto";
-import "EndpointDispatcher/EndpointDispatcherContracts.proto";
+import "ContinuationToken/ContinuationToken.proto";
 
 package Hydra.Api.Presence;
 
+enum PenaltyReason {
+  PENALTY_REASON_NONE = 0;
+  PENALTY_REASON_SESSION_LEAVE = 1;
+  PENALTY_REASON_SESSION_PENDING = 2;
+}
+
 message ConnectRequest {
-  UserContext context = 1;
-  PushToken push_token = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Push.PushToken push_token = 2;
   string client_version = 3;
   string static_property = 4;
 }
 
+message PendingSession {
+  google.protobuf.Duration timer = 1;
+  string session_id = 2;
+}
+
+message PenaltyInfo {
+  google.protobuf.Duration timer = 1;
+  Hydra.Api.Presence.PenaltyReason reason = 2;
+}
+
 message ConnectResponse {
+  Hydra.Api.Presence.PendingSession pending_session = 1;
+  Hydra.Api.Presence.PenaltyInfo penalty_info = 2;
 }
 
 message DisconnectRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message DisconnectResponse {
 }
 
 message GetUsersPresenceRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   repeated string users = 2;
 }
 
 message GetUsersPresenceResponse {
-  repeated UserPresenceData data = 1;
+  repeated Hydra.Api.Presence.UserPresenceData data = 1;
 }
 
 message PartyCreateRequest {
-  UserContext context = 1;
-  PartyCreateParams params = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.PartyCreateParams params = 2;
 }
 
 message PartyCreateResponse {
+  string correlation_id = 1;
 }
 
 message PartySetSettingsRequest {
-  UserContext context = 1;
-  PartySettings settings = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.PartySettings settings = 2;
 }
 
 message PartySetSettingsResponse {
 }
 
 message PartySetDataRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string data = 2;
 }
 
@@ -60,7 +80,7 @@ message PartySetDataResponse {
 }
 
 message PartySetMemberDataRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string member_data = 2;
 }
 
@@ -68,7 +88,7 @@ message PartySetMemberDataResponse {
 }
 
 message PartyInviteSendRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string user_id_to = 2;
 }
 
@@ -76,7 +96,7 @@ message PartyInviteSendResponse {
 }
 
 message PartyInviteRevokeRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string user_id_to = 2;
 }
 
@@ -84,38 +104,41 @@ message PartyInviteRevokeResponse {
 }
 
 message PartyInviteAcceptRequest {
-  UserContext context = 1;
-  InviteData invite_data = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.InviteData invite_data = 2;
 }
 
 message PartyInviteAcceptResponse {
+  string correlation_id = 1;
 }
 
 message PartyInviteRejectRequest {
-  UserContext context = 1;
-  InviteData invite_data = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.InviteData invite_data = 2;
 }
 
 message PartyInviteRejectResponse {
 }
 
 message PartyJoinRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string user_id_to = 2;
 }
 
 message PartyJoinResponse {
+  string correlation_id = 1;
 }
 
 message PartyLeaveRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message PartyLeaveResponse {
+  string correlation_id = 1;
 }
 
 message PartyRemoveMembersRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string user_id = 2;
 }
 
@@ -123,7 +146,7 @@ message PartyRemoveMembersResponse {
 }
 
 message PartySetOwnerRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string user_id = 2;
 }
 
@@ -131,44 +154,56 @@ message PartySetOwnerResponse {
 }
 
 message PartyDisbandRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message PartyDisbandResponse {
 }
 
 message PartyGenerateJoinCodeRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message PartyGenerateJoinCodeResponse {
 }
 
 message PartyClearJoinCodeRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message PartyClearJoinCodeResponse {
 }
 
 message PartyUseJoinCodeRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string join_code = 2;
 }
 
 message PartyUseJoinCodeResponse {
+  string correlation_id = 1;
 }
 
 message MatchmakeStartRequest {
-  UserContext context = 1;
-  MatchmakeSearchOptions options = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.MatchmakeSearchOptions options = 2;
+  repeated Hydra.Api.Presence.MatchmakeMemberData member_data = 3;
 }
 
 message MatchmakeStartResponse {
 }
 
+message MatchmakeRestartRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.MatchmakeSearchOptions options = 2;
+  repeated Hydra.Api.Presence.MatchmakeMemberData member_data = 3;
+}
+
+message MatchmakeRestartResponse {
+  string correlation_id = 1;
+}
+
 message MatchmakeStopRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message MatchmakeStopResponse {
@@ -176,8 +211,9 @@ message MatchmakeStopResponse {
 }
 
 message MatchmakeSessionCreateRequest {
-  UserContext context = 1;
-  MatchmakeCreateOptions options = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.MatchmakeCreateOptions options = 2;
+  repeated Hydra.Api.Presence.MatchmakeMemberData member_data = 3;
 }
 
 message MatchmakeSessionCreateResponse {
@@ -185,31 +221,98 @@ message MatchmakeSessionCreateResponse {
 }
 
 message MatchmakeSessionSetSettingsRequest {
-  UserContext context = 1;
-  MatchmakeSessionSettings settings = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Presence.MatchmakeSessionSettings settings = 2;
 }
 
 message MatchmakeSessionSetSettingsResponse {
 }
 
+message MatchmakeSessionGenerateJoinCodeRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message MatchmakeSessionGenerateJoinCodeResponse {
+}
+
+message MatchmakeSessionClearJoinCodeRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message MatchmakeSessionClearJoinCodeResponse {
+}
+
+message MatchmakeSessionUseJoinCodeRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string join_code = 2;
+  Hydra.Api.Presence.MatchmakeData matchmake_data = 3;
+}
+
+message MatchmakeSessionUseJoinCodeResponse {
+  string correlation_id = 1;
+}
+
 message MatchmakeSessionSetVariantsRequest {
-  UserContext context = 1;
-  repeated GameVariant variants = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated Hydra.Api.Presence.GameVariant variants = 2;
 }
 
 message MatchmakeSessionSetVariantsResponse {
 }
 
+message MatchmakeSessionSetQueueVariantsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated Hydra.Api.Presence.QueueVariants variants = 2;
+}
+
+message MatchmakeSessionSetQueueVariantsResponse {
+}
+
 message MatchmakeSessionSetDataRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string data = 2;
+}
+
+message MatchmakeSessionPendingAcceptRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message MatchmakeSessionPendingAcceptResponse {
+  string correlation_id = 1;
+}
+
+message MatchmakeSessionPendingDeclineRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message MatchmakeSessionPendingDeclineResponse {
+  string correlation_id = 1;
+}
+
+message MatchmakeSessionChangeTeamRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated string user_ids = 2;
+  int32 team_id = 3;
+}
+
+message MatchmakeSessionChangeTeamResponse {
+  string correlation_id = 1;
+}
+
+message MatchmakeSessionChangeClassRoleRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated string class_roles = 2;
+}
+
+message MatchmakeSessionChangeClassRoleResponse {
+  string correlation_id = 1;
 }
 
 message MatchmakeSessionSetDataResponse {
 }
 
 message MatchmakeSessionSetMemberDataRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string member_data = 2;
 }
 
@@ -217,8 +320,9 @@ message MatchmakeSessionSetMemberDataResponse {
 }
 
 message MatchmakeSessionJoinRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string session_id = 2;
+  Hydra.Api.Presence.MatchmakeData matchmake_data = 3;
 }
 
 message MatchmakeSessionJoinResponse {
@@ -226,7 +330,7 @@ message MatchmakeSessionJoinResponse {
 }
 
 message MatchmakeSessionLeaveRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message MatchmakeSessionLeaveResponse {
@@ -234,30 +338,82 @@ message MatchmakeSessionLeaveResponse {
 }
 
 message MatchmakeSessionRemoveMembersRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   repeated string user_id = 2;
 }
 
 message MatchmakeSessionRemoveMembersResponse {
 }
 
+message MatchmakeSessionTerminateRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message MatchmakeSessionTerminateResponse {
+}
+
 message MatchmakeSessionSetOwnerRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   string user_id = 2;
 }
 
 message MatchmakeSessionSetOwnerResponse {
 }
 
-message DataCenterPingEndpoints {
-  string data_center_id = 1;
-  repeated EndpointInfo endpoints = 2;
+message MatchmakeSessionGetInfoRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string session_id = 2;
 }
 
-message GetDataCenterPingEndpointsRequest {
+message MatchmakeSessionGetInfoResponse {
+  bool is_joinable = 1;
+  Hydra.Api.Presence.GameSessionData session_data = 2;
 }
 
-message GetDataCenterPingEndpointsResponse {
-  repeated DataCenterPingEndpoints data_center_ping_endpoints = 1;
+message UserGetPendingSessionRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
+message UserGetPendingSessionResponse {
+  Hydra.Api.Presence.PendingSession pending_session = 1;
+}
+
+message UserGetPenaltyInfoRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message UserGetPenaltyInfoResponse {
+  Hydra.Api.Presence.PenaltyInfo penalty_info = 1;
+}
+
+message MatchmakeBrowseSessionsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string playlist_id = 2;
+  repeated Hydra.Api.Presence.GameVariant filter_variants = 3;
+  Pros.Global.Api.ContinuationToken.ContinuationToken continuation_token = 4;
+}
+
+message BrowseSessionData {
+  string id = 1;
+  Hydra.Api.Presence.MatchmakeJIPState jip = 2;
+  Hydra.Api.Presence.MatchmakeJoinDelegation join_delegation = 3;
+  repeated Hydra.Api.Presence.GameVariant variants = 4;
+  string data = 5;
+  int32 max_players = 6;
+  int32 players_count = 7;
+}
+
+message MatchmakeBrowseSessionsResponse {
+  repeated Hydra.Api.Presence.BrowseSessionData sessions_data = 1;
+  Pros.Global.Api.ContinuationToken.ContinuationToken continuation_token = 2;
+}
+
+message MatchmakeMemberData {
+  string user_id = 1;
+  Hydra.Api.Presence.MatchmakeData data = 2;
+}
+
+message MatchmakeData {
+  string rating_id = 1;
+  repeated string class_roles = 2;
+}

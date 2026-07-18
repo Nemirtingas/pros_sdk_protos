@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Friends/FriendsServiceContracts.proto";
+
+package Hydra.Api.Friends;
+
+service FriendServiceApi {
+  rpc Connect (ConnectRequest) returns (ConnectResponse);
+  rpc Disconnect (DisconnectRequest) returns (DisconnectResponse);
+  rpc SendFriendRequest (SendFriendRequestRequest) returns (SendFriendRequestResponse);
+  rpc AcceptFriendRequest (AcceptFriendRequestRequest) returns (AcceptFriendRequestResponse);
+  rpc SetFriendCustomData (SetFriendCustomDataRequest) returns (SetFriendCustomDataResponse);
+  rpc DeclineFriendRequest (DeclineFriendRequestRequest) returns (DeclineFriendRequestResponse);
+  rpc RemoveFriend (RemoveFriendRequest) returns (RemoveFriendResponse);
+  rpc SetDynamicData (SetDynamicDataRequest) returns (SetDynamicDataResponse);
+  rpc AddRecentPlayers (AddRecentPlayersRequest) returns (AddRecentPlayersResponse);
+}

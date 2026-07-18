@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "GameConfiguration/GameConfigurationContracts.proto";
+
+package Hydra.Api.GameConfiguration;
+
+service GameConfigurationApi {
+  rpc GetConfigurationContext (GetConfigurationContextRequest) returns (GetConfigurationContextResponse);
+  rpc GetServerConfigurationContext (GetServerConfigurationContextRequest) returns (GetServerConfigurationContextResponse);
+  rpc GetConfigurationComponentData (GetConfigurationComponentDataRequest) returns (GetConfigurationComponentDataResponse);
+}

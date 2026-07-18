@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-import "Options.proto";
 import "Context/UserContext.proto";
 import "Context/ToolContext.proto";
 import "Context/ServerContext.proto";
+import "google/protobuf/descriptor.proto";
 
-package Hydra.Api.Facts;
+package Pros.Api.Facts;
 
 enum FactsPackFormat {
   FACTS_PACK_FORMAT_UNKNOWN = 0;
@@ -29,6 +29,20 @@ enum ContextValue {
   CONTEXT_VALUE_USER_ID = 12;
   CONTEXT_VALUE_ACCOUNT_NAME = 13;
   CONTEXT_VALUE_PROVIDER = 14;
+  CONTEXT_VALUE_SDK_CONFIGURATION = 15;
+  CONTEXT_VALUE_PARTY_SESSION_ID = 16;
+  CONTEXT_VALUE_MATCHMAKE_SESSION_ID = 17;
+  CONTEXT_VALUE_DEDICATED_SERVER_ID = 18;
+  CONTEXT_VALUE_PARTY_JOIN_CODE = 19;
+  CONTEXT_VALUE_APPLICATION_NAME = 20;
+  CONTEXT_VALUE_RUNTIME_SEANCE_ID = 21;
+  CONTEXT_VALUE_MATCHMAKE_SESSION_JOIN_CODE = 22;
+  CONTEXT_VALUE_IMMEDIATE_CONTEXT_ERROR_SDK = 1000;
+  CONTEXT_VALUE_IMMEDIATE_CONTEXT_ERROR_APP = 1001;
+  CONTEXT_VALUE_IMMEDIATE_CONTEXT_WARNING_SDK = 1002;
+  CONTEXT_VALUE_IMMEDIATE_CONTEXT_WARNING_APP = 1003;
+  CONTEXT_VALUE_IMMEDIATE_CONTEXT_ERROR_PROS = 1004;
+  CONTEXT_VALUE_IMMEDIATE_CONTEXT_ERROR_PROS_CORRELATION_ID = 1005;
 }
 
 enum FactRole {
@@ -37,24 +51,25 @@ enum FactRole {
 }
 
 message WriteBinaryPackUserRequest {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   bytes entries = 2;
   bytes data = 3;
-  FactsPackHeader header = 4;
+  Pros.Api.Facts.FactsPackHeader header = 4;
 }
 
 message WriteBinaryPackUserResponse {
 }
 
 message FactsPackHeader {
-  repeated FactsContext context = 2;
+  repeated Pros.Api.Facts.FactsContext context = 2;
   int32 pack_number = 3;
   int64 start_time = 4;
   int64 end_time = 5;
   int64 init_time = 6;
-  FactsPackFormat format = 7;
-  FactsPackFormatVersion version = 8;
-  FactsPackOptions options = 9;
+  Pros.Api.Facts.FactsPackFormat format = 7;
+  Pros.Api.Facts.FactsPackFormatVersion version = 8;
+  Pros.Api.Facts.FactsPackOptions options = 9;
+  string fact_session_id = 10;
 }
 
 message FactsPackOptions {
@@ -73,23 +88,26 @@ message FactsPackFormatVersion {
   int32 minor = 2;
 }
 
+message FactsDescription {
+  string value = 1;
+}
+
 message WriteBinaryPackToolRequest {
-  ToolContext tool_context = 1;
+  Hydra.Api.Infrastructure.Context.ToolContext tool_context = 1;
   bytes entries = 2;
   bytes data = 3;
-  FactsPackHeader header = 4;
+  Pros.Api.Facts.FactsPackHeader header = 4;
 }
 
 message WriteBinaryPackToolResponse {
 }
 
 message WriteBinaryPackServerRequest {
-  ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
   bytes entries = 2;
   bytes data = 3;
-  FactsPackHeader header = 4;
+  Pros.Api.Facts.FactsPackHeader header = 4;
 }
 
 message WriteBinaryPackServerResponse {
 }
-

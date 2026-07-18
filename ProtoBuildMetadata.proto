@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package Pros.Metadata;
+
+message Milestone {
+  string name = 1;
+  string release = 2;
+}
+
+message Build {
+  string label = 1;
+  string branch = 2;
+  int32 counter = 3;
+  string date_time = 4;
+}

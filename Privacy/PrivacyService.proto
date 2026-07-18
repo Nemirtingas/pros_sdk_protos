@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Privacy/PrivacyServiceConstracts.proto";
+
+package Hydra.Api.Privacy;
+
+service PrivacyServiceApi {
+  rpc GetPrivacyType (GetPrivacyTypeRequest) returns (GetPrivacyTypeResponse);
+  rpc SetPrivacyType (SetPrivacyTypeRequest) returns (SetPrivacyTypeResponse);
+  rpc AddBlockedUser (AddBlockedUserRequest) returns (AddBlockedUserResponse);
+  rpc RemoveBlockedUser (RemoveBlockedUserRequest) returns (RemoveBlockedUserResponse);
+  rpc GetBlockedUsers (GetBlockedUsersRequest) returns (GetBlockedUsersResponse);
+  rpc PrivacyConnect (PrivacyConnectRequest) returns (PrivacyConnectResponse);
+  rpc PrivacyDisconnect (PrivacyDisconnectRequest) returns (PrivacyDisconnectResponse);
+  rpc UpdateBlockedUserCustomData (UpdateBlockedUserCustomDataRequest) returns (UpdateBlockedUserCustomDataResponse);
+}

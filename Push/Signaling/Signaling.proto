@@ -5,18 +5,23 @@ package Hydra.Api.Push.Signaling;
 enum SignalingType {
   SIGNALING_TYPE_SIGNAL_UNKNOWN = 0;
   SIGNALING_TYPE_SIGNAL_P2P = 1;
+  SIGNALING_TYPE_SIGNAL_RELIABLE_MESSAGE = 2;
+  SIGNALING_TYPE_SIGNAL_RELIABLE_AFFIRMATIVE = 3;
+  SIGNALING_TYPE_SIGNAL_PROBE = 4;
+  SIGNALING_TYPE_SIGNAL_REDSTONE = 10;
+  SIGNALING_TYPE_SIGNAL_VOICE = 11;
+  SIGNALING_TYPE_SIGNAL_CUSTOM_0 = 100;
+  SIGNALING_TYPE_SIGNAL_CUSTOM_1 = 101;
+  SIGNALING_TYPE_SIGNAL_CUSTOM_2 = 102;
+  SIGNALING_TYPE_SIGNAL_CUSTOM_3 = 103;
+  SIGNALING_TYPE_SIGNAL_CUSTOM_4 = 104;
+  SIGNALING_TYPE_SIGNAL_CUSTOM_5 = 105;
 }
 
 message SignalingMessage {
   string message_id = 1;
-  SignalingType type = 2;
+  Hydra.Api.Push.Signaling.SignalingType type = 2;
   string user_id_from = 3;
   string user_id_to = 4;
   bytes data = 5;
 }
-
-message SignalingMessageVersion {
-  int32 version = 1;
-  SignalingMessage update = 2;
-}
-

@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package Pros.Global.Api.Account;
+
+message ProsAccountContext {
+  string token = 1;
+}

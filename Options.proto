@@ -4,44 +4,30 @@ import "google/protobuf/descriptor.proto";
 
 package Hydra.Api.Infrastructure;
 
-enum ServiceAccessRole {
-  UNKNOWN = 0;
-  GUEST = 1;
-  GAME_CLIENT = 2;
-  GAME_SERVER = 3;
-  WEB_PORTAL = 4;
-  SERVER_MANAGER_AGENT = 5;
-  STANDALONE_SERVER = 6;
-  BOT_MANAGER = 7;
-  ADMIN = 8;
-  PLUGIN = 9;
-  PLUGIN_ADMIN = 10;
-  CONFIGURATION_MANAGER = 11;
-  DIAGNOSTIC_MANAGER = 12;
-  GAME_NEXUS_API = 13;
-  DEDICATED_SERVER_UPLOADER = 14;
-  ATHENA = 15;
-}
-
-enum VisibilityScope {
-  NONE = 0;
-  BASE = 1;
-  TITLE = 2;
-}
-
-message EnumValueDescription {
-  string value = 1;
+enum UserBanScope {
+  USER_BAN_SCOPE_UNKNOWN = 0;
+  USER_BAN_SCOPE_PERMANENT = 1;
+  USER_BAN_SCOPE_CHEATING = 2;
+  USER_BAN_SCOPE_CHAT_MUTE = 4;
+  USER_BAN_SCOPE_MATCHMAKING = 8;
 }
 
 message ServiceAttribute {
-  ServiceVersion version = 1;
+  Hydra.Api.Infrastructure.ServiceVersion version = 1;
   string access_role = 2;
   string scope = 3;
+  Hydra.Api.Infrastructure.BanScope ban_scope = 4;
+  Hydra.Api.Infrastructure.ServiceFeature feature = 5;
 }
 
 message MethodAttribute {
   string access_role = 1;
   string scope = 2;
+  Hydra.Api.Infrastructure.BanScope ban_scope = 4;
+}
+
+message ServiceFeature {
+  string name = 1;
 }
 
 message ServiceVersion {
@@ -50,3 +36,7 @@ message ServiceVersion {
   string hash = 3;
 }
 
+message BanScope {
+  repeated Hydra.Api.Infrastructure.UserBanScope scope = 1;
+  bool delayed_ban = 2;
+}

@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+
+package Hydra.Api.Turn;
+
+enum TurnConnectionUsage {
+  TURN_CONNECTION_USAGE_NONE = 0;
+  TURN_CONNECTION_USAGE_VOICE = 1;
+  TURN_CONNECTION_USAGE_MULTIPLAYER = 2;
+}
+
+message TurnConnectionContext {
+  string context = 1;
+}
+
+message TurnConnectionManual {
+  Hydra.Api.Turn.TurnConnectionUsage usage = 1;
+  string closest_dc = 2;
+}
+
+message GetTurnConnectionRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  oneof turn_data {
+    Hydra.Api.Turn.TurnConnectionContext connection_context = 2;
+    Hydra.Api.Turn.TurnConnectionManual connection_manual = 3;
+  }
+}
+
+message TurnConnection {
+  string ip_address = 1;
+  int32 port = 2;
+  string login = 3;
+  string password = 4;
+}
+
+message GetTurnConnectionResponse {
+  Hydra.Api.Turn.TurnConnection connection = 1;
+}
+
+message StandaloneGetTurnConnectionRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  oneof turn_data {
+    Hydra.Api.Turn.TurnConnectionContext connection_context = 2;
+    Hydra.Api.Turn.TurnConnectionManual connection_manual = 3;
+  }
+}
+
+message StandaloneGetTurnConnectionResponse {
+  Hydra.Api.Turn.TurnConnection connection = 1;
+}

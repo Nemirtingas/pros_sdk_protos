@@ -2,30 +2,53 @@ syntax = "proto3";
 
 import "Context/UserContext.proto";
 import "Context/ConfigurationContext.proto";
+import "Context/TagContext.proto";
+import "Context/ServerContext.proto";
 
 package Hydra.Api.GameConfiguration;
 
 enum ComponentDataType {
   COMPONENT_DATA_TYPE_JSON = 0;
+  COMPONENT_DATA_TYPE_JSON_COMPRESSED = 1;
+}
+
+enum CompressionType {
+  COMPRESSION_TYPE_NONE = 0;
+  COMPRESSION_TYPE_ZLIB = 1;
+  COMPRESSION_TYPE_GZIP = 2;
 }
 
 message GetConfigurationContextRequest {
-  UserContext context = 1;
-  repeated ConfigurationComponent components = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string branch_name = 3;
+  Hydra.Api.Infrastructure.Context.TagContext tag_context = 4;
 }
 
 message GetConfigurationContextResponse {
-  ConfigurationContext context = 1;
-  repeated ConfigurationComponentSnapshot snapshots = 2;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext context = 1;
+  repeated Hydra.Api.GameConfiguration.ConfigurationComponentSnapshot snapshots = 2;
+  string branch_name = 3;
+}
+
+message GetServerConfigurationContextRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  string branch_name = 2;
+}
+
+message GetServerConfigurationContextResponse {
+  Hydra.Api.Infrastructure.Context.ConfigurationContext context = 1;
+  repeated Hydra.Api.GameConfiguration.ConfigurationComponentSnapshot snapshots = 2;
+  string branch_name = 3;
 }
 
 message GetConfigurationComponentDataRequest {
-  ConfigurationContext context = 1;
-  repeated ConfigurationComponent components = 2;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext context = 1;
+  repeated Hydra.Api.GameConfiguration.ConfigurationComponent components = 2;
+  Hydra.Api.GameConfiguration.CompressionType compression_type = 3;
 }
 
 message GetConfigurationComponentDataResponse {
-  repeated ComponentDataResult results = 1;
+  repeated Hydra.Api.GameConfiguration.ComponentDataResult results = 1;
 }
 
 message ConfigurationComponent {
@@ -34,13 +57,13 @@ message ConfigurationComponent {
 }
 
 message ConfigurationComponentSnapshot {
-  ConfigurationComponent component = 1;
+  Hydra.Api.GameConfiguration.ConfigurationComponent component = 1;
   string component_hash = 2;
 }
 
 message ComponentDataResult {
-  ConfigurationComponentSnapshot component_snapshot = 1;
+  Hydra.Api.GameConfiguration.ConfigurationComponentSnapshot component_snapshot = 1;
   bytes data_result = 2;
-  ComponentDataType data_type = 3;
+  Hydra.Api.GameConfiguration.ComponentDataType data_type = 3;
+  int32 data_result_original_size = 4;
 }
-

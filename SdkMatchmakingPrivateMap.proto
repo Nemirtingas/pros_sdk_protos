@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+import "SdkMatchmakingDefinitions.proto";
+
+package Leech.Api;
+
+enum MatchmakeCrossplayPlatformFamily {
+  MATCHMAKE_PLATFORM_FAMILY_OTHER = 0;
+  MATCHMAKE_PLATFORM_FAMILY_CONSOLE = 1;
+}
+
+enum MatchmakeCrossplayPlatformId {
+  MATCHMAKE_PLATFORM_ID_DEFAULT = 0;
+  MATCHMAKE_PLATFORM_ID_PC = 1;
+  MATCHMAKE_PLATFORM_ID_XBOX = 2;
+  MATCHMAKE_PLATFORM_ID_PLAYSTATION = 3;
+  MATCHMAKE_PLATFORM_ID_NINTENDO = 4;
+}
+
+enum MMServiceVasyaHardcodeCrossplayValues {
+  i0000 = 0;
+  i0100 = 10;
+  i0117 = 17;
+  i0123 = 23;
+  i0142 = 42;
+  i0400 = 100;
+  i0401 = 101;
+  i1337 = 137;
+}
+
+message CrossplayTypeSpecs {
+  Leech.Api.MatchmakeCrossplaySessionType type = 1;
+  Leech.Api.MatchmakeCrossplayPlatformFamily family = 2;
+}

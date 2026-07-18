@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+package Pros.Global.Api.Maintenance;
+
+enum MessageReceiver {
+  MESSAGE_RECEIVER_UNKNOWN = 0;
+  MESSAGE_RECEIVER_DEVELOPERS = 1;
+  MESSAGE_RECEIVER_PLAYERS = 2;
+  MESSAGE_RECEIVER_INTERNAL = 3;
+}
+
+enum MaintenanceStatus {
+  MAINTENANCE_STATUS_UNKNOWN = 0;
+  MAINTENANCE_STATUS_FUTURE = 1;
+  MAINTENANCE_STATUS_ACTIVE = 2;
+  MAINTENANCE_STATUS_DONE = 3;
+}
+
+enum AdminPortalStatus {
+  ADMIN_PORTAL_STATUS_UNKNOWN = 0;
+  ADMIN_PORTAL_STATUS_UNLOCKED = 1;
+  ADMIN_PORTAL_STATUS_DEVOPS_ONLY = 2;
+  ADMIN_PORTAL_STATUS_LOCKED = 3;
+}
+
+enum PlayerPortalStatus {
+  PLAYER_PORTAL_STATUS_UNKNOWN = 0;
+  PLAYER_PORTAL_STATUS_UNLOCKED = 1;
+  PLAYER_PORTAL_STATUS_WHITELIST = 2;
+  PLAYER_PORTAL_STATUS_LOCKED = 3;
+}
+
+enum GameClientStatus {
+  GAME_CLIENT_STATUS_UNKNOWN = 0;
+  GAME_CLIENT_STATUS_UNLOCKED = 1;
+  GAME_CLIENT_STATUS_NO_NEW_SESSIONS = 2;
+  GAME_CLIENT_STATUS_WHITELIST = 3;
+  GAME_CLIENT_STATUS_LOCKED = 4;
+}
+
+enum MaintenanceReason {
+  MAINTENANCE_REASON_UNKNOWN = 0;
+  MAINTENANCE_REASON_FUTURE = 1;
+  MAINTENANCE_REASON_ACTIVE = 2;
+}
+
+message MaintenanceScope {
+  oneof scope {
+    string title_id = 1;
+    string environment_id = 3;
+  }
+}
+
+message MaintenanceStartNotification {
+  google.protobuf.Timestamp sending_time = 1;
+  repeated Pros.Global.Api.Maintenance.MessageReceiver receivers = 2;
+}
+
+message MaintenanceNotifications {
+  string developer_message = 1;
+  string player_message_id = 2;
+  repeated Pros.Global.Api.Maintenance.MaintenanceStartNotification notifications = 3;
+}
+
+message ServicesStatus {
+  Pros.Global.Api.Maintenance.AdminPortalStatus admin_portal_status = 1;
+  Pros.Global.Api.Maintenance.PlayerPortalStatus player_portal_status = 2;
+  Pros.Global.Api.Maintenance.GameClientStatus game_client_status = 3;
+}
+
+message MaintenanceTime {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Duration duration = 2;
+}
+
+message ExpectedInfluence {
+  bool downtime_expected = 1;
+  Pros.Global.Api.Maintenance.ServicesInfluence services_influence = 2;
+}
+
+message ServicesInfluence {
+  bool admin_portal = 1;
+  bool player_portal = 2;
+  bool game_client = 3;
+}
+
+message SentMessage {
+  google.protobuf.Timestamp time = 1;
+  oneof message {
+    string developers = 2;
+    string internal = 3;
+    string players_message_id = 4;
+  }
+}
+
+message MessageHistory {
+  repeated Pros.Global.Api.Maintenance.SentMessage messages = 1;
+}
+
+message WpMaintenanceStartNotification {
+  google.protobuf.Timestamp sending_time = 1;
+  repeated Pros.Global.Api.Maintenance.MessageReceiver receivers = 2;
+  bool sent = 3;
+}
+
+message WpMaintenanceNotifications {
+  string developer_message = 1;
+  string player_message_id = 2;
+  repeated Pros.Global.Api.Maintenance.WpMaintenanceStartNotification notifications = 3;
+}
+
+message WpMaintenance {
+  Pros.Global.Api.Maintenance.MaintenanceScope scope = 1;
+  Pros.Global.Api.Maintenance.MaintenanceTime initial_expected_time = 2;
+  google.protobuf.Duration live_expected_duration = 3;
+  Pros.Global.Api.Maintenance.MaintenanceTime actual_time = 4;
+  Pros.Global.Api.Maintenance.ExpectedInfluence expected_influence = 5;
+  Pros.Global.Api.Maintenance.ServicesInfluence actual_influence = 6;
+  Pros.Global.Api.Maintenance.WpMaintenanceNotifications notifications = 7;
+  Pros.Global.Api.Maintenance.MessageHistory message_history = 8;
+  Pros.Global.Api.Maintenance.ServicesStatus services_status = 9;
+}

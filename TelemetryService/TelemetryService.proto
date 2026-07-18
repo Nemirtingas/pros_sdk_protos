@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "TelemetryService/TelemetryContracts.proto";
+
+package Pros.Api.Telemetry;
+
+service TelemetryApi {
+  rpc SendPack (SendPackRequest) returns (SendPackResponse);
+  rpc SendServerPack (SendServerPackRequest) returns (SendServerPackResponse);
+}

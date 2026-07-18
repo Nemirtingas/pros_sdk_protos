@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Facts/FactsContracts.proto";
+
+package Pros.Api.Facts;
+
+service FactsApi {
+  rpc WriteBinaryPackUser (WriteBinaryPackUserRequest) returns (WriteBinaryPackUserResponse);
+  rpc WriteBinaryPackTool (WriteBinaryPackToolRequest) returns (WriteBinaryPackToolResponse);
+  rpc WriteBinaryPackServer (WriteBinaryPackServerRequest) returns (WriteBinaryPackServerResponse);
+}

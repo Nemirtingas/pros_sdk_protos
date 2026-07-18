@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "SessionControl/SessionControlContracts.proto";
+import "Options.proto";
+
+package Hydra.Api.SessionControl;
+
+service SessionControlClientApi {
+  rpc CreateSession (CreateSessionRequest) returns (CreateSessionResponse);
+  rpc GetServerInfo (GetServerInfoRequest) returns (GetServerInfoResponse);
+  rpc GetDataCenterEchoEndpoints (GetDataCenterEchoEndpointsRequest) returns (GetDataCenterEchoEndpointsResponse);
+}

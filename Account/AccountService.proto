@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Account/AccountContracts.proto";
+
+package Pros.Api.Account;
+
+service AccountApi {
+  rpc GetRegistrationQRCode (GetRegistrationQRCodeRequest) returns (GetRegistrationQRCodeResponse);
+  rpc GetRegistrationStatus (GetRegistrationStatusRequest) returns (GetRegistrationStatusResponse);
+}

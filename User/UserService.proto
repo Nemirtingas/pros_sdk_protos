@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "User/UserContracts.proto";
+
+package Hydra.Api.User;
+
+service UserApi {
+  rpc GetUsersPublicDataByProviderUserId (UsersPublicDataByProviderUserIdRequest) returns (UsersPublicDataByProviderUserIdResponse);
+  rpc GetUsersPublicDataByUserId (UsersPublicDataByUserIdRequest) returns (UsersPublicDataByUserIdResponse);
+}

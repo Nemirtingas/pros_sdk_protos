@@ -8,4 +8,3 @@ message InviteData {
   string user_id_from = 3;
   string user_id_to = 4;
 }
-

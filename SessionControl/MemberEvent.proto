@@ -1,7 +1,9 @@
 syntax = "proto3";
 
 import "SessionControl/KeyContainer.proto";
+import "SessionControl/ServerInfo.proto";
 import "Context/UserContext.proto";
+import "Presence/PresenceServiceContracts.proto";
 
 package Hydra.Api.SessionControl;
 
@@ -47,50 +49,45 @@ enum TeamId {
 }
 
 message AcceptData {
-  KeyContainer key_info = 1;
+  Hydra.Api.SessionControl.KeyContainer key_info = 1;
 }
 
 message SessionMemberBackendData {
-  KeyContainer key_info = 1;
-}
-
-message ServerInfo {
-  string connection_info = 1;
-  string server_property = 2;
+  Hydra.Api.SessionControl.KeyContainer key_info = 1;
+  Hydra.Api.Presence.MatchmakeData matchmake_data = 2;
 }
 
 message AcceptClientResult {
-  AcceptStatus status = 1;
-  AcceptData data = 2;
-  ServerInfo server_info = 3;
+  Hydra.Api.SessionControl.AcceptStatus status = 1;
+  Hydra.Api.SessionControl.AcceptData data = 2;
+  Hydra.Api.SessionControl.ServerInfo server_info = 3;
 }
 
 message ServerUserContext {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
 }
 
 message SessionMemberEventData {
-  ServerUserContext server_user_context = 1;
-  SessionMemberBackendData backend_data = 2;
-  SessionMemberEventType event_type = 3;
+  Hydra.Api.SessionControl.ServerUserContext server_user_context = 1;
+  Hydra.Api.SessionControl.SessionMemberBackendData backend_data = 2;
+  Hydra.Api.SessionControl.SessionMemberEventType event_type = 3;
 }
 
 message SessionMemberEvent {
   string key = 1;
-  SessionMemberEventData data = 2;
+  Hydra.Api.SessionControl.SessionMemberEventData data = 2;
 }
 
 message MemberAcceptResult {
-  AcceptStatus status = 1;
-  AcceptData data = 2;
+  Hydra.Api.SessionControl.AcceptStatus status = 1;
+  Hydra.Api.SessionControl.AcceptData data = 2;
 }
 
 message SessionMemberEventResultData {
-  AcceptStatus status = 1;
+  Hydra.Api.SessionControl.AcceptStatus status = 1;
 }
 
 message SessionMemberEventResult {
   string key = 1;
-  SessionMemberEventResultData data = 2;
+  Hydra.Api.SessionControl.SessionMemberEventResultData data = 2;
 }
-

@@ -1,65 +1,153 @@
 syntax = "proto3";
 
 import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
 import "Context/ConfigurationContext.proto";
+import "ErrorCode.proto";
+import "Authorization/AuthorizationContracts.proto";
+import "ProsAccount/ProsAccountContracts.proto";
 import "Push/PushToken.proto";
 import "User/Enums.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
 package Hydra.Api.User;
 
 message ConnectRequest {
-  UserContext context = 1;
-  PushToken push_token = 2;
-  ConfigurationContext configuration_context = 3;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Push.PushToken push_token = 2;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 3;
 }
 
 message ConnectResponse {
-  UserStates data = 1;
+  Hydra.Api.User.UserStates data = 1;
+}
+
+message GrainHeartbeatRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message GrainHeartbeatResponse {
+  google.protobuf.Duration refresh_after = 1;
 }
 
 message DisconnectRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message DisconnectResponse {
 }
 
 message GetUserStatesRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
 }
 
 message GetUserStatesResponse {
-  UserStates data = 1;
+  Hydra.Api.User.UserStates data = 1;
+}
+
+message GetPublicUserStatesRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated string user_id_list = 2;
+}
+
+message GetPublicUserStatesResponse {
+  repeated Hydra.Api.User.UserStatesData data = 1;
+}
+
+message GetServerUserStatesRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  repeated string user_id_list = 2;
+}
+
+message GetServerUserStatesResponse {
+  repeated Hydra.Api.User.UserStatesData data = 1;
 }
 
 message GetTransactionsRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   int64 from_transaction_id = 2;
   int64 count = 3;
 }
 
 message GetTransactionsResponse {
-  UserTransactionsUpdate transactions = 1;
+  Hydra.Api.User.UserTransactionsUpdate transactions = 1;
 }
 
 message GetTransactionsReverseRequest {
-  UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
   int64 before_transaction_id = 2;
   int64 count = 3;
 }
 
 message GetTransactionsReverseResponse {
-  UserTransactionsUpdate transactions = 1;
+  Hydra.Api.User.UserTransactionsUpdate transactions = 1;
 }
 
-message ApplyOffersRequest {
-  UserContext user_context = 1;
-  ConfigurationContext configuration_context = 2;
-  repeated OfferListItem offers = 3;
+message ApplyOffers2Request {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
+  repeated Hydra.Api.User.OfferListItem offers = 3;
 }
 
-message ApplyOffersResponse {
+message ApplyOffers2Response {
+  repeated Hydra.Api.User.ApplyOfferResult results = 1;
+}
+
+message ApplyServerOffersRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 2;
+  repeated Hydra.Api.User.OfferJsonListItem offers = 3;
+}
+
+message ApplyServerOffersResponse {
+  repeated Hydra.Api.User.ApplyOfferResult results = 1;
+}
+
+message ApplyServerOffers2Request {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
+  string user_id = 3;
+  repeated Hydra.Api.User.OfferJsonListItem offers = 4;
+}
+
+message ApplyServerOffers2Response {
+  repeated Hydra.Api.User.ApplyOfferResult results = 1;
+}
+
+message ApplyServerOfferIdsRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
+  repeated Hydra.Api.User.UserOffers user_offers = 3;
+}
+
+message ApplyServerOfferIdsResponse {
+  repeated Hydra.Api.User.ApplyOfferUserResult user_results = 1;
+}
+
+message ApplyOfferResult {
+  string reference_id = 1;
+  Pros.Global.Api.Errors.ErrorCode result_code = 2;
+}
+
+message ApplyOfferUserResult {
+  string user_id = 1;
+  repeated Hydra.Api.User.ApplyOfferResult offer_results = 2;
+}
+
+message ApplyDynamicOffersRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
+  repeated Hydra.Api.User.OfferJsonListItem offers = 3;
+}
+
+message ApplyDynamicOffersResponse {
+  repeated Hydra.Api.User.ApplyOfferResult results = 1;
+}
+
+message UserOffers {
+  string user_id = 1;
+  repeated Hydra.Api.User.OfferListItem offers = 2;
 }
 
 message OfferListItem {
@@ -67,18 +155,28 @@ message OfferListItem {
   string offer_id = 2;
 }
 
+message OfferJsonListItem {
+  string reference_id = 1;
+  string offer_json = 2;
+}
+
 message UserStates {
   int64 last_transaction_id = 1;
-  repeated UserState items = 2;
+  repeated Hydra.Api.User.UserState items = 2;
 }
 
 message UserState {
   string state_uid = 1;
-  StateValue state_value = 2;
+  Hydra.Api.User.StateValue state_value = 2;
+}
+
+message UserStatesData {
+  string user_id = 1;
+  Hydra.Api.User.UserStates user_states = 2;
 }
 
 message UserTransactionsUpdate {
-  repeated UserTransaction transactions = 1;
+  repeated Hydra.Api.User.UserTransaction transactions = 1;
 }
 
 message UserTransaction {
@@ -86,13 +184,12 @@ message UserTransaction {
     string key = 1;
     string value = 2;
   }
-
   int64 id = 1;
   string offer_id = 2;
   string reference_id = 3;
-  repeated UserTransactionItem transaction_items = 4;
-  repeated ExtendedInfoEntry extended_info = 5;
-  Timestamp created_at = 6;
+  repeated Hydra.Api.User.UserTransactionItem transaction_items = 4;
+  repeated Hydra.Api.User.UserTransaction.ExtendedInfoEntry extended_info = 5;
+  google.protobuf.Timestamp created_at = 6;
 }
 
 message UserTransactionItem {
@@ -100,29 +197,28 @@ message UserTransactionItem {
     string key = 1;
     string value = 2;
   }
-
   string state_uid = 1;
-  UserStateOpType state_op_type = 2;
-  StateValue prev_value = 3;
-  StateValue current_value = 4;
-  repeated ExtendedInfoEntry extended_info = 5;
+  Hydra.Api.User.UserStateOpType state_op_type = 2;
+  Hydra.Api.User.StateValue prev_value = 3;
+  Hydra.Api.User.StateValue current_value = 4;
+  repeated Hydra.Api.User.UserTransactionItem.ExtendedInfoEntry extended_info = 5;
 }
 
 message StateValue {
+  Hydra.Api.User.UserStateOwnType state_own_type = 1;
+  Hydra.Api.User.UserStateDataType state_data_type = 2;
   oneof value {
-    UserStateOwnType state_own_type = 1;
-    UserStateDataType state_data_type = 2;
-    Int64Value int64_value = 3;
-    StringValue string_value = 4;
-    VectorStringValue vector_string_value = 5;
+    Hydra.Api.User.Int64Value int64_value = 3;
+    Hydra.Api.User.StringValue string_value = 4;
+    Hydra.Api.User.VectorStringValue vector_string_value = 5;
   }
-  UserStateOwnType state_own_type = 1;
-  UserStateDataType state_data_type = 2;
 }
 
 message ProcessPlatformEntitlementsRequest {
-  UserContext user_context = 1;
-  ConfigurationContext configuration_context = 2;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
+  Pros.Global.Api.Auth.FpProviderBinaryContext provider_context = 3;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 4;
 }
 
 message ProcessPlatformEntitlementsResponse {
@@ -139,9 +235,3 @@ message StringValue {
 message VectorStringValue {
   repeated string value = 1;
 }
-
-message UserTransactionsUpdateVersion {
-  int32 version = 1;
-  UserTransactionsUpdate update = 2;
-}
-

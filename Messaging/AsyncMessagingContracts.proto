@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+
+package Hydra.Api.AsyncMessaging;
+
+message ConnectRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message ConnectResponse {
+}
+
+message DisconnectRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message DisconnectResponse {
+}
+
+message JoinRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Hydra.Api.AsyncMessaging.Channel channels = 2;
+}
+
+message JoinResponse {
+  repeated Hydra.Api.AsyncMessaging.ChannelHistory channel_histories = 1;
+}
+
+message LeaveRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Hydra.Api.AsyncMessaging.Channel channels = 2;
+}
+
+message LeaveResponse {
+  repeated Hydra.Api.AsyncMessaging.ChannelHistory channel_histories = 1;
+}
+
+message SendRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Hydra.Api.AsyncMessaging.Channel channel = 2;
+  Hydra.Api.AsyncMessaging.ChannelMessage channel_message = 3;
+}
+
+message SendResponse {
+}
+
+message ReceiveRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Hydra.Api.AsyncMessaging.ChannelInfo channels_info = 2;
+}
+
+message ReceiveResponse {
+  repeated Hydra.Api.AsyncMessaging.ChannelHistory channel_histories = 1;
+}
+
+message ChannelHistory {
+  Hydra.Api.AsyncMessaging.ChannelInfo channel_info = 1;
+  repeated Hydra.Api.AsyncMessaging.ChannelMessageInfo messages_info = 2;
+}
+
+message ChannelInfo {
+  Hydra.Api.AsyncMessaging.Channel channel = 1;
+  int64 channel_index = 2;
+}
+
+message ChannelMessageInfo {
+  Hydra.Api.AsyncMessaging.ChannelMessage message = 1;
+  Hydra.Api.AsyncMessaging.ChannelUser from = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message ChannelUser {
+  string user = 1;
+}
+
+message Channel {
+  string name = 1;
+}
+
+message ChannelMessage {
+  string text = 1;
+}

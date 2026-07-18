@@ -9,7 +9,7 @@ enum UserIdentityType {
 }
 
 message UserContext {
-  UserContextData data = 1;
+  Hydra.Api.Infrastructure.Context.UserContextData data = 1;
   bytes signature = 2;
 }
 
@@ -19,6 +19,7 @@ message UserContextData {
   string platform = 3;
   string kernel_session_id = 4;
   string provider_id = 5;
-  UserIdentityType user_identity_type = 6;
+  Hydra.Api.Infrastructure.Context.UserIdentityType user_identity_type = 6;
+  string cross_progression_id = 7;
+  int64 cross_progression_components = 8;
 }
-

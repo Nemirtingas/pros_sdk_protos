@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/TagContext.proto";
+import "Push/PushToken.proto";
+
+package Hydra.Api.Tag;
+
+message ConnectRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Hydra.Api.Push.PushToken push_token = 2;
+}
+
+message ConnectResponse {
+  Hydra.Api.Infrastructure.Context.TagContext tag_context = 1;
+}
+
+message DisconnectRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message DisconnectResponse {
+}
+
+message GetContextRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message GetContextResponse {
+  Hydra.Api.Infrastructure.Context.TagContext tag_context = 1;
+}

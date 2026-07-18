@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Authorization/AuthorizationContracts.proto";
+import "ProsAccount/ProsAccountContracts.proto";
+
+package Pros.Api.Account;
+
+enum QRCodeSystemMode {
+  QR_CODE_SYSTEM_MODE_NORMAL = 0;
+  QR_CODE_SYSTEM_MODE_TURN_OFF = 1;
+}
+
+enum LinkStatus {
+  LINK_STATUS_UNKNOWN = 0;
+  LINK_STATUS_NOT_LINKED = 1;
+  LINK_STATUS_LINKED = 2;
+  LINK_STATUS_CODE_TIMEOUT = 3;
+  LINK_STATUS_CODE_READ = 4;
+}
+
+enum QrCodeType {
+  QR_CODE_TYPE_COMMON = 0;
+  QR_CODE_TYPE_REGISTRATION = 1;
+  QR_CODE_TYPE_REGISTRATION_COMPLETED = 2;
+  QR_CODE_TYPE_REGISTRATION_COMPLETED_MAIN_PAGE = 3;
+}
+
+message GetRegistrationQRCodeRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Api.Account.LinkContext link_context = 2;
+  string code = 3;
+  Pros.Global.Api.Auth.FpProviderBinaryContext provider_context = 4;
+}
+
+message GetRegistrationQRCodeResponse {
+  string registration_link = 1;
+  bytes qr_code_png = 2;
+  string code = 3;
+  Pros.Api.Account.LinkStatus link_status = 4;
+  int32 expiration_in_seconds = 5;
+  repeated Pros.Api.Account.RetrievalInterval retrieval_intervals = 6;
+  Pros.Api.Account.QRCodeConfig config = 7;
+  Pros.Api.Account.AccountInfo account_info = 8;
+  Pros.Api.Account.QrCodeType qr_code_type = 9;
+}
+
+message QRCodeConfig {
+  Pros.Api.Account.QRCodeSystemMode system_mode = 1;
+}
+
+message RetrievalInterval {
+  int32 order = 1;
+  int32 duration_in_seconds = 2;
+  int32 delay_in_seconds = 3;
+}
+
+message GetRegistrationStatusRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string code = 2;
+}
+
+message GetRegistrationStatusResponse {
+  Pros.Api.Account.LinkStatus link_status = 1;
+  Pros.Api.Account.AccountInfo account_info = 2;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 3;
+}
+
+message AccountInfo {
+  string username = 1;
+  string username_postfix = 2;
+  string avatar_link = 3;
+}
+
+message LinkContext {
+  bytes data = 1;
+}

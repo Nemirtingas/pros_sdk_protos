@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "TimeLimitedEvents/TimeLimitedEventsContracts.proto";
+
+package Pros.Api.TimeLimitedEvents;
+
+service TimeLimitedEventsApi {
+  rpc GetEvents (GetEventsRequest) returns (GetEventsResponse);
+}

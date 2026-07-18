@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+
+package Pros.Api.ProfanityFilter;
+
+message CheckTextRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string text = 2;
+}
+
+message CheckTextResponse {
+}

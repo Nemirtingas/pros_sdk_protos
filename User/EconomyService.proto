@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "User/EconomyContracts.proto";
+
+package Hydra.Api.User;
+
+service EconomyApi {
+  rpc Connect (ConnectRequest) returns (ConnectResponse);
+  rpc GrainHeartbeat (GrainHeartbeatRequest) returns (GrainHeartbeatResponse);
+  rpc Disconnect (DisconnectRequest) returns (DisconnectResponse);
+  rpc ProcessPlatformEntitlements (ProcessPlatformEntitlementsRequest) returns (ProcessPlatformEntitlementsResponse);
+  rpc GetUserStates (GetUserStatesRequest) returns (GetUserStatesResponse);
+  rpc GetPublicUserStates (GetPublicUserStatesRequest) returns (GetPublicUserStatesResponse);
+  rpc GetServerUserStates (GetServerUserStatesRequest) returns (GetServerUserStatesResponse);
+  rpc GetTransactions (GetTransactionsRequest) returns (GetTransactionsResponse);
+  rpc GetTransactionsReverse (GetTransactionsReverseRequest) returns (GetTransactionsReverseResponse);
+  rpc ApplyOffers2 (ApplyOffers2Request) returns (ApplyOffers2Response);
+  rpc ApplyServerOffers2 (ApplyServerOffers2Request) returns (ApplyServerOffers2Response);
+  rpc ApplyServerOfferIds (ApplyServerOfferIdsRequest) returns (ApplyServerOfferIdsResponse);
+}

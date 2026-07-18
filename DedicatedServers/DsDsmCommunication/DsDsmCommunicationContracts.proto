@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+import "GlobalEndpointDispatcher/GlobalEndpointDispatcherContracts.proto";
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+import "Context/ServerContext.proto";
+
+package Hydra.Api.DedicatedServers.DsDsmCommunication;
+
+enum PredefinedTagKeys {
+  PREDEFINED_TAG_KEYS_UNKNOWN = 0;
+  PREDEFINED_TAG_KEYS_TITLE_ID = 1;
+  PREDEFINED_TAG_KEYS_GAME_VERSION = 2;
+  PREDEFINED_TAG_KEYS_GAME_SESSION = 3;
+  PREDEFINED_TAG_KEYS_CPU = 4;
+  PREDEFINED_TAG_KEYS_MEMORY = 5;
+  PREDEFINED_TAG_KEYS_GAME_MAP = 6;
+  PREDEFINED_TAG_KEYS_GAME_MODE = 7;
+  PREDEFINED_TAG_KEYS_PLAYERS_COUNT = 8;
+  PREDEFINED_TAG_KEYS_DSM_GAME_STATE = 9;
+  PREDEFINED_TAG_KEYS_SLOT_ID = 10;
+  PREDEFINED_TAG_KEYS_HUSKY_LEGACY_FPS = 11;
+  PREDEFINED_TAG_KEYS_FPS = 12;
+}
+
+message HandshakeRequest {
+  string version = 1;
+  google.protobuf.StringValue server_id = 2;
+}
+
+message HandshakeResponse {
+  string server_id = 1;
+}
+
+message GetServerSessionInfoRequest {
+  string server_id = 1;
+}
+
+message GetServerSessionInfoResponse {
+  Hydra.Api.DedicatedServers.DsDsmCommunication.ServerSessionInfo session_info = 1;
+  google.protobuf.Duration refresh_after = 2;
+}
+
+message GameSessionStartedRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
+}
+
+message GameSessionStartedResponse {
+}
+
+message GameSessionFinishedRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
+}
+
+message GameSessionFinishedResponse {
+}
+
+message TagValue {
+  oneof value {
+    string string_value = 1;
+    int64 int_value = 2;
+    float float_value = 3;
+  }
+}
+
+message SetGameSessionTagsRequest {
+  message TagsEntry {
+    string key = 1;
+    Hydra.Api.DedicatedServers.DsDsmCommunication.TagValue value = 2;
+  }
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
+  repeated Hydra.Api.DedicatedServers.DsDsmCommunication.SetGameSessionTagsRequest.TagsEntry tags = 2;
+}
+
+message SetGameSessionTagsResponse {
+}
+
+message ServerSessionInfo {
+  string server_token = 1;
+  string auth_token = 2;
+  Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo auth_endpoint = 3;
+  Hydra.Api.DedicatedServers.DsDsmCommunication.ReportedInfo reported_info = 4;
+}
+
+message ReportedInfo {
+  string ip = 1;
+  string ipv6 = 2;
+}
+
+message DsTagsDescription {
+  string value = 1;
+  bool auto = 2;
+}

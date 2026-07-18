@@ -8,4 +8,3 @@ message KeyContainer {
   bytes init_vector_value = 3;
   bytes nonce = 4;
 }
-

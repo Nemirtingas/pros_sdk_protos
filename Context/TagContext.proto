@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package Hydra.Api.Infrastructure.Context;
+
+message TagContext {
+  Hydra.Api.Infrastructure.Context.TagContextData data = 1;
+  bytes signature = 2;
+}
+
+message TagContextData {
+  string title_id = 1;
+  repeated string tags = 2;
+  string kernel_session_id = 3;
+}

@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+import "Localization/LocalizedString.proto";
+import "ErrorCode.proto";
+import "ProsAccount/ProsAccountContracts.proto";
+
+package Pros.Api.Entitlement;
+
+enum EntitlementType {
+  ENTITLEMENT_TYPE_UNKNOWN = 0;
+  ENTITLEMENT_TYPE_DURABLE = 1;
+  ENTITLEMENT_TYPE_CONSUMABLE = 2;
+}
+
+enum EntitlementStatus {
+  ENTITLEMENT_STATUS_UNKNOWN = 0;
+  ENTITLEMENT_STATUS_UNCLAIMED = 1;
+  ENTITLEMENT_STATUS_OWNED = 2;
+  ENTITLEMENT_STATUS_NOT_OWNED = 3;
+}
+
+message GetEntitlementsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 2;
+}
+
+message GetEntitlementsResponse {
+  repeated Pros.Api.Entitlement.Entitlement entitlements = 1;
+}
+
+message GetAllEntitlementsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 2;
+}
+
+message GetAllEntitlementsResponse {
+  repeated Pros.Api.Entitlement.Entitlement entitlements = 1;
+}
+
+message ConsumeEntitlementsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated string entitlement_ids = 2;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 3;
+}
+
+message ConsumeEntitlementsResponse {
+  repeated Pros.Api.Entitlement.Entitlement entitlements = 1;
+}
+
+message ConsumeMultipleEntitlementsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Pros.Api.Entitlement.ConsumeEntitlementCount consume_entitlements = 2;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 3;
+}
+
+message ConsumeMultipleEntitlementsResponse {
+  repeated Pros.Api.Entitlement.ConsumeMultipleEntitlementsResult results = 1;
+}
+
+message ConsumeEntitlementCount {
+  string entitlement_id = 1;
+  int32 count = 2;
+  string reference_id = 3;
+}
+
+message ConsumeMultipleEntitlementsResult {
+  string reference_id = 1;
+  Pros.Global.Api.Errors.ErrorCode result_code = 2;
+}
+
+message Entitlement {
+  string id = 1;
+  string name = 2;
+  repeated Pros.Api.Localization.LocalizedString u_i_name = 3;
+  repeated Pros.Api.Localization.LocalizedString u_i_desc = 4;
+  string picture_url = 5;
+  Pros.Api.Entitlement.EntitlementType entitlement_type = 6;
+  Pros.Api.Entitlement.EntitlementStatus entitlement_status = 7;
+  google.protobuf.Timestamp created = 8;
+  google.protobuf.Timestamp updated = 9;
+  int32 consume_limit = 10;
+  int32 consume_count = 11;
+}

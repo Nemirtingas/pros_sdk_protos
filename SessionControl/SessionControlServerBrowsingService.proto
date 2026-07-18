@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "SessionControl/SessionControlContracts.proto";
+import "Options.proto";
+
+package Hydra.Api.SessionControl;
+
+service SessionControlServerBrowsingApi {
+  rpc BrowseServers (BrowseServersRequest) returns (BrowseServersResponse);
+  rpc CreateServer (CreateServerRequest) returns (CreateServerResponse);
+  rpc HeartbeatServer (HeartbeatServerRequest) returns (HeartbeatServerResponse);
+  rpc DestroyServer (DestroyServerRequest) returns (DestroyServerResponse);
+}

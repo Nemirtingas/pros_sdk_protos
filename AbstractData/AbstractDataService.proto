@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "AbstractData/AbstractDataServiceContracts.proto";
+
+package Hydra.Api.AbstractData;
+
+service AbstractDataApi {
+  rpc GetData (GetDataRequest) returns (GetDataResponse);
+  rpc SetData (SetDataRequest) returns (SetDataResponse);
+  rpc GetDataServer (GetDataServerRequest) returns (GetDataServerResponse);
+  rpc SetDataServer (SetDataServerRequest) returns (SetDataServerResponse);
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "Authorization/AuthorizationContracts.proto";
+import "GlobalEndpointDispatcher/GlobalEndpointDispatcherContracts.proto";
+
+package Pros.Global.Api.Configuration;
+
+enum EndpointStatus {
+  ENDPOINT_STATUS_NONE = 0;
+  ENDPOINT_STATUS_DISABLED = 1;
+  ENDPOINT_STATUS_ENABLED = 2;
+  ENDPOINT_STATUS_RETURN_DEFAULT_VALUE = 3;
+}
+
+message ApiEndpoints {
+  repeated Pros.Global.Api.Configuration.ApiEndpointInfo endpoints = 1;
+  repeated Pros.Global.Api.Auth.IncompatibleEndpointInfo incompatible_endpoints = 2;
+}
+
+message ApiEndpointInfo {
+  Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo endpoint = 1;
+  Pros.Global.Api.Configuration.EndpointStatus status = 2;
+}

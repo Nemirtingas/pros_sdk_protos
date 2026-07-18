@@ -1,15 +1,19 @@
 syntax = "proto3";
 
-import "EndpointDispatcher/EndpointDispatcherContracts.proto";
+import "SessionControl/DataCenterEchoEndpoints.proto";
 import "SessionControl/MemberEvent.proto";
+import "SessionControl/ServerInfo.proto";
 import "Context/UserContext.proto";
 import "Context/ServerContext.proto";
+import "Presence/MatchmakeStatus.proto";
 import "Nullable/Nullable.proto";
+import "Push/Presence/Presence.proto";
+import "ContinuationToken/ContinuationToken.proto";
 
 package Hydra.Api.SessionControl;
 
 message CreateSessionRequest {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   string data_center_id = 2;
   string client_version = 3;
   string server_data = 4;
@@ -20,82 +24,112 @@ message CreateSessionResponse {
 }
 
 message GetServerInfoRequest {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   string game_session_id = 2;
+  string s_c_context = 3;
 }
 
 message GetServerInfoResponse {
-  AcceptClientResult accept_client_result = 1;
+  Hydra.Api.SessionControl.AcceptClientResult accept_client_result = 1;
   int32 refresh_after_seconds = 2;
 }
 
-message ManagedGetServerInfoRequest {
-  UserContext user_context = 1;
-  string s_c_context = 2;
-  string game_session_id = 3;
-}
-
-message ManagedGetServerInfoResponse {
-  AcceptClientResult accept_client_result = 1;
-}
-
-message ActivateSessionRequest {
+message PrepareActivateSessionRequest {
   string server_token = 1;
-  ServerInfo server_info = 2;
 }
 
-message ActivateSessionResponse {
-  ServerContext server_context = 1;
-  string server_data = 2;
+message PrepareActivateSessionResponse {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  oneof session_data {
+    string server_data = 2;
+    Hydra.Api.SessionControl.ManagedSessionData managed_session_data = 3;
+  }
+}
+
+message ActivateSession3Request {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  Hydra.Api.SessionControl.ServerInfo server_info = 2;
+}
+
+message ActivateSession3Response {
+}
+
+message ManagedSessionData {
+  repeated Hydra.Api.Presence.GameVariant variants = 1;
+  string session_data = 2;
+  string playlist = 3;
 }
 
 message GetSessionMemberEventsRequest {
-  ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
   int64 last_event_id = 2;
+}
+
+message GetSessionEventsRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  int64 last_session_member_event_id = 2;
+  int64 last_session_data_event_id = 3;
 }
 
 message GetSessionMemberEventsResponse {
-  repeated SessionMemberEvent events = 1;
+  repeated Hydra.Api.SessionControl.SessionMemberEvent events = 1;
   int64 last_event_id = 2;
 }
 
+message SessionMemberEvents {
+  repeated Hydra.Api.SessionControl.SessionMemberEvent events = 1;
+  int64 last_event_id = 2;
+}
+
+message SessionDataEvent {
+  int64 sequence_id = 1;
+  Hydra.Api.Nullable.NullableString play_list_id = 2;
+  repeated Hydra.Api.Presence.GameVariant variants = 3;
+  Hydra.Api.Presence.MatchmakeSessionSettings settings = 4;
+  Hydra.Api.Nullable.NullableString data = 5;
+  repeated Hydra.Api.Push.Presence.PresenceSessionMemberUpdate members_update = 6;
+}
+
+message SessionDataEvents {
+  repeated Hydra.Api.SessionControl.SessionDataEvent events = 1;
+  int64 last_event_id = 2;
+}
+
+message GetSessionEventsResponse {
+  Hydra.Api.SessionControl.SessionMemberEvents session_member_events = 1;
+  Hydra.Api.SessionControl.SessionDataEvents session_data_events = 2;
+}
+
+message HeartbeatSessionRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+}
+
+message HeartbeatSessionResponse {
+  int32 refresh_after_seconds = 1;
+}
+
 message ProcessSessionMemberEventsRequest {
-  ServerContext server_context = 1;
-  repeated SessionMemberEventResult list = 2;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  repeated Hydra.Api.SessionControl.SessionMemberEventResult list = 2;
 }
 
 message ProcessSessionMemberEventsResponse {
 }
 
 message FinishSessionRequest {
-  ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
 }
 
 message FinishSessionResponse {
 }
 
 message GetDataCenterEchoEndpointsRequest {
-  string client_version = 1;
-}
-
-message GetDataCenterEchoEndpointsV2Request {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   string client_version = 2;
 }
 
-message EchoEndpoint {
-  string ip = 1;
-  int32 port = 2;
-  EndpointScheme scheme = 3;
-}
-
-message DataCenterEchoEndpoints {
-  string data_center_id = 1;
-  repeated EchoEndpoint endpoints = 2;
-}
-
 message GetDataCenterEchoEndpointsResponse {
-  repeated DataCenterEchoEndpoints endpoints = 1;
+  repeated Hydra.Api.SessionControl.DataCenterEchoEndpoints endpoints = 1;
 }
 
 message SessionKeyValue {
@@ -108,7 +142,7 @@ message HeartbeatServerTags {
 }
 
 message HeartbeatServerKeyValue {
-  repeated SessionKeyValue list = 1;
+  repeated Hydra.Api.SessionControl.SessionKeyValue list = 1;
 }
 
 message HeartbeatServerMembers {
@@ -116,45 +150,47 @@ message HeartbeatServerMembers {
 }
 
 message ServerBrowsingSessionData {
-  NullableString game_mode = 1;
-  NullableString game_map = 2;
-  NullableString server_name = 3;
-  NullableBool password_protected = 4;
-  NullableInt max_player_count = 5;
-  HeartbeatServerTags tags = 6;
-  HeartbeatServerKeyValue key_values = 7;
-  HeartbeatServerMembers members = 8;
+  Hydra.Api.Nullable.NullableString game_mode = 1;
+  Hydra.Api.Nullable.NullableString game_map = 2;
+  Hydra.Api.Nullable.NullableString server_name = 3;
+  Hydra.Api.Nullable.NullableBool password_protected = 4;
+  Hydra.Api.Nullable.NullableInt max_player_count = 5;
+  Hydra.Api.SessionControl.HeartbeatServerTags tags = 6;
+  Hydra.Api.SessionControl.HeartbeatServerKeyValue key_values = 7;
+  Hydra.Api.SessionControl.HeartbeatServerMembers members = 8;
 }
 
 message ServerData {
-  ServerBrowsingSessionData session_data = 1;
-  ServerInfo server_info = 2;
+  Hydra.Api.SessionControl.ServerBrowsingSessionData session_data = 1;
+  Hydra.Api.SessionControl.ServerInfo server_info = 2;
+  string kernel_session_id = 3;
 }
 
 message BrowseServersResponse {
   int32 slots_total = 1;
   int32 slots_occupied = 2;
-  repeated ServerData servers = 3;
+  repeated Hydra.Api.SessionControl.ServerData servers = 3;
+  Pros.Global.Api.ContinuationToken.ContinuationToken continuation_token = 4;
 }
 
 message HeartbeatServerData {
-  ServerBrowsingSessionData data = 1;
+  Hydra.Api.SessionControl.ServerBrowsingSessionData data = 1;
 }
 
 message CreateServerRequest {
   string server_token = 1;
   string client_version = 2;
-  ServerBrowsingSessionData create_data = 3;
-  ServerInfo server_info = 4;
+  Hydra.Api.SessionControl.ServerBrowsingSessionData create_data = 3;
+  Hydra.Api.SessionControl.ServerInfo server_info = 4;
 }
 
 message CreateServerResponse {
-  ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
 }
 
 message HeartbeatServerRequest {
-  ServerContext server_context = 1;
-  HeartbeatServerData update = 2;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  Hydra.Api.SessionControl.HeartbeatServerData update = 2;
 }
 
 message HeartbeatServerResponse {
@@ -162,14 +198,30 @@ message HeartbeatServerResponse {
 }
 
 message BrowseServersRequest {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   string client_version = 2;
+  Pros.Global.Api.ContinuationToken.ContinuationToken continuation_token = 3;
 }
 
 message DestroyServerRequest {
-  ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
 }
 
 message DestroyServerResponse {
 }
 
+message ManagedRemoveMembersRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  repeated string user_ids = 2;
+}
+
+message ManagedSetUserPendingRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 2;
+}
+
+message ManagedSetUserPendingResponse {
+}
+
+message ManagedRemoveMembersResponse {
+}

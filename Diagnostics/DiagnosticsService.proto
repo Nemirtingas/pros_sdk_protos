@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Diagnostics/DiagnosticsContracts.proto";
+
+package Hydra.Api.Diagnostics;
+
+service DiagnosticsApi {
+  rpc WriteCrashDumpUser (WriteCrashDumpUserRequest) returns (WriteCrashDumpUserResponse);
+  rpc WriteCrashDumpServer (WriteCrashDumpServerRequest) returns (WriteCrashDumpServerResponse);
+  rpc WriteCrashDumpTool (WriteCrashDumpToolRequest) returns (WriteCrashDumpToolResponse);
+  rpc WriteCrashDumpModEditor (WriteCrashDumpModEditorRequest) returns (WriteCrashDumpModEditorResponse);
+}

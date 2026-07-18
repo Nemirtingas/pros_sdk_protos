@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Messaging/AsyncMessagingContracts.proto";
+
+package Hydra.Api.AsyncMessaging;
+
+service AsyncMessagingApi {
+  rpc Connect (ConnectRequest) returns (ConnectResponse);
+  rpc Disconnect (DisconnectRequest) returns (DisconnectResponse);
+  rpc Join (JoinRequest) returns (JoinResponse);
+  rpc Leave (LeaveRequest) returns (LeaveResponse);
+  rpc Send (SendRequest) returns (SendResponse);
+  rpc Receive (ReceiveRequest) returns (ReceiveResponse);
+}

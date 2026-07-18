@@ -1,5 +1,9 @@
 syntax = "proto3";
 
+import "SessionControl/KeyContainer.proto";
+import "Authorization/AuthorizationContracts.proto";
+import "google/protobuf/wrappers.proto";
+
 package Hydra.Api.Presence;
 
 enum MatchmakeState {
@@ -19,6 +23,12 @@ enum MatchmakeJoinDelegation {
   MATCHMAKE_JOIN_DELEGATION_ALLOWED_USERS = 2;
 }
 
+enum MemberState {
+  MEMBER_STATE_NONE = 0;
+  MEMBER_STATE_ACTIVE = 1;
+  MEMBER_STATE_PENDING = 2;
+}
+
 enum GameSessionIdChangeReason {
   GAME_SESSION_ID_CHANGE_REASON_NONE = 0;
   GAME_SESSION_ID_CHANGE_REASON_JOIN = 1;
@@ -33,6 +43,11 @@ enum GameSessionIdChangeReason {
   GAME_SESSION_ID_CHANGE_REASON_SESSION_FINISHED_TIMEOUT_QUEUE = 10;
 }
 
+message PlatformData {
+  Pros.Global.Api.Auth.BuildPlatform build_platform = 1;
+  Pros.Global.Api.Auth.Provider provider = 2;
+}
+
 message DCPing {
   string name = 1;
   int32 ping = 2;
@@ -44,26 +59,27 @@ message QueueVariants {
 }
 
 message MatchmakeSessionSettings {
-  MatchmakeJIPState jip = 1;
+  Hydra.Api.Presence.MatchmakeJIPState jip = 1;
   int32 max_players = 2;
-  MatchmakeJoinDelegation join_delegation = 3;
+  Hydra.Api.Presence.MatchmakeJoinDelegation join_delegation = 3;
   repeated string allowed_user_ids = 4;
 }
 
 message MatchmakeSessionOptions {
   string playlist_id = 1;
-  repeated DCPing pings = 2;
+  repeated Hydra.Api.Presence.DCPing pings = 2;
 }
 
 message MatchmakeCreateOptions {
-  MatchmakeSessionOptions options = 1;
-  MatchmakeSessionSettings settings = 2;
-  repeated GameVariant variants = 3;
+  Hydra.Api.Presence.MatchmakeSessionOptions options = 1;
+  Hydra.Api.Presence.MatchmakeSessionSettings settings = 2;
+  repeated Hydra.Api.Presence.GameVariant variants = 3;
 }
 
 message MatchmakeSearchOptions {
-  MatchmakeSessionOptions options = 1;
-  repeated QueueVariants variants = 2;
+  Hydra.Api.Presence.MatchmakeSessionOptions options = 1;
+  repeated Hydra.Api.Presence.QueueVariants variants = 2;
+  float connection_quality = 3;
 }
 
 message GameVariant {
@@ -80,32 +96,37 @@ message SessionMember {
   int32 sorting_index = 6;
   string group_id = 7;
   int32 team_id = 8;
+  Hydra.Api.SessionControl.KeyContainer keys = 9;
+  Hydra.Api.Presence.MemberState state = 10;
+  Hydra.Api.Presence.PlatformData platform_data = 11;
+  google.protobuf.StringValue class_role = 12;
 }
 
 message GameSessionData {
   string id = 1;
-  MatchmakeSessionSettings settings = 2;
-  repeated GameVariant variants = 3;
+  Hydra.Api.Presence.MatchmakeSessionSettings settings = 2;
+  repeated Hydra.Api.Presence.GameVariant variants = 3;
   string data = 4;
-  repeated SessionMember session_members = 5;
+  repeated Hydra.Api.Presence.SessionMember session_members = 5;
+  string join_code = 6;
 }
 
 message GameSessionId {
   string id = 1;
-  GameSessionIdChangeReason reason = 2;
+  Hydra.Api.Presence.GameSessionIdChangeReason reason = 2;
 }
 
 message MatchmakeStatus {
-  GameSessionId id = 1;
-  MatchmakeState state = 2;
-  GameSessionData session = 3;
+  Hydra.Api.Presence.GameSessionId id = 1;
+  Hydra.Api.Presence.MatchmakeState state = 2;
+  Hydra.Api.Presence.GameSessionData session = 3;
 }
 
 message UserPresenceData {
   string user_id = 1;
-  GameSessionData session = 2;
+  Hydra.Api.Presence.GameSessionData session = 2;
   bool is_online = 3;
   bool is_invitable = 4;
   string static_data = 5;
+  Hydra.Api.Presence.PlatformData platform_data = 6;
 }
-

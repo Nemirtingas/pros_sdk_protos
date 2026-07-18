@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "Facts/FactsContracts.proto";
+
+package Leech.Api;
+
+message ADFSendPackageData {
+  Pros.Api.Facts.FactsPackHeader header = 1;
+  bytes entry = 2;
+  bytes data = 3;
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "User/BanContracts.proto";
+
+package Hydra.Api.User.Bans;
+
+service UserBansApi {
+  rpc GetUserActiveBans (GetUserActiveBansRequest) returns (GetUserActiveBansResponse);
+}

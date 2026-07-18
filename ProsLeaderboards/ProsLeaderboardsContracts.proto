@@ -1,0 +1,210 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+import "Localization/LocalizedString.proto";
+import "Authorization/AuthorizationContracts.proto";
+import "Account/AccountContracts.proto";
+import "ContinuationToken/ContinuationToken.proto";
+
+package Pros.Api.ProsLeaderboards;
+
+enum ProsLeaderboardDataCaptureStatus {
+  PROS_LEADERBOARD_DATA_CAPTURE_STATUS_UNKNOWN = 0;
+  PROS_LEADERBOARD_DATA_CAPTURE_STATUS_ACTIVE = 1;
+  PROS_LEADERBOARD_DATA_CAPTURE_STATUS_SCHEDULED = 2;
+  PROS_LEADERBOARD_DATA_CAPTURE_STATUS_FINISHED = 3;
+  PROS_LEADERBOARD_DATA_CAPTURE_STATUS_NOT_SCHEDULED = 4;
+  PROS_LEADERBOARD_DATA_CAPTURE_STATUS_DELETED = 5;
+}
+
+enum ProsLeaderboardDataCaptureEndType {
+  PROS_LEADERBOARD_DATA_CAPTURE_END_TYPE_UNKNOWN = 0;
+  PROS_LEADERBOARD_DATA_CAPTURE_END_TYPE_ON_END_DATE = 1;
+  PROS_LEADERBOARD_DATA_CAPTURE_END_TYPE_AFTER_NUMBER_OF_RESETS = 2;
+}
+
+enum ProsLeaderboardPublishStatus {
+  PROS_LEADERBOARD_PUBLISH_STATUS_UNKNOWN = 0;
+  PROS_LEADERBOARD_PUBLISH_STATUS_NOT_SCHEDULED = 1;
+  PROS_LEADERBOARD_PUBLISH_STATUS_SCHEDULED = 2;
+  PROS_LEADERBOARD_PUBLISH_STATUS_PUBLISHED = 3;
+  PROS_LEADERBOARD_PUBLISH_STATUS_FINISHED = 4;
+  PROS_LEADERBOARD_PUBLISH_STATUS_DELETED = 5;
+}
+
+enum ProsLeaderboardTimePeriod {
+  PROS_LEADERBOARD_TIME_PERIOD_UNKNOWN = 0;
+  PROS_LEADERBOARD_TIME_PERIOD_SECOND = 1;
+  PROS_LEADERBOARD_TIME_PERIOD_MINUTE = 2;
+  PROS_LEADERBOARD_TIME_PERIOD_HOUR = 3;
+  PROS_LEADERBOARD_TIME_PERIOD_DAY = 4;
+  PROS_LEADERBOARD_TIME_PERIOD_WEEK = 5;
+  PROS_LEADERBOARD_TIME_PERIOD_MONTH = 6;
+  PROS_LEADERBOARD_TIME_PERIOD_YEAR = 7;
+}
+
+message GetLeaderboardsCatalogRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
+}
+
+message GetLeaderboardsCatalogResponse {
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboard leaderboards = 1;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
+}
+
+message GetLeaderboardEntriesRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string leaderboard_id = 2;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 3;
+}
+
+message GetLeaderboardEntriesResponse {
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardEntries entries = 1;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
+}
+
+message GetLeaderboardsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardSearch leaderboards_searches = 2;
+}
+
+message GetLeaderboardsResponse {
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardSearchData leaderboards_searches = 1;
+}
+
+message UpdateLeaderboardsRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardUpdateData leaderboards_updates = 2;
+}
+
+message UpdateLeaderboardsResponse {
+}
+
+message ProsLeaderboardSearch {
+  string leaderboard_id = 1;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 2;
+}
+
+message ProsLeaderboardSearchData {
+  string leaderboard_id = 1;
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardEntries entries = 2;
+  Pros.Global.Api.ContinuationToken.ContinuationToken search_token = 3;
+}
+
+message LeaderboardUpdateData {
+  string leaderboard_name = 1;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardUserUpdateData users_updates = 2;
+}
+
+message LeaderboardUserUpdateData {
+  string user_id = 1;
+  Pros.Global.Api.Auth.Provider provider = 2;
+  Pros.Global.Api.Auth.BuildPlatform platform = 3;
+  int32 score = 4;
+  string custom_data = 5;
+}
+
+message ProsLeaderboardEntries {
+  Pros.Global.Api.Auth.Provider provider = 1;
+  Pros.Global.Api.Auth.BuildPlatform platform = 2;
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardTierEntries tier_entries = 3;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardRequestedPlayerResult requested_player_result = 4;
+}
+
+message ProsLeaderboardTierEntries {
+  string tier_name = 1;
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardEntry entries = 2;
+}
+
+message ProsLeaderboardEntry {
+  int32 rank = 1;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardPlayer player = 2;
+  int32 score = 3;
+  string custom_data = 4;
+}
+
+message ProsLeaderboardPlayer {
+  string user_id = 1;
+  string account_id = 2;
+  Pros.Api.Account.AccountInfo account_info = 3;
+}
+
+message ProsLeaderboardRequestedPlayerResult {
+  string tier_name = 1;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardEntry result = 2;
+}
+
+message ProsLeaderboard {
+  string leaderboard_id = 1;
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardLocalizationInfo localization_infos = 2;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardGeneralInfo general_info = 3;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardDataCaptureInfo data_capture_info = 4;
+  string leaderboard_name = 6;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardPublishingInfo player_portal_publishing_info = 7;
+}
+
+message ProsLeaderboardLocalizationInfo {
+  Pros.Api.Localization.LocalizedString leaderboard_display_name = 1;
+  Pros.Api.Localization.LocalizedString leaderboard_description = 2;
+  Pros.Api.Localization.LocalizedString leaderboard_metric_name = 3;
+}
+
+message ProsLeaderboardGeneralInfo {
+  bool split_data_by_platform = 1;
+  repeated string platform_ids = 2;
+  int32 participants_displayed = 3;
+  bool show_anonymous_players = 4;
+  repeated Pros.Api.ProsLeaderboards.ProsLeaderboardTierInfo tiers = 5;
+}
+
+message ProsLeaderboardTierInfo {
+  string name = 1;
+  repeated Pros.Api.Localization.LocalizedString localized_names = 2;
+  int32 order = 3;
+}
+
+message ProsLeaderboardDataCaptureInfo {
+  google.protobuf.Timestamp start_date = 1;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardDataCaptureReset data_capture_reset = 2;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardDataCaptureEndInfo data_capture_end_date = 3;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardDataCaptureStatus data_capture_status = 4;
+}
+
+message ProsLeaderboardPublishingInfo {
+  Pros.Api.ProsLeaderboards.ProsLeaderboardDuration publishing_date = 1;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardPublishStatus publishing_status = 2;
+}
+
+message ProsLeaderboardPeriod {
+  Pros.Api.ProsLeaderboards.ProsLeaderboardTimePeriod period = 1;
+  int64 value = 2;
+}
+
+message ProsLeaderboardDataCaptureReset {
+  Pros.Api.ProsLeaderboards.ProsLeaderboardReset next_reset = 1;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardReset last_reset = 2;
+  Pros.Api.ProsLeaderboards.ProsLeaderboardPeriod reset_period = 3;
+  int32 total_reset_count = 4;
+  int32 completed_reset_count = 5;
+}
+
+message ProsLeaderboardReset {
+  google.protobuf.Timestamp reset_time = 1;
+  int64 remaining_till_next_reset_seconds = 2;
+}
+
+message ProsLeaderboardDataCaptureEndInfo {
+  Pros.Api.ProsLeaderboards.ProsLeaderboardDataCaptureEndType end_type = 1;
+  google.protobuf.Timestamp end_on = 2;
+  int32 number_of_resets = 3;
+  int32 remaining_resets = 4;
+  int64 remaining_till_end_seconds = 5;
+}
+
+message ProsLeaderboardDuration {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp finish = 2;
+}

@@ -2,23 +2,36 @@ syntax = "proto3";
 
 import "Context/UserContext.proto";
 import "Context/ServerContext.proto";
+import "ErrorCode.proto";
 
 package Hydra.Api.AbstractData;
+
+enum AbstractDataCompressionType {
+  ABSTRACT_DATA_COMPRESSION_TYPE_NONE = 0;
+  ABSTRACT_DATA_COMPRESSION_TYPE_ZLIB = 1;
+  ABSTRACT_DATA_COMPRESSION_TYPE_GZIP = 2;
+}
 
 message AbstractDataRecord {
   int64 layout = 1;
   int64 version = 2;
   bytes data = 3;
+  Hydra.Api.AbstractData.AbstractDataCompressionInfo compression_info = 4;
+}
+
+message AbstractDataCompressionInfo {
+  Hydra.Api.AbstractData.AbstractDataCompressionType compression_type = 1;
+  int32 data_original_size = 2;
 }
 
 message AbstractDataContainerData {
   string container_name = 1;
-  AbstractDataRecord record = 2;
+  Hydra.Api.AbstractData.AbstractDataRecord record = 2;
 }
 
 message AbstractDataKeyContainers {
   string key = 1;
-  repeated AbstractDataContainerData containers = 2;
+  repeated Hydra.Api.AbstractData.AbstractDataContainerData containers = 2;
 }
 
 message AbstractDataKeyContainerNames {
@@ -27,36 +40,49 @@ message AbstractDataKeyContainerNames {
 }
 
 message GetDataRequest {
-  UserContext context = 1;
-  repeated AbstractDataKeyContainerNames key_container_names = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainerNames key_container_names = 2;
+  Hydra.Api.AbstractData.AbstractDataCompressionType compression_type = 3;
 }
 
 message GetDataResponse {
-  repeated AbstractDataKeyContainers data = 1;
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainers data = 1;
 }
 
 message SetDataRequest {
-  UserContext context = 1;
-  repeated AbstractDataKeyContainers data = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainers data = 2;
 }
 
 message SetDataResponse {
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainerResult results = 1;
 }
 
 message GetDataServerRequest {
-  ServerContext context = 1;
-  repeated AbstractDataKeyContainerNames key_container_names = 2;
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainerNames key_container_names = 2;
+  Hydra.Api.AbstractData.AbstractDataCompressionType compression_type = 3;
 }
 
 message GetDataServerResponse {
-  repeated AbstractDataKeyContainers data = 1;
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainers data = 1;
 }
 
 message SetDataServerRequest {
-  ServerContext context = 1;
-  repeated AbstractDataKeyContainers data = 2;
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainers data = 2;
 }
 
 message SetDataServerResponse {
+  repeated Hydra.Api.AbstractData.AbstractDataKeyContainerResult results = 1;
 }
 
+message AbstractDataKeyContainerResult {
+  string key = 1;
+  repeated Hydra.Api.AbstractData.AbstractDataContainerResult container_results = 2;
+}
+
+message AbstractDataContainerResult {
+  string container_name = 1;
+  Pros.Global.Api.Errors.ErrorCode result_code = 2;
+}

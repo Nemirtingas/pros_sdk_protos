@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Maintenance/Common.proto";
+
+package Pros.Global.Api.GlobalEndpointDispatcher;
+
+enum EnvironmentStatus {
+  ENVIRONMENT_STATUS_UNKNOWN = 0;
+  ENVIRONMENT_STATUS_READY = 1;
+  ENVIRONMENT_STATUS_MAINTENANCE = 2;
+}
+
+enum EndpointScheme {
+  ENDPOINT_SCHEME_SECURED = 0;
+  ENDPOINT_SCHEME_UNSECURED = 1;
+  ENDPOINT_SCHEME_UDP = 2;
+}
+
+enum RateLimiterScope {
+  RATE_LIMITER_SCOPE_NONE = 0;
+  RATE_LIMITER_SCOPE_GLOBAL = 1;
+  RATE_LIMITER_SCOPE_SERVICE = 2;
+  RATE_LIMITER_SCOPE_METHOD = 3;
+}
+
+message GetEnvironmentInfoRequest {
+  Pros.Global.Api.GlobalEndpointDispatcher.ServiceIdentity authorization = 1;
+  Pros.Global.Api.GlobalEndpointDispatcher.TitleIdentity title = 2;
+  string build_version = 3;
+}
+
+message GetEnvironmentInfoResponse {
+  int64 date = 1;
+  Pros.Global.Api.GlobalEndpointDispatcher.EnvironmentInfo environment = 2;
+}
+
+message ServiceIdentity {
+  string name = 1;
+  Hydra.Api.Infrastructure.ServiceVersion version = 2;
+}
+
+message TitleIdentity {
+  string title_id = 1;
+  string title_secret = 2;
+}
+
+message EndpointInfo {
+  Pros.Global.Api.GlobalEndpointDispatcher.ServiceIdentity service_info = 1;
+  string ip = 2;
+  int32 port = 3;
+  Pros.Global.Api.GlobalEndpointDispatcher.EndpointScheme scheme = 4;
+}
+
+message EnvironmentInfo {
+  string id = 1;
+  Pros.Global.Api.GlobalEndpointDispatcher.EnvironmentStatus status = 2;
+  Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo endpoint = 3;
+  int32 seconds_until_maintenance_complete = 4;
+  Pros.Global.Api.GlobalEndpointDispatcher.MaintenanceInfo maintenance_info = 5;
+}
+
+message MaintenanceInfo {
+  int64 start_unix_time = 1;
+  int64 end_unix_time = 2;
+  Pros.Global.Api.Maintenance.MaintenanceReason reason = 3;
+}
+
+message SdkRateLimiter {
+  string id = 1;
+  Pros.Global.Api.GlobalEndpointDispatcher.ScopeDetails scope_details = 2;
+  uint64 requests_count = 3;
+  uint64 period_sec = 4;
+}
+
+message ScopeDetails {
+  Pros.Global.Api.GlobalEndpointDispatcher.RateLimiterScope scope_target = 1;
+  string apply_scope_to = 2;
+}
+
+message SdkRateLimiterInfo {
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.SdkRateLimiter rate_limiters = 1;
+}
+
+message SdkConnectionTimingInfo {
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.SdkConnectionTiming connection_timings = 1;
+}
+
+message SdkConnectionTiming {
+  repeated int32 connection_attempt_timers_seconds = 1;
+  double offset_percent = 2;
+  repeated string service_names = 3;
+}
+
+message LongPollingInfo {
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.EndpointLongPollingInfo long_polling_infos = 1;
+}
+
+message EndpointLongPollingInfo {
+  string endpoint_name = 1;
+  int32 timeout_seconds = 2;
+}

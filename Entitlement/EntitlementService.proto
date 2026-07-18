@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Entitlement/EntitlementContracts.proto";
+
+package Pros.Api.Entitlement;
+
+service EntitlementApi {
+  rpc GetAllEntitlements (GetAllEntitlementsRequest) returns (GetAllEntitlementsResponse);
+  rpc ConsumeEntitlements (ConsumeEntitlementsRequest) returns (ConsumeEntitlementsResponse);
+  rpc ConsumeMultipleEntitlements (ConsumeMultipleEntitlementsRequest) returns (ConsumeMultipleEntitlementsResponse);
+}

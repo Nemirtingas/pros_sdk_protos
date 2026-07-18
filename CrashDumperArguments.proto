@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+import "GlobalEndpointDispatcher/GlobalEndpointDispatcherContracts.proto";
+
+package Leech.Api;
+
+message CrashDumperArguments {
+  Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo diagnostics = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 2;
+  string token = 3;
+  string client_version = 4;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 5;
+  string title_secret = 6;
+}

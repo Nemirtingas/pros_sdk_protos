@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "ProsSdkConfiguration/ProsSdkConfigurationContracts.proto";
+
+package Pros.Api.SdkConfiguration;
+
+service ProsSdkConfigurationApi {
+  rpc GetConfiguration (GetConfigurationRequest) returns (GetConfigurationResponse);
+  rpc GetServerConfiguration (GetServerConfigurationRequest) returns (GetServerConfigurationResponse);
+  rpc GetMaintenanceInfo (GetMaintenanceInfoRequest) returns (GetMaintenanceInfoResponse);
+  rpc GetServerMaintenanceInfo (GetServerMaintenanceInfoRequest) returns (GetServerMaintenanceInfoResponse);
+}

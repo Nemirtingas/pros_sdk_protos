@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "ProfanityFilter/ProfanityFilterContracts.proto";
+
+package Pros.Api.ProfanityFilter;
+
+service ProfanityFilterApi {
+  rpc CheckText (CheckTextRequest) returns (CheckTextResponse);
+}

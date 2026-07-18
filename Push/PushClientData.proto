@@ -4,19 +4,26 @@ import "Push/PushVersion.proto";
 import "Push/PushToken.proto";
 import "Context/UserContext.proto";
 import "Context/ServerContext.proto";
+import "Push/PushClientMessage.proto";
 
 package Hydra.Api.Push;
 
-message PushAuthorizationData {
-  oneof context {
-    int32 generation = 1;
-    PushToken token = 2;
-    repeated PushVersion versions = 3;
-    UserContext user_context = 4;
-    ServerContext server_context = 5;
-  }
-  int32 generation = 1;
-  PushToken token = 2;
-  repeated PushVersion versions = 3;
+message PushClientData {
+  string user_id = 1;
+  string user_signature = 2;
+  int32 generation = 3;
+  string title_id = 4;
+  Hydra.Api.Push.PushToken token = 5;
+  repeated Hydra.Api.Push.PushVersion versions = 6;
+  Hydra.Api.Push.PushSetKeyValues key_values = 7;
 }
 
+message PushAuthorizationData {
+  int32 generation = 1;
+  Hydra.Api.Push.PushToken token = 2;
+  repeated Hydra.Api.Push.PushVersion versions = 3;
+  oneof context {
+    Hydra.Api.Infrastructure.Context.UserContext user_context = 4;
+    Hydra.Api.Infrastructure.Context.ServerContext server_context = 5;
+  }
+}

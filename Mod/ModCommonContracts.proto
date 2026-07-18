@@ -1,0 +1,395 @@
+syntax = "proto3";
+
+import "Images/ImageContracts.proto";
+import "google/protobuf/timestamp.proto";
+import "Localization/LocalizedString.proto";
+import "Authorization/AuthorizationContracts.proto";
+
+package Pros.Api.Mod;
+
+enum ModStatus {
+  MOD_STATUS_UNKNOWN = 0;
+  MOD_STATUS_HIDDEN = 1;
+  MOD_STATUS_PUBLIC = 2;
+  MOD_STATUS_BLOCKED = 3;
+  MOD_STATUS_DELETED = 4;
+  MOD_STATUS_UNDER_DELETION = 5;
+  MOD_STATUS_REJECTED = 6;
+  MOD_STATUS_RETEST = 7;
+}
+
+enum ModVersionStatus {
+  MOD_VERSION_STATUS_UNKNOWN = 0;
+  MOD_VERSION_STATUS_CREATED = 1;
+  MOD_VERSION_STATUS_IN_TEST = 2;
+  MOD_VERSION_STATUS_APPROVED = 3;
+  MOD_VERSION_STATUS_REJECTED = 4;
+  MOD_VERSION_STATUS_PUBLIC = 5;
+  MOD_VERSION_STATUS_HIDDEN = 6;
+  MOD_VERSION_STATUS_DELETED = 7;
+  MOD_VERSION_STATUS_PENDING_UPLOAD = 8;
+  MOD_VERSION_STATUS_ERROR = 9;
+  MOD_VERSION_STATUS_BLOCKED = 10;
+}
+
+enum ModAdvancedApproveStatus {
+  MOD_ADVANCED_APPROVE_STATUS_NONE = 0;
+  MOD_ADVANCED_APPROVE_STATUS_WAITING_FOR_TEST = 1;
+  MOD_ADVANCED_APPROVE_STATUS_QA_TEST = 2;
+  MOD_ADVANCED_APPROVE_STATUS_MODERATOR_TEST = 3;
+  MOD_ADVANCED_APPROVE_STATUS_MODERATOR_APPROVED = 4;
+}
+
+enum ModLikeStatus {
+  MOD_LIKE_STATUS_NONE = 0;
+  MOD_LIKE_STATUS_LIKE = 1;
+  MOD_LIKE_STATUS_DISLIKE = 2;
+}
+
+enum ModSortType {
+  MOD_SORT_TYPE_NONE = 0;
+  MOD_SORT_TYPE_ALPHABETICAL = 1;
+  MOD_SORT_TYPE_DOWNLOADS = 2;
+  MOD_SORT_TYPE_LIKES = 3;
+  MOD_SORT_TYPE_SUBSCRIBERS = 4;
+  MOD_SORT_TYPE_LAST_UPDATED = 5;
+  MOD_SORT_TYPE_CREATED_AT = 6;
+  MOD_SORT_TYPE_PROFILE_URL = 7;
+  MOD_SORT_TYPE_MOD_STATUS = 8;
+  MOD_SORT_TYPE_LIKES_THEN_DOWNLOADS = 9;
+  MOD_SORT_TYPE_TOTAL_COMPLAINTS = 10;
+  MOD_SORT_TYPE_NEW_COMPLAINTS = 11;
+  MOD_SORT_TYPE_UNCHECKED_MODERATOR_NOTES = 12;
+  MOD_SORT_TYPE_BY_REQUESTED_MOD_IDS = 13;
+}
+
+enum ModSortOrder {
+  MOD_SORT_ORDER_NONE = 0;
+  MOD_SORT_ORDER_ASC = 1;
+  MOD_SORT_ORDER_DESC = 2;
+}
+
+enum ModCollectionType {
+  MOD_COLLECTION_TYPE_UNKNOWN = 0;
+  MOD_COLLECTION_TYPE_STATIC = 1;
+  MOD_COLLECTION_TYPE_DYNAMIC = 2;
+}
+
+enum ModImageExtension {
+  MOD_IMAGE_EXTENSION_UNKNOWN = 0;
+  MOD_IMAGE_EXTENSION_JPG = 1;
+  MOD_IMAGE_EXTENSION_PNG = 2;
+}
+
+enum ModVersionUploadStatus {
+  MOD_VERSION_UPLOAD_STATUS_UNKNOWN = 0;
+  MOD_VERSION_UPLOAD_STATUS_STARTED = 1;
+  MOD_VERSION_UPLOAD_STATUS_FAILED = 2;
+  MOD_VERSION_UPLOAD_STATUS_COMPLETED = 3;
+}
+
+enum ModVersionPlatformApproveType {
+  MOD_VERSION_PLATFORM_APPROVE_TYPE_NONE = 0;
+  MOD_VERSION_PLATFORM_APPROVE_TYPE_AUTO = 1;
+  MOD_VERSION_PLATFORM_APPROVE_TYPE_REQUIRED = 2;
+  MOD_VERSION_PLATFORM_APPROVE_TYPE_DISABLED = 3;
+}
+
+enum ModModerationSourceType {
+  MOD_MODERATION_SOURCE_TYPE_UNKNOWN = 0;
+  MOD_MODERATION_SOURCE_TYPE_ACCOUNT = 1;
+  MOD_MODERATION_SOURCE_TYPE_AUTOMATIC = 2;
+}
+
+enum ModAutomaticModerationSourceType {
+  MOD_AUTOMATIC_MODERATION_SOURCE_TYPE_NONE = 0;
+  MOD_AUTOMATIC_MODERATION_SOURCE_TYPE_PROFANITY = 1;
+  MOD_AUTOMATIC_MODERATION_SOURCE_TYPE_FILE_ANTIVIRUS = 2;
+  MOD_AUTOMATIC_MODERATION_SOURCE_TYPE_URL_SECURITY = 3;
+  MOD_AUTOMATIC_MODERATION_SOURCE_TYPE_FILE_PROCESSOR = 4;
+}
+
+message ModVersion {
+  string version_tag = 1;
+  string platform_id = 2;
+  google.protobuf.Timestamp approved_at = 3;
+  google.protobuf.Timestamp uploaded_at = 4;
+  Pros.Api.Mod.ModDataInfo mod_data_info = 5;
+  string release_notes = 6;
+  Pros.Api.Mod.ModVersionStatus mod_version_status = 7;
+  repeated Pros.Api.Mod.ModModeratorMessage moderator_messages = 8;
+  string version_name = 9;
+  google.protobuf.Timestamp updated_at = 10;
+  Pros.Api.Mod.ModAdvancedApproveStatus advanced_approve_status = 11;
+}
+
+message ModDataInfo {
+  string file_name = 1;
+  string file_id = 2;
+  int64 mod_size_in_bytes = 3;
+  string file_url = 4;
+  string validation_hash = 6;
+  string status = 7;
+}
+
+message ModTagGroup {
+  string tag_group_name = 1;
+  string tag_group_localization_id = 2;
+  repeated Pros.Api.Localization.LocalizedString tag_group_localization = 3;
+  repeated Pros.Api.Mod.ModTag tags = 4;
+  bool multiple_choice = 5;
+  int32 order = 6;
+}
+
+message ModTag {
+  string tag_id = 1;
+  string tag_localization_id = 2;
+  repeated Pros.Api.Localization.LocalizedString tag_localization = 3;
+  int32 order = 4;
+}
+
+message ModType {
+  string type_id = 1;
+  string type_localization_id = 2;
+  repeated Pros.Api.Localization.LocalizedString type_localization = 3;
+  int32 order = 4;
+}
+
+message ModInfo {
+  Pros.Api.Mod.ModIdentifiers identifiers = 1;
+  Pros.Api.Mod.ModDisplayInfo display_info = 2;
+  Pros.Api.Mod.ModSearchFields search_fields = 3;
+  Pros.Api.Mod.ModDateTimeFields date_time_fields = 4;
+  Pros.Api.Mod.ModCounterFields counters_fields = 5;
+  Pros.Api.Mod.ModDependencyInfoFields dependency_fields = 6;
+  Pros.Api.Mod.AccountModInfo account_mod_info = 7;
+  Pros.Api.Mod.ModVersion version = 8;
+  repeated Pros.Api.Mod.ModIncludedToStaticCollectionInfo included_to_collection_infos = 9;
+}
+
+message ModeratorSubscriptionInfo {
+  Pros.Api.Mod.ProsUserAccountInfo moderator_account_info = 1;
+  Pros.Api.Mod.ProsUserAccountInfo subscribed_by_account_info = 2;
+  google.protobuf.Timestamp subscribed_at = 3;
+}
+
+message GetModsSearchFilter {
+  Pros.Api.Mod.ProsUserModel author = 1;
+  repeated string tags = 2;
+  string mod_name = 3;
+  repeated string mod_types = 4;
+  repeated Pros.Api.Mod.ModStatus mod_statuses = 5;
+  string mod_collection_id = 6;
+  bool subscriptions_only = 7;
+  Pros.Api.Mod.IntervalFilters interval_filters = 8;
+  Pros.Api.Mod.ExcludeFilters exclude_filters = 9;
+  bool ignore_account_hide_filters = 10;
+}
+
+message ModDisplayInfo {
+  string name = 1;
+  repeated Pros.Api.Localization.LocalizedString full_description = 2;
+  repeated Pros.Api.Localization.LocalizedString short_description = 3;
+  string homepage = 6;
+  repeated string youtube_link = 7;
+  repeated Pros.Api.Mod.ModModeratorMessage moderator_messages = 8;
+  Pros.Api.Image.Image logo = 9;
+  repeated Pros.Api.Image.Image pictures = 10;
+}
+
+message ModIncludedToStaticCollectionInfo {
+  string collection_id = 1;
+  string collection_name = 2;
+  string collection_name_localization_id = 3;
+  repeated Pros.Api.Localization.LocalizedString collection_name_localization = 4;
+}
+
+message ModDateTimeFields {
+  google.protobuf.Timestamp last_update = 1;
+  google.protobuf.Timestamp created_at = 2;
+  google.protobuf.Timestamp deleted_at = 3;
+}
+
+message AccountModInfo {
+  Pros.Api.Mod.ModLikeStatus like_status = 1;
+  google.protobuf.Timestamp subscribed_at = 2;
+  bool is_subscribed = 3;
+  Pros.Api.Mod.AccountModHideInfo hide_info = 4;
+}
+
+message AccountModHideInfo {
+  bool hidden_by_id = 1;
+  bool hidden_by_author = 2;
+}
+
+message ModSearchFields {
+  Pros.Api.Mod.ModType mod_type = 1;
+  Pros.Api.Mod.ProsUserModel author = 2;
+  Pros.Api.Mod.ModStatus mod_status = 3;
+  repeated Pros.Api.Mod.ModTag tags = 4;
+  string collection_id = 5;
+}
+
+message IntervalFilters {
+  Pros.Api.Mod.IntervalFilter created_at_interval_filter = 1;
+  Pros.Api.Mod.IntervalFilter updated_at_interval_filter = 2;
+}
+
+message ExcludeFilters {
+  repeated string mod_ids = 1;
+}
+
+message ModIdentifiers {
+  string mod_id = 1;
+  string profile_url = 2;
+}
+
+message GetModsSorting {
+  Pros.Api.Mod.ModSortType sort_type = 1;
+  Pros.Api.Mod.ModSortOrder sort_order = 2;
+}
+
+message ModCounterFields {
+  int32 likes = 1;
+  int32 dislikes = 2;
+  int32 downloads = 3;
+  int32 subscribers = 4;
+}
+
+message ProsUserModel {
+  string username = 1;
+  string username_postfix = 2;
+}
+
+message ProsUserAccountInfo {
+  Pros.Api.Mod.ProsUserModel user_info = 1;
+  string account_id = 2;
+  string login = 3;
+}
+
+message ModHideInfo {
+  repeated string mod_ids = 1;
+  repeated Pros.Api.Mod.ProsUserAccountSearchInfo mod_author_account_infos = 2;
+}
+
+message ProsUserAccountSearchInfo {
+  oneof filter {
+    Pros.Api.Mod.ProsUserModel user_info = 1;
+    string account_id = 2;
+    string login = 3;
+  }
+}
+
+message SearchContinuationToken {
+  int32 skip = 1;
+  int32 take = 2;
+  int64 total = 3;
+}
+
+message IntervalFilter {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp to = 2;
+}
+
+message ModComplaintType {
+  string id = 1;
+  repeated Pros.Api.Localization.LocalizedString name = 2;
+}
+
+message ModDependencyInfoFields {
+  repeated Pros.Api.Mod.ModDependencyInfo this_depends_on = 1;
+  repeated Pros.Api.Mod.ModDependencyInfo other_depends_on_this = 2;
+}
+
+message ModDependencyInfo {
+  string mod_id = 1;
+  string mod_name = 2;
+  Pros.Api.Mod.ModStatus mod_status = 3;
+}
+
+message ModCollectionGroup {
+  string collection_group_name = 1;
+  repeated Pros.Api.Mod.ModCollectionGroupEntryInfo collection_group_entries = 2;
+}
+
+message ModCollectionGroupEntryInfo {
+  Pros.Api.Mod.ModCollectionGroupEntry mod_collection_group_entry = 1;
+  string collection_name = 2;
+  string collection_name_localization_id = 3;
+  repeated Pros.Api.Localization.LocalizedString collection_name_localization = 4;
+  Pros.Api.Mod.ModCollectionType collection_type = 5;
+}
+
+message ModCollectionGroupEntry {
+  string collection_id = 1;
+  string collection_view_type = 2;
+  int32 order = 3;
+}
+
+message ModCollectionInfo {
+  string collection_id = 1;
+  string collection_name = 2;
+  string collection_name_localization_id = 3;
+  repeated Pros.Api.Localization.LocalizedString collection_name_localization = 4;
+  repeated Pros.Api.Mod.ModCollectionEntry entries = 5;
+  Pros.Api.Mod.ModCollectionType collection_type = 6;
+}
+
+message ModCollectionEntry {
+  string mod_id = 1;
+  int32 order = 2;
+  string mod_name = 3;
+}
+
+message ModUploadParameters {
+  int32 min_chunk_size = 1;
+  int32 max_chunk_size = 2;
+  int64 max_file_size = 3;
+}
+
+message ModPublishParameters {
+  bool mod_publish_enabled = 1;
+  bool profanity_filter_enabled = 2;
+  bool manual_moderation = 3;
+  string player_portal_url = 4;
+  bool mods_advanced_approve_flow = 5;
+  string support_link = 6;
+}
+
+message ModPlatformParameters {
+  repeated Pros.Api.Mod.ModPlatform platforms = 4;
+}
+
+message ProviderWithPlatform {
+  Pros.Global.Api.Auth.Provider provider = 1;
+  Pros.Global.Api.Auth.BuildPlatform platform = 2;
+}
+
+message ModPlatform {
+  Pros.Api.Mod.ProviderWithPlatform platform = 1;
+  Pros.Api.Mod.ModVersionPlatformApproveType approve_type = 2;
+}
+
+message ModModeratorMessage {
+  string moderator_account_id = 1;
+  string message = 2;
+  google.protobuf.Timestamp posted_at = 3;
+  repeated Pros.Api.Mod.ModModeratorMessageDetails message_details = 4;
+  Pros.Api.Mod.ModModerationSource moderation_source = 5;
+}
+
+message ModModerationSource {
+  string moderator_account_id = 1;
+  Pros.Api.Mod.ModModerationSourceType moderation_source_type = 2;
+  Pros.Api.Mod.ModAutomaticModerationSourceType automatic_moderation_source_type = 3;
+}
+
+message ModModeratorMessageDetails {
+  string field = 1;
+  repeated Pros.Api.Mod.ModModeratorMessageDetailsProblems problems = 2;
+}
+
+message ModModeratorMessageDetailsProblems {
+  string input_value = 1;
+  string found_problem = 2;
+}

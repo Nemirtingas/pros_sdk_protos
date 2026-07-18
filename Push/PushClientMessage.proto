@@ -7,13 +7,27 @@ package Hydra.Api.Push;
 enum PushClientMessageType {
   PUSH_CLIENT_MESSAGE_TYPE_UNKNOWN = 0;
   PUSH_CLIENT_MESSAGE_TYPE_SIGNALING = 1;
+  PUSH_CLIENT_MESSAGE_TYPE_HEARTBEAT = 2;
+  PUSH_CLIENT_MESSAGE_TYPE_SET_KEY_VALUES = 3;
 }
 
 message PushClientMessage {
+  Hydra.Api.Push.PushClientMessageType message_type = 1;
   oneof kind {
-    PushClientMessageType message_type = 1;
-    SignalingMessage signal = 2;
+    Hydra.Api.Push.Signaling.SignalingMessage signal = 2;
+    Hydra.Api.Push.PushHeartbeatMessage heartbeat = 3;
+    Hydra.Api.Push.PushSetKeyValues key_values = 4;
   }
-  PushClientMessageType message_type = 1;
 }
 
+message PushHeartbeatMessage {
+}
+
+message KeyValue {
+  string key = 1;
+  string value = 2;
+}
+
+message PushSetKeyValues {
+  repeated Hydra.Api.Push.KeyValue key_value = 1;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Mod/ModContracts.proto";
+
+package Pros.Api.Mod;
+
+service ModApi {
+  rpc GetMods (GetModsRequest) returns (GetModsResponse);
+  rpc RateMod (RateModRequest) returns (RateModResponse);
+  rpc GetModsParameters (GetModsParametersRequest) returns (GetModsParametersResponse);
+  rpc SubscribeToMod (SubscribeToModRequest) returns (SubscribeToModResponse);
+  rpc UnsubscribeFromMod (UnsubscribeFromModRequest) returns (UnsubscribeFromModResponse);
+  rpc UpdateDownloads (UpdateDownloadsRequest) returns (UpdateDownloadsResponse);
+  rpc GetModsStat (GetModsStatRequest) returns (GetModsStatResponse);
+  rpc SubmitModComplaint (SubmitModComplaintRequest) returns (SubmitModComplaintResponse);
+  rpc UploadModImage (UploadModImageRequest) returns (UploadModImageResponse);
+  rpc AddMod (AddModRequest) returns (AddModResponse);
+  rpc AddModVersion (AddModVersionRequest) returns (AddModVersionResponse);
+  rpc GetModVersionUploadStatus (GetModVersionUploadStatusRequest) returns (GetModVersionUploadStatusResponse);
+  rpc GetModCollectionGroups (GetModCollectionGroupsRequest) returns (GetModCollectionGroupsResponse);
+  rpc CheckForExistingProfileUrl (CheckForExistingProfileUrlRequest) returns (CheckForExistingProfileUrlResponse);
+  rpc HideModsForUser (HideModsForUserRequest) returns (HideModsForUserResponse);
+  rpc UndoHideModsForUser (UndoHideModsForUserRequest) returns (UndoHideModsForUserResponse);
+}

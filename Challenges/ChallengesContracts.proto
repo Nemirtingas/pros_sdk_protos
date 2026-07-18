@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "google/protobuf/duration.proto";
 import "Challenges/ChallengesCore.proto";
 import "Context/UserContext.proto";
 import "Context/ServerContext.proto";
@@ -9,65 +10,111 @@ import "Push/PushToken.proto";
 package Hydra.Api.Challenges;
 
 message ConnectRequest {
-  UserContext context = 1;
-  ConfigurationContext configuration_context = 2;
-  PushToken push_token = 3;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
+  Hydra.Api.Push.PushToken push_token = 3;
 }
 
 message ConnectResponse {
-  UserChallengesInfo user_challenges_info = 1;
+  Hydra.Api.Challenges.UserChallengesInfo user_challenges_info = 1;
   int64 version = 2;
 }
 
+message GrainHeartbeatRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message GrainHeartbeatResponse {
+  google.protobuf.Duration refresh_after = 1;
+}
+
+message DisconnectRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message DisconnectResponse {
+}
+
 message GetChallengesRequest {
-  UserContext context = 1;
-  ConfigurationContext configuration_context = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
 }
 
 message GetChallengesResponse {
-  UserChallengesInfo user_challenges_info = 1;
+  Hydra.Api.Challenges.UserChallengesInfo user_challenges_info = 1;
   int64 version = 2;
 }
 
 message GetChallengesIncrementalUpdateRequest {
-  UserContext context = 1;
-  ConfigurationContext configuration_context = 2;
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContext configuration_context = 2;
   int64 from_version = 3;
 }
 
 message GetChallengesIncrementalUpdateResponse {
-  UserChallengesIncrementalUpdate user_challenges_incremental_update = 1;
+  Hydra.Api.Challenges.UserChallengesIncrementalUpdate user_challenges_incremental_update = 1;
   int64 version = 2;
 }
 
 message ServerSubmitChallengeCountersRequest {
-  ServerContext context = 1;
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
   string reference_id = 2;
-  repeated ChallengeOperationList user_operations = 3;
+  repeated Hydra.Api.Challenges.ChallengeOperationList user_operations = 3;
   bool is_last_update = 4;
 }
 
 message ServerSubmitChallengeCountersResponse {
   repeated string failed_user_ids = 1;
+  repeated Hydra.Api.Challenges.ChallengePerUserCompletedUpdate per_user_completed_challenges = 2;
 }
 
-message ServerGetChallengesRequest {
-  ServerContext context = 1;
-  repeated string user_ids = 2;
+message ClientSelfSubmitChallengeCountersRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string reference_id = 2;
+  repeated Hydra.Api.Challenges.ChallengeCounterOperation operations = 3;
+  bool is_last_update = 4;
+}
+
+message ClientSelfSubmitChallengeCountersResponse {
+}
+
+message ClientSubmitChallengeCountersRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string reference_id = 2;
+  repeated Hydra.Api.Challenges.ChallengeOperationList user_operations = 3;
+  bool is_last_update = 4;
+}
+
+message ClientSubmitChallengeCountersResponse {
+  repeated string failed_user_ids = 1;
 }
 
 message PerUserChallengeCounter {
   string user_id = 1;
-  repeated ChallengeCounterWithEvents challenge_counters = 2;
+  repeated Hydra.Api.Challenges.ChallengeCounterWithEvents challenge_counters = 2;
+}
+
+message ClientGetChallengeCountersRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated string user_ids = 2;
+}
+
+message ClientGetChallengeCountersResponse {
+  repeated Hydra.Api.Challenges.PerUserChallengeCounter per_user_challenge_counters = 1;
+  Hydra.Api.Challenges.ServerChallengesSettings server_challenges_settings = 2;
+}
+
+message ServerGetChallengesRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext context = 1;
+  repeated string user_ids = 2;
 }
 
 message ServerGetChallengesResponse {
-  repeated PerUserChallengeCounter per_user_challenge_counters = 1;
-  ServerChallengesSettings server_challenges_settings = 2;
+  repeated Hydra.Api.Challenges.PerUserChallengeCounter per_user_challenge_counters = 1;
+  Hydra.Api.Challenges.ServerChallengesSettings server_challenges_settings = 2;
 }
 
 message ServerChallengesSettings {
   int64 flush_time_criteria_sec = 1;
   int64 flush_count_criteria = 2;
 }
-

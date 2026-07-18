@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+import "ProsAccount/ProsAccountContracts.proto";
+import "Localization/LocalizedString.proto";
+
+package Pros.Api.TimeLimitedEvents;
+
+enum TimeLimitedEventStatus {
+  TIME_LIMITED_EVENT_STATUS_NONE = 0;
+  TIME_LIMITED_EVENT_STATUS_DRAFT = 1;
+  TIME_LIMITED_EVENT_STATUS_SCHEDULED = 2;
+  TIME_LIMITED_EVENT_STATUS_ACTIVE = 3;
+  TIME_LIMITED_EVENT_STATUS_FINISHED = 4;
+}
+
+enum TimeLimitedEventType {
+  TIME_LIMITED_EVENT_TYPE_NONE = 0;
+  TIME_LIMITED_EVENT_TYPE_PERSONAL = 1;
+  TIME_LIMITED_EVENT_TYPE_COMMUNITY = 2;
+}
+
+enum TimeLimitedEventGoalValueType {
+  TIME_LIMITED_EVENT_GOAL_VALUE_TYPE_NONE = 0;
+  TIME_LIMITED_EVENT_GOAL_VALUE_TYPE_PERSONAL = 1;
+  TIME_LIMITED_EVENT_GOAL_VALUE_TYPE_COMMUNITY = 2;
+  TIME_LIMITED_EVENT_GOAL_VALUE_TYPE_TARGET = 3;
+}
+
+message GetEventsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 2;
+  repeated Pros.Api.TimeLimitedEvents.TimeLimitedEventsFilter filters = 3;
+}
+
+message GetEventsResponse {
+  repeated Pros.Api.TimeLimitedEvents.TimeLimitedTypeEvents type_events = 1;
+}
+
+message TimeLimitedEventsFilter {
+  Pros.Api.TimeLimitedEvents.TimeLimitedEventType type = 1;
+  repeated Pros.Api.TimeLimitedEvents.TimeLimitedEventStatus statuses = 2;
+}
+
+message TimeLimitedTypeEvents {
+  Pros.Api.TimeLimitedEvents.TimeLimitedEventType type = 1;
+  bool is_enabled = 2;
+  repeated Pros.Api.TimeLimitedEvents.TimeLimitedEvent events = 3;
+}
+
+message TimeLimitedEvent {
+  string id = 1;
+  Pros.Api.TimeLimitedEvents.TimeLimitedEventDetails details = 2;
+  repeated Pros.Api.TimeLimitedEvents.TimeLimitedEventGoal goals = 3;
+}
+
+message TimeLimitedEventDetails {
+  Pros.Api.TimeLimitedEvents.TimeLimitedEventStatus status = 1;
+  repeated Pros.Api.Localization.LocalizedString name_localizations = 2;
+  repeated Pros.Api.Localization.LocalizedString description_localizations = 3;
+  Pros.Api.TimeLimitedEvents.TimeLimitedEventPeriod activity = 4;
+  Pros.Api.TimeLimitedEvents.TimeLimitedEventPeriod publishing = 5;
+}
+
+message TimeLimitedEventPeriod {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+}
+
+message TimeLimitedEventGoal {
+  string id = 1;
+  repeated Pros.Api.Localization.LocalizedString description_localizations = 2;
+  repeated string entitlement_ids = 3;
+  repeated Pros.Api.TimeLimitedEvents.TimeLimitedEventGoalValue values = 4;
+}
+
+message TimeLimitedEventGoalValue {
+  Pros.Api.TimeLimitedEvents.TimeLimitedEventGoalValueType type = 1;
+  int64 goal_value = 3;
+}

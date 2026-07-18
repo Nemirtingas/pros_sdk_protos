@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Banner/BannerContracts.proto";
+
+package Pros.Api.Banner;
+
+service BannerApi {
+  rpc GetBanners2 (GetBannersRequest2) returns (GetBannersResponse2);
+}

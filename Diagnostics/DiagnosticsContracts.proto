@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "Context/UserContext.proto";
 import "Context/ServerContext.proto";
+import "Context/ToolContext.proto";
+import "ProsAccount/ProsAccountContracts.proto";
 
 package Hydra.Api.Diagnostics;
 
@@ -9,6 +11,7 @@ enum CrashDumpType {
   CRASH_DUMP_TYPE_UNKNOWN = 0;
   CRASH_DUMP_TYPE_GAME_CLIENT = 1;
   CRASH_DUMP_TYPE_GAME_SERVER = 2;
+  CRASH_DUMP_TYPE_MOD_EDITOR = 3;
 }
 
 enum DiagnosticsDataType {
@@ -17,11 +20,11 @@ enum DiagnosticsDataType {
 }
 
 message WriteCrashDumpUserRequest {
-  UserContext user_context = 1;
-  repeated DiagnosticsProperty properties = 2;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Hydra.Api.Diagnostics.DiagnosticsProperty properties = 2;
   string dump_hash = 3;
   bytes data = 4;
-  DiagnosticsDataType data_type = 5;
+  Hydra.Api.Diagnostics.DiagnosticsDataType data_type = 5;
   string provider = 6;
   string client_version = 7;
   string sdk_version = 8;
@@ -31,11 +34,11 @@ message WriteCrashDumpUserResponse {
 }
 
 message WriteCrashDumpServerRequest {
-  ServerContext server_context = 1;
-  repeated DiagnosticsProperty properties = 2;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  repeated Hydra.Api.Diagnostics.DiagnosticsProperty properties = 2;
   string dump_hash = 3;
   bytes data = 4;
-  DiagnosticsDataType data_type = 5;
+  Hydra.Api.Diagnostics.DiagnosticsDataType data_type = 5;
   string version = 6;
   string sdk_version = 7;
 }
@@ -43,8 +46,33 @@ message WriteCrashDumpServerRequest {
 message WriteCrashDumpServerResponse {
 }
 
+message WriteCrashDumpToolRequest {
+  Hydra.Api.Infrastructure.Context.ToolContext tool_context = 1;
+  repeated Hydra.Api.Diagnostics.DiagnosticsProperty properties = 2;
+  string dump_hash = 3;
+  bytes data = 4;
+  Hydra.Api.Diagnostics.DiagnosticsDataType data_type = 5;
+  string version = 6;
+  string sdk_version = 7;
+}
+
+message WriteCrashDumpToolResponse {
+}
+
+message WriteCrashDumpModEditorRequest {
+  Pros.Global.Api.Account.ProsAccountContext account_context = 1;
+  repeated Hydra.Api.Diagnostics.DiagnosticsProperty properties = 2;
+  string dump_hash = 3;
+  bytes data = 4;
+  Hydra.Api.Diagnostics.DiagnosticsDataType data_type = 5;
+  string version = 6;
+  string sdk_version = 7;
+}
+
+message WriteCrashDumpModEditorResponse {
+}
+
 message DiagnosticsProperty {
   string name = 1;
   string value = 2;
 }
-

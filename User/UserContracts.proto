@@ -1,33 +1,36 @@
 syntax = "proto3";
 
 import "Context/UserContext.proto";
-import "Auth/AuthorizationContracts.proto";
+import "Authorization/AuthorizationContracts.proto";
 
 package Hydra.Api.User;
 
 message UsersPublicDataByProviderUserIdRequest {
-  UserContext user_context = 1;
-  Provider provider_id = 2;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Global.Api.Auth.Provider provider_id = 2;
   repeated string provider_user_id_list = 3;
 }
 
 message UsersPublicDataByProviderUserIdResponse {
-  repeated UserBaseData data = 1;
+  repeated Hydra.Api.User.UserBaseData data = 1;
 }
 
 message UsersPublicDataByUserIdRequest {
-  UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   repeated string user_id_list = 2;
 }
 
 message UsersPublicDataByUserIdResponse {
-  repeated UserBaseData data = 1;
+  repeated Hydra.Api.User.UserBaseData data = 1;
 }
 
 message UserBaseData {
   string user_id = 1;
-  Provider provider_id = 2;
-  string provider_user_id = 3;
-  string platform = 4;
+  string provider_user_id = 2;
+  repeated Hydra.Api.User.UserBasePlatforms platforms = 3;
 }
 
+message UserBasePlatforms {
+  Pros.Global.Api.Auth.Provider provider_id = 1;
+  Pros.Global.Api.Auth.BuildPlatform platform = 4;
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "google/protobuf/empty.proto";
+
+package Hydra.Api.Push;
+
+service PushServiceStub {
+  rpc Fake (Empty) returns (Empty);
+}

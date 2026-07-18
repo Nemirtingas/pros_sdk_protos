@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Authorization/AuthorizationContracts.proto";
+
+package Pros.Global.Api.Auth;
+
+service AuthorizationApi {
+  rpc SignInHydra (SignInHydraRequest) returns (SignInHydraResponse);
+  rpc SignInEpicOnlineServices (SignInEpicOnlineServicesRequest) returns (SignInEpicOnlineServicesResponse);
+  rpc SignInXbox (SignInXboxRequest) returns (SignInXboxResponse);
+  rpc SignInMsStore (SignInMsStoreRequest) returns (SignInMsStoreResponse);
+  rpc GetCustomDeveloperStringMsStore (GetCustomDeveloperStringMsStoreRequest) returns (GetCustomDeveloperStringMsStoreResponse);
+  rpc SignInPsn (SignInPsnRequest) returns (SignInPsnResponse);
+  rpc SignInSteam (SignInSteamRequest) returns (SignInSteamResponse);
+  rpc SignInNintendo (SignInNintendoRequest) returns (SignInNintendoResponse);
+  rpc GetNonceValueNintendo (GetNonceValueNintendoRequest) returns (GetNonceValueNintendoResponse);
+  rpc SignInOculus (SignInOculusRequest) returns (SignInOculusResponse);
+  rpc SignInAppleGameCenter (SignInAppleGameCenterRequest) returns (SignInAppleGameCenterResponse);
+  rpc SignInAmazonLuna (SignInAmazonLunaRequest) returns (SignInAmazonLunaResponse);
+  rpc SignInMyGames (SignInMyGamesRequest) returns (SignInMyGamesResponse);
+  rpc SignInHydraAuthTicket (SignInHydraAuthTicketRequest) returns (SignInHydraAuthTicketResponse);
+  rpc SignInStandaloneCode (SignInStandaloneCodeRequest) returns (SignInStandaloneCodeResponse);
+  rpc SignInTool (SignInToolRequest) returns (SignInToolResponse);
+  rpc RefreshUser (RefreshUserRequest) returns (RefreshUserResponse);
+  rpc SignOutUser (SignOutUserRequest) returns (SignOutUserResponse);
+  rpc GetStandaloneSignInCode (GetStandaloneSignInCodeRequest) returns (GetStandaloneSignInCodeResponse);
+  rpc SignInSecondary (SignInSecondaryRequest) returns (SignInSecondaryResponse);
+}

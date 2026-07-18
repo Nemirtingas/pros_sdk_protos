@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Rating/RatingContracts.proto";
+
+package Hydra.Api.Rating;
+
+service RatingApi {
+  rpc GetRatingsServer (GetRatingsServerRequest) returns (GetRatingsServerResponse);
+  rpc GetRatingsUser (GetRatingsUserRequest) returns (GetRatingsUserResponse);
+  rpc UpdateRatingsServer (UpdateRatingsServerRequest) returns (UpdateRatingsServerResponse);
+  rpc UpdateCustomRatingsServer (UpdateCustomRatingsServerRequest) returns (UpdateCustomRatingsServerResponse);
+  rpc UpdateRatingsUser (UpdateRatingsUserRequest) returns (UpdateRatingsUserResponse);
+  rpc UpdateCustomRatingsUser (UpdateCustomRatingsUserRequest) returns (UpdateCustomRatingsUserResponse);
+  rpc GetOwnRating (GetOwnRatingRequest) returns (GetOwnRatingResponse);
+}

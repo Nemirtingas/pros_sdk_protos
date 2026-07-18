@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "HydraSdkConfiguration/HydraSdkConfigurationContracts.proto";
+
+package Hydra.Api.SdkConfiguration;
+
+service HydraSdkConfigurationApi {
+  rpc GetConfiguration (GetConfigurationRequest) returns (GetConfigurationResponse);
+  rpc GetServerConfiguration (GetServerConfigurationRequest) returns (GetServerConfigurationResponse);
+}

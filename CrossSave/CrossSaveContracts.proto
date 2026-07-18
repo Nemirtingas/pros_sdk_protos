@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Authorization/AuthorizationContracts.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "ProsAccount/ProsAccountContracts.proto";
+
+package Pros.Api.CrossSave;
+
+enum SaveSnapshotType {
+  SAVE_SNAPSHOT_TYPE_DEFAULT = 0;
+  SAVE_SNAPSHOT_TYPE_BIG_SNAPSHOT = 1;
+}
+
+message SubmitSnapshotRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Api.CrossSave.SaveSnapshot snapshot = 2;
+}
+
+message SubmitSnapshotResponse {
+  google.protobuf.Duration cooldown = 1;
+}
+
+message GetTransferInfoRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 2;
+}
+
+message GetTransferInfoResponse {
+  string transfer_id = 1;
+  string content_type = 2;
+  string data_description_json = 3;
+  Pros.Global.Api.Auth.BuildPlatform platform = 4;
+  Pros.Global.Api.Auth.Provider provider = 5;
+  google.protobuf.Timestamp save_created_at = 6;
+  google.protobuf.Timestamp transfer_created_at = 7;
+}
+
+message CompleteTransferRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string transfer_id = 2;
+  Pros.Api.CrossSave.SaveSnapshot backup_snapshot = 3;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 4;
+}
+
+message CompleteTransferResponse {
+  Pros.Api.CrossSave.SaveSnapshot transfer_snapshot = 1;
+}
+
+message SkipTransferRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string transfer_id = 2;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 3;
+}
+
+message SkipTransferResponse {
+}
+
+message SaveSnapshot {
+  Pros.Api.CrossSave.SaveSnapshotType type = 4;
+  repeated Pros.Api.CrossSave.SaveData saves = 1;
+  string container_id = 5;
+  string content_type = 2;
+  string data_description_json = 3;
+}
+
+message SaveData {
+  string key = 1;
+  bytes data = 2;
+}

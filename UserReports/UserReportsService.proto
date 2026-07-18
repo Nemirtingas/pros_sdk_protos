@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "UserReports/UserReportsContracts.proto";
+
+package Hydra.Api.UserReports;
+
+service UserReportsApi {
+  rpc SendUserReport (SendUserReportRequest) returns (SendUserReportResponse);
+}

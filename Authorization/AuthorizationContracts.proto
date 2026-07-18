@@ -1,0 +1,342 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+import "ErrorCode.proto";
+import "Context/UserContext.proto";
+import "Context/ToolContext.proto";
+import "GlobalEndpointDispatcher/GlobalEndpointDispatcherContracts.proto";
+
+package Pros.Global.Api.Auth;
+
+enum BuildPlatform {
+  BUILD_PLATFORM_UNKNOWN = 0;
+  BUILD_PLATFORM_WIN64 = 1;
+  BUILD_PLATFORM_LINUX64 = 2;
+  BUILD_PLATFORM_DURANGO = 3;
+  BUILD_PLATFORM_ORBIS = 4;
+  BUILD_PLATFORM_SWITCH = 5;
+  BUILD_PLATFORM_DARWINARM64 = 6;
+  BUILD_PLATFORM_ANDROID = 7;
+  BUILD_PLATFORM_PROSPERO = 8;
+  BUILD_PLATFORM_SCARLETT = 9;
+  BUILD_PLATFORM_STADIA = 10;
+  BUILD_PLATFORM_XBOXONE = 13;
+  BUILD_PLATFORM_DARWINX64 = 14;
+  BUILD_PLATFORM_WIN32 = 15;
+  BUILD_PLATFORM_OUNCE = 16;
+}
+
+enum Provider {
+  PROVIDER_STEAM = 0;
+  PROVIDER_EOS = 1;
+  PROVIDER_STADIA = 2;
+  PROVIDER_XBOX = 3;
+  PROVIDER_PSN = 4;
+  PROVIDER_NINTENDO = 5;
+  PROVIDER_MS_STORE = 6;
+  PROVIDER_OCULUS = 7;
+  PROVIDER_APPLE_GAME_CENTER = 8;
+  PROVIDER_AMAZON_LUNA = 9;
+  PROVIDER_MY_GAMES = 10;
+  PROVIDER_HYDRA = 100;
+  PROVIDER_TOOL = 101;
+  PROVIDER_STANDALONE = 102;
+  PROVIDER_SECONDARY = 103;
+  PROVIDER_UNKNOWN = 200;
+}
+
+enum PsnClientLicenseType {
+  PSN_CLIENT_LICENSE_TYPE_UNKNOWN = 0;
+  PSN_CLIENT_LICENSE_TYPE_FULL_GAME = 1;
+  PSN_CLIENT_LICENSE_TYPE_PSPLUS_TRIAL = 2;
+  PSN_CLIENT_LICENSE_TYPE_UPGRADABLE_TRIAL = 3;
+}
+
+enum SearchAccountType {
+  SEARCH_ACCOUNT_TYPE_ACCOUNT_ID = 0;
+  SEARCH_ACCOUNT_TYPE_ACCOUNT_PAIRWISE_ID = 1;
+  SEARCH_ACCOUNT_TYPE_LOGIN = 2;
+  SEARCH_ACCOUNT_TYPE_USERNAME = 3;
+  SEARCH_ACCOUNT_TYPE_USERNAME_WITH_POSTFIX = 4;
+}
+
+enum PartnerId {
+  PARTNER_ID_DEV_TO_DEV = 0;
+}
+
+message PlatformDetails {
+  string platform_description = 1;
+  int32 platform_internal_id = 2;
+}
+
+message SignInData {
+  Pros.Global.Api.GlobalEndpointDispatcher.TitleIdentity title = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.ServiceIdentity versions = 2;
+  string build_version = 3;
+  Pros.Global.Api.Auth.BuildPlatform build_platform = 4;
+  Pros.Global.Api.Auth.PlatformDetails runtime_platform = 5;
+}
+
+message SignInEpicOnlineServicesRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string auth_access_token = 2;
+}
+
+message SignInXboxRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string xsts_client_token = 2;
+}
+
+message SignInMsStoreRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string xsts_client_token = 2;
+  string xstore_client_token = 3;
+}
+
+message GetCustomDeveloperStringMsStoreRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string xsts_client_token = 2;
+}
+
+message SignInPsnRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string auth_code = 2;
+  int32 issuer_id = 3;
+  Pros.Global.Api.Auth.PsnClientLicenseType client_license_type = 4;
+}
+
+message SignInHydraRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string login = 2;
+  Pros.Global.Api.Auth.ProviderOverride provider_override = 3;
+}
+
+message ProviderOverride {
+  Pros.Global.Api.Auth.Provider provider = 1;
+}
+
+message SignInSteamRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string auth_session_ticket = 2;
+  bool validate_identity = 3;
+}
+
+message SignInNintendoRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string identity_token = 2;
+  string contents_auth_token = 3;
+}
+
+message GetNonceValueNintendoRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string identity_token = 2;
+}
+
+message SignInOculusRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string nonce = 2;
+  int64 user_id = 3;
+}
+
+message SignInAppleGameCenterRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string team_player_id = 2;
+  Pros.Global.Api.Auth.AppleGameCenterAuthPayload auth_payload = 3;
+}
+
+message AppleGameCenterAuthPayload {
+  string public_key_url = 1;
+  string signature = 2;
+  string salt = 3;
+  uint64 timestamp = 4;
+}
+
+message SignInAmazonLunaRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string identity_token = 2;
+}
+
+message SignInMyGamesRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string access_token = 2;
+}
+
+message SignInEpicOnlineServicesResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInXboxResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInMsStoreResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message GetCustomDeveloperStringMsStoreResponse {
+  string custom_developer_string = 1;
+}
+
+message SignInPsnResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInHydraResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInSteamResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInNintendoResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message GetNonceValueNintendoResponse {
+  string nonce_value = 1;
+}
+
+message SignInOculusResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInAppleGameCenterResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInAmazonLunaResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInMyGamesResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message SignInResponse {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 2;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo endpoints = 3;
+  int64 date = 4;
+  int32 refresh_after_seconds = 5;
+  string external_identity_token = 6;
+  repeated Pros.Global.Api.Auth.IncompatibleEndpointInfo incompatible_endpoints = 7;
+  Pros.Global.Api.Auth.FpProviderBinaryContext provider_context = 8;
+  Pros.Global.Api.Auth.Provider provider = 9;
+  Pros.Global.Api.Auth.BuildPlatform platform = 10;
+}
+
+message AuthorizationArgumentDto {
+  string key = 1;
+  string value = 2;
+}
+
+message HydraRequestContext {
+  string token = 1;
+}
+
+message SignOutUserRequest {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 2;
+}
+
+message SignOutUserResponse {
+}
+
+message RefreshUserRequest {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 2;
+  Pros.Global.Api.Auth.FpProviderBinaryContext provider_context = 3;
+}
+
+message RefreshUserResponse {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  int32 refresh_after_seconds = 2;
+  Pros.Global.Api.Auth.FpProviderBinaryContext provider_context = 3;
+}
+
+message SignInInfrastructureRequest {
+  string secret = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.ServiceIdentity versions = 2;
+}
+
+message SignInInfrastructureResponse {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo endpoints = 2;
+  int64 date = 3;
+  int64 expires_at = 4;
+  repeated Pros.Global.Api.Auth.IncompatibleEndpointInfo incompatible_endpoints = 5;
+}
+
+message SignInHydraAuthTicketRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string hydra_auth_ticket = 2;
+}
+
+message SignInHydraAuthTicketResponse {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo endpoints = 2;
+  int64 date = 3;
+  int64 expires_at = 4;
+  repeated Pros.Global.Api.Auth.IncompatibleEndpointInfo incompatible_endpoints = 5;
+}
+
+message SignInStandaloneCodeRequest {
+  Pros.Global.Api.Auth.SignInData data = 1;
+  string standalone_code = 2;
+}
+
+message SignInStandaloneCodeResponse {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo endpoints = 2;
+  int64 date = 3;
+  string server_token = 4;
+  int64 expires_at = 5;
+  repeated Pros.Global.Api.Auth.IncompatibleEndpointInfo incompatible_endpoints = 6;
+}
+
+message GetStandaloneSignInCodeRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message GetStandaloneSignInCodeResponse {
+  string standalone_code = 1;
+}
+
+message SignInToolRequest {
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.ServiceIdentity versions = 1;
+  Pros.Global.Api.GlobalEndpointDispatcher.TitleIdentity title = 2;
+}
+
+message SignInToolResponse {
+  Pros.Global.Api.Auth.HydraRequestContext request_context = 1;
+  Hydra.Api.Infrastructure.Context.ToolContext tool_context = 2;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.EndpointInfo endpoints = 3;
+  int64 date = 4;
+  int64 expires_at = 5;
+  repeated Pros.Global.Api.Auth.IncompatibleEndpointInfo incompatible_endpoints = 6;
+}
+
+message SignInSecondaryRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Global.Api.Auth.SignInData data = 2;
+}
+
+message SignInSecondaryResponse {
+  Pros.Global.Api.Auth.SignInResponse data = 1;
+}
+
+message IncompatibleEndpointInfo {
+  string service_name = 1;
+  Pros.Global.Api.Errors.ErrorCode error_code = 2;
+  string error_description = 3;
+}
+
+message FpProviderBinaryContext {
+  bytes payload = 1;
+  int32 kid = 2;
+}
+
+message AuthDescription {
+  string value = 1;
+}

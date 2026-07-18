@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+import "GlobalEndpointDispatcher/GlobalEndpointDispatcherContracts.proto";
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+import "Configuration/ConfigurationContracts.proto";
+import "TelemetryService/TelemetryContracts.proto";
+
+package Pros.Api.SdkConfiguration;
+
+enum FactsOperationMode {
+  FACTS_OPERATION_MODE_UNKNOWN = 0;
+  FACTS_OPERATION_MODE_DISABLED = 1;
+  FACTS_OPERATION_MODE_SDK_ONLY = 2;
+  FACTS_OPERATION_MODE_IMPORTANT_ONLY = 3;
+  FACTS_OPERATION_MODE_ALL = 4;
+}
+
+enum FactsApiContractsFormat {
+  FACTS_API_CONTRACTS_FORMAT_UNKNOWN = 0;
+  FACTS_API_CONTRACTS_FORMAT_NONE = 1;
+  FACTS_API_CONTRACTS_FORMAT_DEBUG_STRING = 2;
+  FACTS_API_CONTRACTS_FORMAT_BINARY = 3;
+}
+
+enum InternalSdkLogsLevel {
+  INTERNAL_SDK_LOGS_LEVEL_UNKNOWN = 0;
+  INTERNAL_SDK_LOGS_LEVEL_ERROR = 1;
+  INTERNAL_SDK_LOGS_LEVEL_WARNING = 2;
+  INTERNAL_SDK_LOGS_LEVEL_INFORMATION = 3;
+  INTERNAL_SDK_LOGS_LEVEL_VERBOSE = 4;
+}
+
+message GetConfigurationRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.ServiceIdentity versions = 2;
+  string build_version = 3;
+}
+
+message GetConfigurationResponse {
+  Pros.Global.Api.Configuration.ApiEndpoints endpoints = 1;
+  Pros.Api.SdkConfiguration.ApiSettings settings = 2;
+  int32 refresh_after_seconds = 3;
+  Pros.Global.Api.GlobalEndpointDispatcher.SdkRateLimiterInfo rate_limiting_info = 4;
+  Pros.Global.Api.GlobalEndpointDispatcher.SdkConnectionTimingInfo connection_timing_info = 5;
+  Pros.Global.Api.GlobalEndpointDispatcher.LongPollingInfo long_polling_info = 6;
+}
+
+message GetServerConfigurationRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.ServiceIdentity versions = 2;
+  string build_version = 3;
+}
+
+message GetServerConfigurationResponse {
+  Pros.Global.Api.Configuration.ApiEndpoints endpoints = 1;
+  Pros.Api.SdkConfiguration.ApiSettings settings = 2;
+  int32 refresh_after_seconds = 3;
+  Pros.Global.Api.GlobalEndpointDispatcher.SdkRateLimiterInfo rate_limiting_info = 4;
+  Pros.Global.Api.GlobalEndpointDispatcher.SdkConnectionTimingInfo connection_timing_info = 5;
+  Pros.Global.Api.GlobalEndpointDispatcher.LongPollingInfo long_polling_info = 6;
+}
+
+message FactsConfig {
+  int32 chunk_fullness_criteria_percents = 1;
+  Pros.Api.SdkConfiguration.FactsOperationMode operation_mode = 2;
+  int32 mandatory_flush_interval_sec = 3;
+  int32 max_chunk_number_to_send = 4;
+  Pros.Api.SdkConfiguration.FactsApiContractsFormat api_contracts_format = 5;
+  Pros.Api.SdkConfiguration.InternalSdkLogsLevel internal_sdk_logs_level = 6;
+}
+
+message ApiSettings {
+  Pros.Api.Telemetry.TelemetryConfig telemetry_config = 1;
+  Pros.Api.SdkConfiguration.FactsConfig facts_config = 2;
+}
+
+message GetMaintenanceInfoRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message GetMaintenanceInfoResponse {
+  int32 refresh_after_seconds = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.MaintenanceInfo maintenances = 2;
+}
+
+message GetServerMaintenanceInfoRequest {
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 1;
+}
+
+message GetServerMaintenanceInfoResponse {
+  int32 refresh_after_seconds = 1;
+  repeated Pros.Global.Api.GlobalEndpointDispatcher.MaintenanceInfo maintenances = 2;
+}

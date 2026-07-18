@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Context/ServerContext.proto";
+import "TelemetryService/TelemetryContracts.proto";
+
+package Leech.Api;
+
+message TelemetryLocalPackIdentity {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Hydra.Api.Infrastructure.Context.ServerContext server_context = 2;
+  string user_identity = 3;
+}
+
+message TelemetryLocalPack {
+  Pros.Api.Telemetry.TelemetryPack pack = 1;
+  Leech.Api.TelemetryLocalPackIdentity identity = 2;
+}

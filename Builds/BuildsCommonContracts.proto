@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package Hydra.Api.Builds.Common;
-
-message BuildVersionWithIdDto {
-  string id = 1;
-  string version = 2;
-}
-

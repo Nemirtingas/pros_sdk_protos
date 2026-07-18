@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Turn/TurnServiceContracts.proto";
+
+package Hydra.Api.Turn;
+
+service TurnApi {
+  rpc GetTurnConnection (GetTurnConnectionRequest) returns (GetTurnConnectionResponse);
+  rpc StandaloneGetTurnConnection (StandaloneGetTurnConnectionRequest) returns (StandaloneGetTurnConnectionResponse);
+}

@@ -6,4 +6,3 @@ message PushToken {
   int32 instance_key = 1;
   string user_key = 3;
 }
-

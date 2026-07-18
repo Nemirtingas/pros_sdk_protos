@@ -1,0 +1,197 @@
+syntax = "proto3";
+
+import "Images/ImageContracts.proto";
+import "Context/UserContext.proto";
+import "Localization/LocalizedString.proto";
+import "Mod/ModCommonContracts.proto";
+
+package Pros.Api.Mod;
+
+message GetModsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Api.Mod.GetModsRequiredFields required_fields = 2;
+  Pros.Api.Mod.GetModsSorting sorting = 6;
+  oneof filter {
+    string mod_id = 3;
+    string profile_url = 4;
+    Pros.Api.Mod.GetModsSearchFilter search_filter = 5;
+  }
+}
+
+message GetModsResponse {
+  repeated Pros.Api.Mod.ModInfo mods = 1;
+  Pros.Api.Mod.SearchContinuationToken search_continuation_token = 2;
+}
+
+message RateModRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string mod_id = 2;
+  Pros.Api.Mod.ModLikeStatus like_status = 3;
+}
+
+message RateModResponse {
+}
+
+message GetModsParametersRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message GetModsParametersResponse {
+  repeated Pros.Api.Mod.ModTagGroup mod_tags = 1;
+  repeated Pros.Api.Mod.ModType mod_types = 2;
+  string new_mods_search_period = 3;
+  repeated Pros.Api.Mod.ModComplaintType complaint_types = 4;
+  Pros.Api.Mod.ModUploadParameters mod_upload_parameters = 5;
+  Pros.Api.Mod.ModPlatformParameters mod_platform_parameters = 6;
+  Pros.Api.Mod.ModPublishParameters mod_publish_parameters = 7;
+}
+
+message SubscribeToModRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated string mod_ids = 2;
+}
+
+message SubscribeToModResponse {
+}
+
+message UnsubscribeFromModRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated string mod_ids = 2;
+}
+
+message UnsubscribeFromModResponse {
+}
+
+message UpdateDownloadsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string mod_id = 2;
+  string version_tag = 3;
+}
+
+message UpdateDownloadsResponse {
+}
+
+message GetModsStatRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message GetModsStatResponse {
+  int32 new_mods_count = 1;
+  int32 public_mods_count = 2;
+  int32 subscriptions_mods_count = 3;
+  int32 created_mods_count = 4;
+}
+
+message GetModCollectionGroupsRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message GetModCollectionGroupsResponse {
+  repeated Pros.Api.Mod.ModCollectionGroup mod_collection_groups = 1;
+}
+
+message SubmitModComplaintRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string mod_id = 2;
+  repeated string complaint_type_ids = 3;
+}
+
+message SubmitModComplaintResponse {
+}
+
+message AddModRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Api.Mod.ModMandatoryFields mandatory_fields = 2;
+  Pros.Api.Mod.ModAdditionalFields additional_fields = 3;
+}
+
+message AddModResponse {
+  string mod_id = 1;
+  repeated Pros.Api.Mod.ModModeratorMessage moderator_messages = 2;
+}
+
+message AddModVersionRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string mod_id = 2;
+  string container_id = 3;
+  Pros.Api.Mod.AddModVersionAdditionalFields version_additional_fields = 4;
+}
+
+message AddModVersionResponse {
+  string version_tag = 2;
+}
+
+message GetModVersionUploadStatusRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string mod_id = 2;
+  string version_tag = 3;
+}
+
+message GetModVersionUploadStatusResponse {
+  Pros.Api.Mod.ModVersionUploadStatus status = 1;
+}
+
+message CheckForExistingProfileUrlRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string profile_url = 2;
+}
+
+message CheckForExistingProfileUrlResponse {
+}
+
+message UploadModImageRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  bytes image_data = 2;
+  bool thumbnail_required = 3;
+  Pros.Api.Mod.ModImageExtension extension = 4;
+  Pros.Api.Image.ThumbnailProfile thumbnail_profile = 5;
+}
+
+message UploadModImageResponse {
+  Pros.Api.Image.Image picture = 2;
+}
+
+message HideModsForUserRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Api.Mod.ModHideInfo hide_info = 2;
+}
+
+message HideModsForUserResponse {
+}
+
+message UndoHideModsForUserRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Api.Mod.ModHideInfo hide_info = 2;
+}
+
+message UndoHideModsForUserResponse {
+}
+
+message GetModsRequiredFields {
+  Pros.Api.Mod.SearchContinuationToken search_continuation_token = 1;
+}
+
+message ModMandatoryFields {
+  string mod_name = 1;
+  repeated Pros.Api.Localization.LocalizedString full_description = 2;
+  repeated Pros.Api.Localization.LocalizedString short_description = 3;
+  Pros.Api.Image.Image logo = 6;
+  repeated Pros.Api.Image.Image pictures = 7;
+}
+
+message ModAdditionalFields {
+  string mod_type_id = 1;
+  repeated string mod_tag_ids = 2;
+  string homepage = 3;
+  string profile_url = 4;
+  repeated string youtube_link = 5;
+}
+
+message AddModVersionAdditionalFields {
+  repeated Pros.Api.Mod.ProviderWithPlatform supported_platforms = 2;
+  bool auto_publish = 3;
+  string release_notes = 4;
+  string file_name = 5;
+  string version_name = 6;
+  bool send_to_moderation = 7;
+}

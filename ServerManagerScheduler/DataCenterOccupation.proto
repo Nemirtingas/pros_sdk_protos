@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package Hydra.Api.ServerManagerScheduler;
-
-message DataCenterOccupation {
-  string data_center_id = 1;
-  int32 occupation = 2;
-}
-

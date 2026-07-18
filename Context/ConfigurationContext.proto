@@ -3,7 +3,7 @@ syntax = "proto3";
 package Hydra.Api.Infrastructure.Context;
 
 message ConfigurationContext {
-  ConfigurationContextData data = 1;
+  Hydra.Api.Infrastructure.Context.ConfigurationContextData data = 1;
   bytes signature = 2;
 }
 
@@ -11,4 +11,3 @@ message ConfigurationContextData {
   string title_id = 1;
   string configuration_hash = 2;
 }
-

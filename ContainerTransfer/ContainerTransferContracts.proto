@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+
+package Pros.Api.ContainerTransfer;
+
+enum ContainerType {
+  CONTAINER_TYPE_UNSPECIFIED = 0;
+  CONTAINER_TYPE_CHUNK_BASED = 1;
+  CONTAINER_TYPE_MERGED = 2;
+}
+
+message UploadChunksRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string upload_id = 2;
+  repeated Pros.Api.ContainerTransfer.ContainerChunk chunks = 3;
+}
+
+message UploadChunksResponse {
+}
+
+message CommitUploadRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string upload_id = 2;
+  Pros.Api.ContainerTransfer.ContainerType container_type = 3;
+}
+
+message CommitUploadResponse {
+  string container_id = 1;
+}
+
+message GetContainerInfoRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string container_id = 2;
+}
+
+message GetContainerInfoResponse {
+  repeated Pros.Api.ContainerTransfer.ContainerChunkInfo chunk_infos = 1;
+  Pros.Api.ContainerTransfer.ContainerType container_type = 2;
+  Pros.Api.ContainerTransfer.ContainerChunkPlan container_chunk_plan = 3;
+}
+
+message DownloadChunksRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  string container_id = 2;
+  repeated int32 chunk_numbers = 3;
+}
+
+message DownloadChunksResponse {
+  repeated Pros.Api.ContainerTransfer.ContainerChunk chunks = 1;
+}
+
+message ContainerChunk {
+  int32 number = 1;
+  string key = 2;
+  bytes data = 3;
+}
+
+message ContainerChunkInfo {
+  int32 number = 1;
+  string key = 2;
+  int32 size = 3;
+}
+
+message ContainerChunkPlan {
+  int32 default_chunk_size = 1;
+  int32 chunks_count = 2;
+  int32 last_chunk_size = 3;
+}

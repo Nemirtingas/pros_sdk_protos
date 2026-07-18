@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "Friends/FriendsServiceContracts.proto";
+import "google/protobuf/timestamp.proto";
+
+package Hydra.Api.Friends;
+
+enum RecentPlayersListUpdateType {
+  RECENT_PLAYERS_LIST_UPDATE_TYPE_NONE = 0;
+  RECENT_PLAYERS_LIST_UPDATE_TYPE_ADD = 1;
+  RECENT_PLAYERS_LIST_UPDATE_TYPE_REMOVE = 2;
+  RECENT_PLAYERS_LIST_UPDATE_TYPE_STATE = 3;
+  RECENT_PLAYERS_LIST_UPDATE_TYPE_CHANGE = 4;
+}
+
+enum FriendListUpdateType {
+  FRIEND_LIST_UPDATE_TYPE_NONE = 0;
+  FRIEND_LIST_UPDATE_TYPE_ADD = 1;
+  FRIEND_LIST_UPDATE_TYPE_REMOVE = 2;
+  FRIEND_LIST_UPDATE_TYPE_CHANGE = 3;
+}
+
+message RecentPlayersUpdate {
+  Hydra.Api.Friends.RecentPlayersListUpdateType update_type = 1;
+  string user_id = 2;
+  Hydra.Api.Friends.RecentPlayerState state = 3;
+  string dynamic_data = 4;
+  google.protobuf.Timestamp added = 5;
+  google.protobuf.Timestamp last_online = 6;
+  Hydra.Api.Friends.PlatformData last_platform_data = 7;
+}
+
+message FriendListUpdate {
+  Hydra.Api.Friends.FriendListUpdateType update_type = 1;
+  string user_id = 2;
+  string custom_data = 3;
+  Hydra.Api.Friends.FriendState state = 4;
+  string dynamic_data = 5;
+  google.protobuf.Timestamp last_online = 6;
+  Hydra.Api.Friends.PlatformData last_platform_data = 7;
+}
+
+message FriendRequestUpdate {
+  Hydra.Api.Friends.FriendRequest request = 1;
+}
+
+message RecentPlayersUpdates {
+  repeated Hydra.Api.Friends.RecentPlayersUpdate recent_players_update = 1;
+}
+
+message FriendsUpdate {
+  oneof kind {
+    Hydra.Api.Friends.FriendListUpdate friend_list_update = 1;
+    Hydra.Api.Friends.FriendRequestUpdate friend_request_update = 2;
+    Hydra.Api.Friends.RecentPlayersUpdates recent_players_updates = 3;
+  }
+}

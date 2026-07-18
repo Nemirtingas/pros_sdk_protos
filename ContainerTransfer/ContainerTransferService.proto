@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "ContainerTransfer/ContainerTransferContracts.proto";
+
+package Pros.Api.ContainerTransfer;
+
+service ContainerTransferApi {
+  rpc UploadChunks (UploadChunksRequest) returns (UploadChunksResponse);
+  rpc CommitUpload (CommitUploadRequest) returns (CommitUploadResponse);
+  rpc GetContainerInfo (GetContainerInfoRequest) returns (GetContainerInfoResponse);
+  rpc DownloadChunks (DownloadChunksRequest) returns (DownloadChunksResponse);
+}

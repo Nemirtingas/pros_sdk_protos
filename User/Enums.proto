@@ -27,4 +27,3 @@ enum UserStateOpType {
   USER_STATE_OP_TYPE_REQUIRE = 6;
   USER_STATE_OP_TYPE_REQUIRELESS = 7;
 }
-

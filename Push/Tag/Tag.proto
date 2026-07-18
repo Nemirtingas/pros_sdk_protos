@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "Context/TagContext.proto";
+
+package Hydra.Api.Tag;
+
+message TagUserUpdate {
+  Hydra.Api.Infrastructure.Context.TagContext tag_context = 1;
+}

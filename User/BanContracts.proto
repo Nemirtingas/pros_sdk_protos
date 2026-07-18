@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Nullable/Nullable.proto";
+import "google/protobuf/timestamp.proto";
+import "Context/UserContext.proto";
+
+package Hydra.Api.User.Bans;
+
+message UserBanInfo {
+  string ban_id = 1;
+  Hydra.Api.Infrastructure.UserBanScope scope = 2;
+  string description = 3;
+  google.protobuf.Timestamp ban_date = 4;
+  Hydra.Api.Nullable.NullableTimestamp expiration_date = 5;
+  Hydra.Api.Nullable.NullableTimestamp unban_date = 6;
+  string unban_description = 7;
+  bool is_active = 8;
+}
+
+message GetUserActiveBansRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+}
+
+message GetUserActiveBansResponse {
+  repeated Hydra.Api.User.Bans.UserBanInfo bans = 1;
+}

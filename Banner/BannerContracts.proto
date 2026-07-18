@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Localization/LocalizedString.proto";
+import "Account/AccountContracts.proto";
+import "ProsAccount/ProsAccountContracts.proto";
+
+package Pros.Api.Banner;
+
+enum BannerUrlType {
+  BANNER_URL_TYPE_EXTERNAL_URL = 0;
+  BANNER_URL_TYPE_IN_APP_GAME_CONTENT = 1;
+  BANNER_URL_TYPE_IN_APP_EXTERNAL_CONTENT = 2;
+  BANNER_URL_TYPE_QR_CODE = 3;
+  BANNER_URL_TYPE_QR_CODE_REGISTRATION = 4;
+  BANNER_URL_TYPE_NONE = 5;
+  BANNER_URL_TYPE_IN_APP_GAME_PAGE = 6;
+}
+
+enum BannerType {
+  BANNER_TYPE_TIPS = 0;
+  BANNER_TYPE_PROMO = 1;
+}
+
+enum BannerSystemMode {
+  BANNER_SYSTEM_MODE_NORMAL = 0;
+  BANNER_SYSTEM_MODE_TURN_OFF = 1;
+}
+
+message GetBannersRequest2 {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  Pros.Api.Banner.BannerClientInfo client_info = 2;
+  Pros.Api.Banner.BannersClientFilter filter = 3;
+  Pros.Global.Api.Account.ProsAccountContext account_context = 4;
+}
+
+message GetBannersResponse2 {
+  Pros.Api.Banner.BannerConfig config = 1;
+  repeated Pros.Api.Banner.BannersSpaceGroup banners_groups = 2;
+}
+
+message BannerClientInfo {
+  string client_version = 1;
+  repeated string entitlements = 2;
+}
+
+message BannersClientFilter {
+  repeated Pros.Api.Banner.BannerSpaceFilter spaces_filter = 1;
+}
+
+message BannersSpaceGroup {
+  Pros.Api.Banner.BannerSpace space = 1;
+  repeated Pros.Api.Banner.BannerInfo banners = 2;
+}
+
+message BannerInfo {
+  string campaign_id = 1;
+  string image_url = 2;
+  string redirect_url = 3;
+  Pros.Api.Banner.BannerType banner_type = 5;
+  repeated Pros.Api.Banner.BannerMessage messages = 6;
+  Pros.Api.Banner.BannerUrlType url_type = 7;
+  Pros.Api.Account.LinkContext link_context = 8;
+  repeated Pros.Api.Banner.BannerLabel labels = 9;
+  Pros.Api.Banner.BannerSpace space = 10;
+}
+
+message BannerSpace {
+  string name = 1;
+  bool is_default = 2;
+  int32 display_duration_ms = 3;
+}
+
+message BannerSpaceFilter {
+  string name = 1;
+}
+
+message BannerConfig {
+  Pros.Api.Banner.BannerSystemMode system_mode = 3;
+  repeated Pros.Api.Banner.BannerSpace spaces = 4;
+}
+
+message BannerMessage {
+  string id = 1;
+  repeated Pros.Api.Localization.LocalizedString descriptions = 2;
+}
+
+message BannerLabel {
+  string label = 1;
+}

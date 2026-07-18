@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Tag/TagContracts.proto";
+
+package Hydra.Api.Tag;
+
+service TagApi {
+  rpc Connect (ConnectRequest) returns (ConnectResponse);
+  rpc Disconnect (DisconnectRequest) returns (DisconnectResponse);
+  rpc GetContext (GetContextRequest) returns (GetContextResponse);
+}

@@ -1,27 +1,34 @@
 syntax = "proto3";
 
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 
 package Hydra.Api.Nullable;
 
 message NullableString {
   oneof kind {
-    NullValue null = 1;
+    google.protobuf.NullValue null = 1;
     string data = 2;
   }
 }
 
 message NullableInt {
   oneof kind {
-    NullValue null = 1;
+    google.protobuf.NullValue null = 1;
     int32 data = 2;
   }
 }
 
 message NullableBool {
   oneof kind {
-    NullValue null = 1;
+    google.protobuf.NullValue null = 1;
     bool data = 2;
   }
 }
 
+message NullableTimestamp {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    google.protobuf.Timestamp data = 2;
+  }
+}

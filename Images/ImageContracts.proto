@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package Pros.Api.Image;
+
+message Image {
+  string url = 1;
+  Pros.Api.Image.Thumbnail thumbnail = 2;
+}
+
+message Thumbnail {
+  string small_url = 1;
+  string medium_url = 2;
+  string large_url = 3;
+}
+
+message ThumbnailProfile {
+  Pros.Api.Image.ThumbnailSize small = 1;
+  Pros.Api.Image.ThumbnailSize medium = 2;
+  Pros.Api.Image.ThumbnailSize large = 3;
+}
+
+message ThumbnailSize {
+  int32 width = 1;
+  int32 height = 2;
+}

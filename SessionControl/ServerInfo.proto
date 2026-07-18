@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package Hydra.Api.SessionControl;
+
+message ServerInfo {
+  string connection_info = 1;
+  string server_property = 2;
+}

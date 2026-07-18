@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "Challenges/ChallengesContracts.proto";
+
+package Hydra.Api.Challenges;
+
+service ChallengesApi {
+  rpc Connect (ConnectRequest) returns (ConnectResponse);
+  rpc GrainHeartbeat (GrainHeartbeatRequest) returns (GrainHeartbeatResponse);
+  rpc Disconnect (DisconnectRequest) returns (DisconnectResponse);
+  rpc GetChallenges (GetChallengesRequest) returns (GetChallengesResponse);
+  rpc GetChallengesIncrementalUpdate (GetChallengesIncrementalUpdateRequest) returns (GetChallengesIncrementalUpdateResponse);
+  rpc ServerSubmitChallengeCounters (ServerSubmitChallengeCountersRequest) returns (ServerSubmitChallengeCountersResponse);
+  rpc ServerGetChallenges (ServerGetChallengesRequest) returns (ServerGetChallengesResponse);
+  rpc ClientSelfSubmitChallengeCounters (ClientSelfSubmitChallengeCountersRequest) returns (ClientSelfSubmitChallengeCountersResponse);
+  rpc ClientSubmitChallengeCounters (ClientSubmitChallengeCountersRequest) returns (ClientSubmitChallengeCountersResponse);
+  rpc ClientGetChallengeCounters (ClientGetChallengeCountersRequest) returns (ClientGetChallengeCountersResponse);
+}

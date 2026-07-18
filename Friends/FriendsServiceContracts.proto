@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+import "Context/UserContext.proto";
+import "Push/PushToken.proto";
+import "Authorization/AuthorizationContracts.proto";
+import "google/protobuf/timestamp.proto";
+
+package Hydra.Api.Friends;
+
+enum FriendState {
+  FRIEND_STATE_NONE = 0;
+  FRIEND_STATE_OFFLINE = 1;
+  FRIEND_STATE_ONLINE = 2;
+}
+
+enum RecentPlayerState {
+  RECENT_PLAYER_STATE_NONE = 0;
+  RECENT_PLAYER_STATE_OFFLINE = 1;
+  RECENT_PLAYER_STATE_ONLINE = 2;
+}
+
+message PlatformData {
+  Pros.Global.Api.Auth.BuildPlatform build_platform = 1;
+  Pros.Global.Api.Auth.Provider provider = 2;
+}
+
+message Friend {
+  google.protobuf.Timestamp added = 1;
+  string user_id = 2;
+  string custom_data = 3;
+  Hydra.Api.Friends.FriendState state = 4;
+  string dynamic_data = 5;
+  google.protobuf.Timestamp last_online = 6;
+  Hydra.Api.Friends.PlatformData last_platform_data = 7;
+}
+
+message RecentPlayer {
+  google.protobuf.Timestamp added = 1;
+  string user_id = 2;
+  Hydra.Api.Friends.RecentPlayerState state = 3;
+  string dynamic_data = 4;
+  google.protobuf.Timestamp last_online = 5;
+  Hydra.Api.Friends.PlatformData last_platform_data = 6;
+}
+
+message FriendRequest {
+  string user_id = 1;
+  string request_id = 2;
+  string custom_data = 3;
+  google.protobuf.Timestamp created = 4;
+}
+
+message ConnectRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  Hydra.Api.Push.PushToken push_token = 2;
+  string dynamic_data = 3;
+}
+
+message ConnectResponse {
+  repeated Hydra.Api.Friends.Friend friends = 1;
+  repeated Hydra.Api.Friends.RecentPlayer recent_players = 2;
+  repeated Hydra.Api.Friends.FriendRequest requests = 3;
+}
+
+message DisconnectRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+}
+
+message DisconnectResponse {
+}
+
+message SendFriendRequestRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string user_id = 2;
+  string custom_data = 3;
+}
+
+message GetFriendRequestRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  int64 version = 2;
+}
+
+message RemoveFriendRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string user_id = 2;
+}
+
+message RemoveFriendResponse {
+}
+
+message SendFriendRequestResponse {
+}
+
+message AcceptFriendRequestRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string friend_request_id = 2;
+  string custom_data = 3;
+}
+
+message SetFriendCustomDataRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string user_id = 2;
+  string custom_data = 3;
+}
+
+message SetFriendCustomDataResponse {
+}
+
+message DeclineFriendRequestRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string friend_request_id = 2;
+}
+
+message AddRecentPlayersRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  repeated string userd_ids = 2;
+}
+
+message AddRecentPlayersResponse {
+}
+
+message SetDynamicDataRequest {
+  Hydra.Api.Infrastructure.Context.UserContext context = 1;
+  string dynamic_data = 2;
+}
+
+message SetDynamicDataResponse {
+}
+
+message AcceptFriendRequestResponse {
+}
+
+message DeclineFriendRequestResponse {
+}

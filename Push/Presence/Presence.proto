@@ -3,8 +3,9 @@ syntax = "proto3";
 import "Presence/PartyStatus.proto";
 import "Presence/MatchmakeStatus.proto";
 import "Presence/InviteData.proto";
-import "Errors/ErrorCode.proto";
+import "ErrorCode.proto";
 import "Nullable/Nullable.proto";
+import "Presence/PresenceServiceContracts.proto";
 
 package Hydra.Api.Push.Presence;
 
@@ -21,11 +22,22 @@ enum InviteEventType {
   INVITE_EVENT_TYPE_REJECT_RECEIVED = 9;
 }
 
+enum PresenceUserDisconnectedReason {
+  PRESENCE_USER_DISCONNECTED_REASON_NONE = 0;
+  PRESENCE_USER_DISCONNECTED_REASON_TIMEOUT = 1;
+}
+
 enum PresenceSessionMemberUpdateType {
   PRESENCE_SESSION_MEMBER_UPDATE_TYPE_NONE = 0;
   PRESENCE_SESSION_MEMBER_UPDATE_TYPE_ADD = 1;
   PRESENCE_SESSION_MEMBER_UPDATE_TYPE_REMOVE = 2;
   PRESENCE_SESSION_MEMBER_UPDATE_TYPE_UPDATE = 3;
+}
+
+enum PresenceSessionType {
+  PRESENCE_SESSION_TYPE_NONE = 0;
+  PRESENCE_SESSION_TYPE_MANAGED = 1;
+  PRESENCE_SESSION_TYPE_UNMANAGED = 2;
 }
 
 enum PresencePartyUpdateType {
@@ -45,72 +57,73 @@ enum PresencePartyMemberUpdateType {
 }
 
 message InviteEvent {
-  InviteEventType event_type = 1;
-  InviteData data = 2;
+  Hydra.Api.Push.Presence.InviteEventType event_type = 1;
+  Hydra.Api.Presence.InviteData data = 2;
   int32 sequence_id = 3;
 }
 
-message LongOperationResultUpdate {
+message LongOperationResult {
+  Pros.Global.Api.Errors.ErrorCode error_code = 1;
+}
+
+message LongOperationStatus {
   string correlation_id = 1;
-  ErrorCode result_code = 2;
+  string user_id = 2;
+  Hydra.Api.Push.Presence.LongOperationResult result = 3;
+}
+
+message PresenceUserDisconnected {
+  Hydra.Api.Push.Presence.PresenceUserDisconnectedReason reason = 1;
 }
 
 message PresenceUserUpdate {
-  repeated InviteEvent invite_events = 1;
-  LongOperationResultUpdate long_operation_result = 2;
+  repeated Hydra.Api.Push.Presence.InviteEvent invite_events = 1;
+  Hydra.Api.Push.Presence.PresenceUserDisconnected user_disconnected = 3;
+  Hydra.Api.Push.Presence.LongOperationStatus long_operation_status = 4;
+  Hydra.Api.Presence.PenaltyInfo penalty_info = 5;
 }
 
 message PresenceSessionMemberUpdate {
-  PresenceSessionMemberUpdateType update_type = 2;
-  SessionMember member_data = 3;
+  Hydra.Api.Push.Presence.PresenceSessionMemberUpdateType update_type = 2;
+  Hydra.Api.Presence.SessionMember member_data = 3;
 }
 
 message PresenceSessionQueueData {
   string play_list_id = 1;
-  repeated QueueVariants queue_variants = 2;
+  repeated Hydra.Api.Presence.QueueVariants queue_variants = 2;
 }
 
 message PresenceSessionGameData {
-  NullableString play_list_id = 1;
-  repeated GameVariant variants = 2;
-  MatchmakeSessionSettings settings = 3;
-  NullableString data = 4;
-  repeated PresenceSessionMemberUpdate members_update = 5;
+  Hydra.Api.Nullable.NullableString play_list_id = 1;
+  repeated Hydra.Api.Presence.GameVariant variants = 2;
+  Hydra.Api.Presence.MatchmakeSessionSettings settings = 3;
+  Hydra.Api.Nullable.NullableString data = 4;
+  repeated Hydra.Api.Push.Presence.PresenceSessionMemberUpdate members_update = 5;
   string s_c_managed_context = 6;
+  Hydra.Api.Push.Presence.PresenceSessionType session_type = 7;
+  string turn_connection_context = 8;
+  Hydra.Api.Nullable.NullableString join_code2 = 10;
 }
 
 message PresenceSessionUpdate {
-  GameSessionId id = 1;
-  MatchmakeState state = 2;
-  PresenceSessionQueueData queue_data = 3;
-  PresenceSessionGameData game_data = 4;
+  Hydra.Api.Presence.GameSessionId id = 1;
+  Hydra.Api.Presence.MatchmakeState state = 2;
+  Hydra.Api.Push.Presence.PresenceSessionQueueData queue_data = 3;
+  Hydra.Api.Push.Presence.PresenceSessionGameData game_data = 4;
+  Hydra.Api.Push.Presence.LongOperationStatus long_operation_status = 5;
+  Hydra.Api.Presence.PendingSession pending_session = 6;
 }
 
 message PresencePartyUpdate {
-  PartyId id = 2;
-  NullableString data = 3;
-  PartySettings settings = 4;
-  repeated PresencePartyMemberUpdate members = 5;
-  NullableString join_code = 6;
+  Hydra.Api.Presence.PartyId id = 2;
+  Hydra.Api.Nullable.NullableString data = 3;
+  Hydra.Api.Presence.PartySettings settings = 4;
+  repeated Hydra.Api.Push.Presence.PresencePartyMemberUpdate members = 5;
+  Hydra.Api.Nullable.NullableString join_code = 6;
+  Hydra.Api.Push.Presence.LongOperationStatus long_operation_status = 7;
 }
 
 message PresencePartyMemberUpdate {
-  PresencePartyMemberUpdateType update_type = 1;
-  PartyMember member = 2;
+  Hydra.Api.Push.Presence.PresencePartyMemberUpdateType update_type = 1;
+  Hydra.Api.Presence.PartyMember member = 2;
 }
-
-message PresenceUserUpdateVersion {
-  int32 version = 1;
-  PresenceUserUpdate update = 2;
-}
-
-message PresenceSessionUpdateVersion {
-  int32 version = 1;
-  PresenceSessionUpdate update = 2;
-}
-
-message PresencePartyUpdateVersion {
-  int32 version = 1;
-  PresencePartyUpdate update = 2;
-}
-

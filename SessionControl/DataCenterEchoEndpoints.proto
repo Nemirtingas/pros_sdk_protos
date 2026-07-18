@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "GlobalEndpointDispatcher/GlobalEndpointDispatcherContracts.proto";
+
+package Hydra.Api.SessionControl;
+
+message EchoEndpoint {
+  string ip = 1;
+  int32 port = 2;
+  Pros.Global.Api.GlobalEndpointDispatcher.EndpointScheme scheme = 3;
+}
+
+message DataCenterEchoEndpoints {
+  string data_center_id = 1;
+  repeated Hydra.Api.SessionControl.EchoEndpoint endpoints = 2;
+}

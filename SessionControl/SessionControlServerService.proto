@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "SessionControl/SessionControlContracts.proto";
+import "Options.proto";
+
+package Hydra.Api.SessionControl;
+
+service SessionControlServerApi {
+  rpc PrepareActivateSession (PrepareActivateSessionRequest) returns (PrepareActivateSessionResponse);
+  rpc ActivateSession3 (ActivateSession3Request) returns (ActivateSession3Response);
+  rpc GetSessionMemberEvents (GetSessionMemberEventsRequest) returns (GetSessionMemberEventsResponse);
+  rpc ProcessSessionMemberEvents (ProcessSessionMemberEventsRequest) returns (ProcessSessionMemberEventsResponse);
+  rpc HeartbeatSession (HeartbeatSessionRequest) returns (HeartbeatSessionResponse);
+  rpc FinishSession (FinishSessionRequest) returns (FinishSessionResponse);
+  rpc ManagedRemoveMembers (ManagedRemoveMembersRequest) returns (ManagedRemoveMembersResponse);
+  rpc ManagedSetUserPending (ManagedSetUserPendingRequest) returns (ManagedSetUserPendingResponse);
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "Options.proto";
+import "CrossSave/CrossSaveContracts.proto";
+
+package Pros.Api.CrossSave;
+
+service CrossSaveApi {
+  rpc SubmitSnapshot (SubmitSnapshotRequest) returns (SubmitSnapshotResponse);
+  rpc GetTransferInfo (GetTransferInfoRequest) returns (GetTransferInfoResponse);
+  rpc CompleteTransfer (CompleteTransferRequest) returns (CompleteTransferResponse);
+  rpc SkipTransfer (SkipTransferRequest) returns (SkipTransferResponse);
+}
