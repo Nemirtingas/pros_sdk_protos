@@ -306,12 +306,17 @@ message ModComplaintType {
 message ModDependencyInfoFields {
   repeated Pros.Api.Mod.ModDependencyInfo this_depends_on = 1;
   repeated Pros.Api.Mod.ModDependencyInfo other_depends_on_this = 2;
+  repeated Pros.Api.Mod.ModExtraContentDependencyInfo extra_content_dependency_infos = 3;
 }
 
 message ModDependencyInfo {
   string mod_id = 1;
   string mod_name = 2;
   Pros.Api.Mod.ModStatus mod_status = 3;
+}
+
+message ModExtraContentDependencyInfo {
+  string extra_content_id = 1;
 }
 
 message ModCollectionGroup {
