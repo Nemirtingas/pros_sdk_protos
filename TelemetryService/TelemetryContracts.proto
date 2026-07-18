@@ -16,10 +16,39 @@ enum TelemetryPackCompression {
   TELEMETRY_PACK_COMPRESSION_GZIP = 2;
 }
 
+enum OptionalTelemetryState {
+  OPTIONAL_TELEMETRY_STATE_UNSPECIFIED = 0;
+  OPTIONAL_TELEMETRY_STATE_OFF = 1;
+  OPTIONAL_TELEMETRY_STATE_CONSENT_REQUIRED = 2;
+  OPTIONAL_TELEMETRY_STATE_ACCEPTED = 3;
+  OPTIONAL_TELEMETRY_STATE_DECLINED = 4;
+}
+
+enum TelemetryEventTypesFilter {
+  TELEMETRY_EVENT_TYPES_FILTER_UNSPECIFIED = 0;
+  TELEMETRY_EVENT_TYPES_FILTER_DISABLED = 1;
+  TELEMETRY_EVENT_TYPES_FILTER_RESTRICTED_LIST = 2;
+  TELEMETRY_EVENT_TYPES_FILTER_ALLOWED_LIST = 3;
+}
+
 message TelemetryConfig {
   repeated string restricted_event_types = 1;
   int32 recommended_upload_interval_sec = 2;
   repeated string priority_event_types = 3;
+  int32 event_max_length = 4;
+  int32 events_rate_per_sec = 5;
+  repeated string allowed_event_types = 6;
+  Pros.Api.Telemetry.TelemetryEventTypesFilter filter_mode = 7;
+  Pros.Api.Telemetry.OptionalTelemetryState optional_telemetry_state = 8;
+}
+
+message SetOptionalTelemetryStateRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  bool is_accepted = 2;
+}
+
+message SetOptionalTelemetryStateResponse {
+  Pros.Api.Telemetry.TelemetryConfig telemetry_config = 1;
 }
 
 message SendPackRequest {

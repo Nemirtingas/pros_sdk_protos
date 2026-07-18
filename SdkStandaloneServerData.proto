@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package Leech.Api;
+
+message StandaloneRTTItem {
+  string datacenter_id = 1;
+  int32 rtt_ms = 2;
+}
+
+message StandaloneRTTArray {
+  repeated Leech.Api.StandaloneRTTItem items = 1;
+}

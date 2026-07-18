@@ -109,6 +109,11 @@ enum ModAutomaticModerationSourceType {
   MOD_AUTOMATIC_MODERATION_SOURCE_TYPE_FILE_PROCESSOR = 4;
 }
 
+enum ModInstallationType {
+  MOD_INSTALLATION_TYPE_SUBSCRIBE = 0;
+  MOD_INSTALLATION_TYPE_MANUAL = 1;
+}
+
 message ModVersion {
   string version_tag = 1;
   string platform_id = 2;
@@ -121,6 +126,7 @@ message ModVersion {
   string version_name = 9;
   google.protobuf.Timestamp updated_at = 10;
   Pros.Api.Mod.ModAdvancedApproveStatus advanced_approve_status = 11;
+  Pros.Api.Mod.ModInstallationType installation_type = 12;
 }
 
 message ModDataInfo {
@@ -354,6 +360,7 @@ message ModPublishParameters {
   string player_portal_url = 4;
   bool mods_advanced_approve_flow = 5;
   string support_link = 6;
+  bool eula_enabled = 7;
 }
 
 message ModPlatformParameters {

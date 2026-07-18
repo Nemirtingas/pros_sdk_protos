@@ -15,7 +15,12 @@ enum BannerUrlType {
   BANNER_URL_TYPE_QR_CODE_REGISTRATION = 4;
   BANNER_URL_TYPE_NONE = 5;
   BANNER_URL_TYPE_IN_APP_GAME_PAGE = 6;
-  BANNER_URL_TYPE_IN_APP_PLATFORM_GAME_CONTENT = 7;
+}
+
+enum BannerGameContentType {
+  BANNER_GAME_CONTENT_TYPE_DEFAULT = 0;
+  BANNER_GAME_CONTENT_TYPE_CLIENT_ID = 1;
+  BANNER_GAME_CONTENT_TYPE_PLATFORM_ID = 2;
 }
 
 enum BannerUrlMode {
@@ -71,6 +76,7 @@ message BannerInfo {
   repeated Pros.Api.Banner.BannerLabel labels = 9;
   Pros.Api.Banner.BannerSpace space = 10;
   Pros.Api.Banner.BannerUrlMode url_mode = 11;
+  Pros.Api.Banner.BannerGameContentType game_content_type = 12;
 }
 
 message BannerSpace {

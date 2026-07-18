@@ -28,6 +28,7 @@ message WriteCrashDumpUserRequest {
   string provider = 6;
   string client_version = 7;
   string sdk_version = 8;
+  string facts_session_id = 9;
 }
 
 message WriteCrashDumpUserResponse {

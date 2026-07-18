@@ -13,4 +13,5 @@ message CrashDumperArguments {
   string client_version = 4;
   Hydra.Api.Infrastructure.Context.ServerContext server_context = 5;
   string title_secret = 6;
+  string fact_session_id = 7;
 }

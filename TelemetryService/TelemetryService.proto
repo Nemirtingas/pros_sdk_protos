@@ -6,6 +6,7 @@ import "TelemetryService/TelemetryContracts.proto";
 package Pros.Api.Telemetry;
 
 service TelemetryApi {
+  rpc SetOptionalTelemetryState (SetOptionalTelemetryStateRequest) returns (SetOptionalTelemetryStateResponse);
   rpc SendPack (SendPackRequest) returns (SendPackResponse);
   rpc SendServerPack (SendServerPackRequest) returns (SendServerPackResponse);
 }
