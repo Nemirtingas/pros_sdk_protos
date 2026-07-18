@@ -3,12 +3,14 @@ syntax = "proto3";
 import "Context/UserContext.proto";
 import "Context/TagContext.proto";
 import "Push/PushToken.proto";
+import "Authorization/AuthorizationContracts.proto";
 
 package Hydra.Api.Tag;
 
 message ConnectRequest {
   Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
   Hydra.Api.Push.PushToken push_token = 2;
+  Hydra.Api.Tag.TagData data = 3;
 }
 
 message ConnectResponse {
@@ -28,4 +30,8 @@ message GetContextRequest {
 
 message GetContextResponse {
   Hydra.Api.Infrastructure.Context.TagContext tag_context = 1;
+}
+
+message TagData {
+  Pros.Global.Api.Auth.PlatformDetails runtime_platform = 1;
 }

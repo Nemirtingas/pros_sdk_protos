@@ -103,6 +103,7 @@ message PresenceSessionGameData {
   Hydra.Api.Push.Presence.PresenceSessionType session_type = 7;
   string turn_connection_context = 8;
   Hydra.Api.Nullable.NullableString join_code2 = 10;
+  string data_center_id = 11;
 }
 
 message PresenceSessionUpdate {

@@ -109,6 +109,7 @@ message GameSessionData {
   string data = 4;
   repeated Hydra.Api.Presence.SessionMember session_members = 5;
   string join_code = 6;
+  string data_center_id = 7;
 }
 
 message GameSessionId {

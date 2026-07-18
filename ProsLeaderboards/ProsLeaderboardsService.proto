@@ -10,4 +10,5 @@ service ProsLeaderboardsApi {
   rpc GetLeaderboardsUserEntries (GetLeaderboardsUserEntriesRequest) returns (GetLeaderboardsUserEntriesResponse);
   rpc GetLeaderboardsEntityEntries (GetLeaderboardsEntityEntriesRequest) returns (GetLeaderboardsEntityEntriesResponse);
   rpc UpdateLeaderboardsEntries (UpdateLeaderboardsEntriesRequest) returns (UpdateLeaderboardsEntriesResponse);
+  rpc UpdateGameClientLeaderboardsEntries (UpdateGameClientLeaderboardsEntriesRequest) returns (UpdateGameClientLeaderboardsEntriesResponse);
 }

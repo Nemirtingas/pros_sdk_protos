@@ -93,6 +93,14 @@ message UpdateLeaderboardsEntriesRequest {
 message UpdateLeaderboardsEntriesResponse {
 }
 
+message UpdateGameClientLeaderboardsEntriesRequest {
+  Hydra.Api.Infrastructure.Context.UserContext user_context = 1;
+  repeated Pros.Api.ProsLeaderboards.LeaderboardUpdateQuery queries = 2;
+}
+
+message UpdateGameClientLeaderboardsEntriesResponse {
+}
+
 message LeaderboardSearchEntityQuery {
   string entry_id = 1;
   Pros.Api.ProsLeaderboards.LeaderboardSearchBaseQuery base_query = 2;
@@ -138,6 +146,10 @@ message LeaderboardPlayer {
   string user_id = 1;
   string account_id = 2;
   Pros.Api.Account.AccountInfo account_info = 3;
+  oneof nickname {
+    string provider_nickname = 4;
+    string provider_id = 5;
+  }
 }
 
 message LeaderboardSearchEntityData {

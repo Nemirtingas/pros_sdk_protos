@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "Context/UserContext.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
 
 package Hydra.Api.Privacy;
 
@@ -36,6 +37,7 @@ message SetPrivacyTypeResponse {
 message CommunicationBlock {
   Hydra.Api.Privacy.BlockCommunicationType type = 1;
   google.protobuf.Timestamp created = 2;
+  google.protobuf.Timestamp expiration_date = 3;
 }
 
 message BlockedUser {
@@ -49,6 +51,7 @@ message AddBlockedUserRequest {
   string user_id = 2;
   repeated Hydra.Api.Privacy.BlockCommunicationType types = 3;
   string custom_data = 4;
+  google.protobuf.Duration block_duration = 5;
 }
 
 message AddBlockedUserResponse {

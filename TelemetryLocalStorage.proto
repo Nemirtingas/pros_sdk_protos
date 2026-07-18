@@ -14,5 +14,4 @@ message TelemetryLocalPackIdentity {
 
 message TelemetryLocalPack {
   Pros.Api.Telemetry.TelemetryPack pack = 1;
-  Leech.Api.TelemetryLocalPackIdentity identity = 2;
 }

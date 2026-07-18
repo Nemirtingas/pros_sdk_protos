@@ -5,6 +5,7 @@ import "Push/PushToken.proto";
 import "Context/UserContext.proto";
 import "Context/ServerContext.proto";
 import "Push/PushClientMessage.proto";
+import "Authorization/AuthorizationContracts.proto";
 
 package Hydra.Api.Push;
 
@@ -22,6 +23,7 @@ message PushAuthorizationData {
   int32 generation = 1;
   Hydra.Api.Push.PushToken token = 2;
   repeated Hydra.Api.Push.PushVersion versions = 3;
+  Pros.Global.Api.Auth.HydraRequestContext hydra_request_context = 6;
   oneof context {
     Hydra.Api.Infrastructure.Context.UserContext user_context = 4;
     Hydra.Api.Infrastructure.Context.ServerContext server_context = 5;
